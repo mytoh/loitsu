@@ -93,7 +93,7 @@
        (call-process (string-join `("git" "checkout" ,@(cdr args)))))
       ;; github.com/zaiste/dotfiles
       ("changes"
-       (spawn "git" '("log" "--pretty=format:%Cred%h %Cgreen(%cr) %C(bold blue)<%cn>%Creset %s --name-status")))
+       (spawn "git" '("log" "--pretty=format:%Cred%h %Cgreen(%cr) %C(bold blue)<%cn>%Creset %s " "--name-status")))
       ("short"
        (spawn "git" '("log" "--pretty=format:%Cred%h %Cgreen(%cr)\t %C(bold blue):%cn:%Creset %s")))
       ("lg"
