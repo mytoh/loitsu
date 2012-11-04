@@ -2,16 +2,14 @@
 (library (maali)
   (export paint
     pa
-    unpaint
-    )
+    unpaint)
   (import
     (rnrs)
     (only (srfi :13)
       string-trim)
     (irregex)
     (match)
-    (maali rgb-colours)
-    )
+    (maali rgb-colours))
 
   (define ansi-colours
     '((black   0)
