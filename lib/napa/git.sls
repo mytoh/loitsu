@@ -62,6 +62,9 @@
                                            "'{"
                                            "\"name\": " "\"" name "\""
                                            "}'"))))))
+  (define (git-command args)
+    (call-process (string-join (append '("git" ) args)))
+   )
 
   (define (git args)
     (match (car args)
@@ -74,20 +77,20 @@
       ("create"
        (github-create-new-repository (cdr args)))
       ("a"
-       (call-process (string-join `("git" "add" "-p" ,@(cdr args)))))
+       (git-command `("add" "-p" ,@(cdr args))))
       ("st"
-       (call-process (string-join `("git" "status"))))
+       (git-command `("status")))
       ("ps"
-       (call-process (string-join `("git" "push" ,@(cdr args)))))
+       (git-command `("push" ,@(cdr args))))
       ((or "up" "pl")
-       (call-process (string-join `("git" "pull" ,@(cdr args)))))
+       (git-command `("pull" ,@(cdr args))))
       ("df"
-       (call-process (string-join `("git" "diff" ,@(cdr args)))))
+       (git-command `("diff" ,@(cdr args))))
       ("remote"
        ; default verobose
-       (call-process (string-join `("git" "remote" "-v" ,@(cdr args)))))
+       (git-command `("remote" "-v" ,@(cdr args))))
       ("co"
-       (call-process (string-join `("git" "checkout" ,@(cdr args)))))
+       (git-command `("checkout" ,@(cdr args))))
       ;; github.com/zaiste/dotfiles
       ("changes"
        (spawn "git" '("log" "--pretty=format:%Cred%h %Cgreen(%cr) %C(bold blue)<%cn>%Creset %s " "--name-status")))
@@ -96,9 +99,9 @@
       ("lg"
        (spawn "git" '("log" "--graph" "--pretty=format:%Cred%h -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue):%an:%Creset" "--abbrev-commit" "--date=relative")))
       ("br"
-       (call-process (string-join `("git" "branch" ,@(cdr args)))))
+       (git-command `("branch" ,@(cdr args))))
       (else
-        (call-process (string-join `("git" ,@args))))))
+        (git-command `(,@args)))))
 
   (define (directory-git?)
     (let-values (((out status x) (call-process "git rev-parse --git-dir")))
