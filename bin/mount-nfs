@@ -1,0 +1,42 @@
+#!/usr/bin/env mosh
+
+(import (rnrs)
+  (only (srfi :13 strings)
+    string-join)
+  (match)
+  (mosh process))
+
+
+(define (main args)
+  (match (car args)
+    ; commands
+    ("mypassport"
+     (mount-mypassport))
+    ("deskstar"
+     (mount-deskstar))
+    ("quatre"
+     (mount-quatre (cadr args)))
+    ("all"
+     (mount-mypassport)
+     (mount-deskstar)
+     (mount-quatre (cadr args)))
+    ))
+
+(define mount
+  (lambda (src dest)
+    (call-process (string-join
+                    `("sudo" "mount" "-v" ,src ,dest)))))
+
+(define (mount-mypassport)
+  (mount "quatrevingtdix:/Volumes/MyPassport"
+         "/nfs/mypassport"))
+
+(define (mount-deskstar)
+  (mount "quatrevingtdix:/Volumes/Deskstar"
+         "/nfs/deskstar"))
+
+(define (mount-quatre user)
+  (mount (string-append "quatrevingtdix:/Users/" user)
+         "/nfs/quatre"))
+
+;; vim:filetype=scheme

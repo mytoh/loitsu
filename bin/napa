@@ -1,0 +1,17 @@
+#!/usr/bin/env mosh
+
+(import
+  (rnrs)
+  (napa))
+
+(define (main args)
+  (cond
+    ((directory-git?)
+     (display  (git (cdr args))))
+    (else
+      (git (cdr args))
+      )))
+
+(main (command-line))
+
+;; vim:filetype=scheme
