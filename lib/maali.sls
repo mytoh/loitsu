@@ -188,9 +188,9 @@
     x)
 
 
- ; (define (unpaint s)
- ;   (irregex-replace/all '(: "[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
+  ; (define (unpaint s)
+  ;   (irregex-replace/all '(: "[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
 
- ; ; "\[((\d)+\;)*(\d)+m"
+  ; ; "\[((\d)+\;)*(\d)+m"
 
-)
+  )

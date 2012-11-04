@@ -15,7 +15,8 @@
     (mosh process)
     (irregex)
     (match)
-    (mosh pp))
+    (loitsu process)
+    )
 
   (define (git-clone args)
     (let ((options (list (option '(#\p "private") #f #f
@@ -56,15 +57,11 @@
   (define (github-create-new-repository args)
     (let ((name (car args))
           (user (string-trim-right (process-output->string "git config user.name"))))
-      (call-process (p (string-join `("curl" "-u" ,user "https://api.github.com/user/repos"
+      (call-process (string-join `("curl" "-u" ,user "https://api.github.com/user/repos"
                                       "-d" ,(string-append
                                               "'{"
                                               "\"name\": " "\"" name "\""
-                                              "}'")))))))
-
-  (define (process-output->string cmd)
-    (let-values (((cout status x) (call-process cmd)))
-      cout))
+                                              "}'"))))))
 
   (define (git args)
     (match (car args)
