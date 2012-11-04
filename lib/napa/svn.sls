@@ -1,0 +1,23 @@
+
+(library (napa svn)
+  (export svn)
+  (import
+    (rnrs)
+    (match)
+    (only (srfi :13 strings)
+      string-join)
+    (mosh process))
+
+(define (svn args)
+  (cond
+    ((null? args)
+     (call-process "svn"))
+    (else
+      (match  (car args)
+        ("st"
+         (call-process (string-join '("svn" "status"))))
+        (_
+          (call-process (string-join `("svn" ,@args))))))))
+
+)
+

@@ -8,9 +8,16 @@
   (cond
     ((directory-git?)
      (display  (git (cdr args))))
+    ((file-exists?  ".hg")
+     (hg  (cdr args)))
+    ((file-exists?  ".svn")
+     (svn (cdr args)))
+    ((file-exists?  "CVS")
+     (cvs (cdr args)))
+    ((file-exists?  "_darcs")
+     (darcs (cdr args)))
     (else
-      (git (cdr args))
-      )))
+      (git (cdr args)))))
 
 (main (command-line))
 

@@ -8,22 +8,24 @@
 
 
 (define (main args)
-  (match (car args)
+  (match (cadr args)
     ; commands
     ("mypassport"
      (mount-mypassport))
     ("deskstar"
      (mount-deskstar))
     ("quatre"
-     (mount-quatre (cadr args)))
+     (mount-quatre (caddr args)))
     ("all"
      (mount-mypassport)
      (mount-deskstar)
-     (mount-quatre (cadr args)))
+     (mount-quatre (caddr args)))
     ))
 
 (define mount
   (lambda (src dest)
+    (display (string-append "mounting " source))
+    (newline)
     (call-process (string-join
                     `("sudo" "mount" "-v" ,src ,dest)))))
 
@@ -38,5 +40,7 @@
 (define (mount-quatre user)
   (mount (string-append "quatrevingtdix:/Users/" user)
          "/nfs/quatre"))
+
+(main (command-line))
 
 ;; vim:filetype=scheme
