@@ -58,10 +58,10 @@
     (let ((name (car args))
           (user (string-trim-right (process-output->string "git config user.name"))))
       (call-process (string-join `("curl" "-u" ,user "https://api.github.com/user/repos"
-                                      "-d" ,(string-append
-                                              "'{"
-                                              "\"name\": " "\"" name "\""
-                                              "}'"))))))
+                                   "-d" ,(string-append
+                                           "'{"
+                                           "\"name\": " "\"" name "\""
+                                           "}'"))))))
 
   (define (git args)
     (match (car args)

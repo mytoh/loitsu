@@ -2,7 +2,7 @@
 (library (maali)
   (export paint
     pa
-    unpaint)
+    )
   (import
     (rnrs)
     (only (srfi :13)
