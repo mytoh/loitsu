@@ -3,7 +3,7 @@
 (library (napa darcs)
   (export darcs)
   (import
-    (rnrs)
+    (scheme base)
     (match)
     (only (srfi :13 strings)
       string-join)

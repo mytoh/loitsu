@@ -3,7 +3,9 @@
   (export
     b f  o t)
   (import
-    (rnrs)
+    (scheme base)
+    (scheme write)
+    (scheme file)
     (srfi :19))
 
   (define (b x)

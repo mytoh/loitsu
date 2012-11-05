@@ -1,7 +1,10 @@
 #!/usr/bin/env mosh
 
 (import
-  (rnrs)
+  (scheme base)
+  (scheme process-context)
+  (scheme write)
+  (scheme file)
   (napa))
 
 (define (main args)

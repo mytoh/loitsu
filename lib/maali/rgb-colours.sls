@@ -3,7 +3,7 @@
 (library (maali rgb-colours)
   (export
     rgb-colours)
-  (import (rnrs))
+  (import (scheme base))
 
 
   (define rgb-colours

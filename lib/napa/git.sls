@@ -4,7 +4,8 @@
     git
     directory-git?)
   (import
-    (rnrs)
+    (scheme base)
+    (scheme write)
     (srfi :8 receive)
     (only (srfi :13 strings)
       string-trim-right

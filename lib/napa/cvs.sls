@@ -3,7 +3,7 @@
 (library (napa cvs)
   (export cvs)
   (import
-    (rnrs)
+    (scheme base)
     (match)
     (only (srfi :13 strings)
       string-join)

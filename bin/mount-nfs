@@ -1,6 +1,8 @@
 #!/usr/bin/env mosh
 
-(import (rnrs)
+(import 
+  (scheme base)
+  (scheme process-context)
   (only (srfi :13 strings)
     string-join)
   (match)

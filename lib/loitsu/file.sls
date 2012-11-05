@@ -2,13 +2,15 @@
 (library (loitsu file)
   (export
     file-dirname)
-  (import (rnrs)
+  (import
+    (scheme base)
     (only (srfi :13 strings)
       string-join
       string-take-right)
     (only (srfi :1 lists)
       drop-right)
-    (mosh)
+    (except (mosh)
+      read-line)  
     (mosh file))
 
   (define (file-dirname path)

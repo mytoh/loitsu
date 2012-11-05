@@ -2,11 +2,13 @@
 (library (talikko commands commands)
   (export commands)
   (import
-    (rnrs)
+    (scheme base)
+    (scheme process-context)
     (only (srfi :13 strings)
-      string-join)  
+      string-join)
     (mosh file)
-    (mosh))
+    (except (mosh)
+      read-line))
 
   (define(commands)
     (for-each

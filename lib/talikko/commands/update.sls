@@ -3,13 +3,14 @@
   (export update
     update-source-tree)
   (import
-    (rnrs)
+    (scheme base)
+    (scheme file)
     (only (srfi :13 strings)
       string-join)
-
     (mosh process)
     (mosh file)
-    (mosh)
+    (except (mosh)
+      read-line)
     (loitsu process)
     (maali))
 

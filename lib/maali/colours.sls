@@ -5,7 +5,7 @@
     ansi-effects
     ansi-colours-foreground
     ansi-colours-background)
-  (import (rnrs))
+  (import (scheme base))
 
 
   (define ansi-colours

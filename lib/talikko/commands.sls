@@ -5,7 +5,7 @@
     update
     update-source-tree)
   (import
-    (rnrs)
+    (scheme base)
     (talikko commands commands)
     (talikko commands update)
     ))

@@ -6,8 +6,7 @@
   (export
     rgb-txt->list)
   (import
-    (except (rnrs)
-      remove)
+    (scheme base)
     (only (srfi :1 lists)
       last
       remove)

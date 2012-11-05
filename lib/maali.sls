@@ -4,7 +4,10 @@
     pa
     )
   (import
-    (rnrs)
+    (scheme base)
+    (scheme write)
+    (only (srfi :1)
+      fold)
     (only (srfi :13)
       string-trim)
     (irregex)
@@ -20,15 +23,15 @@
         ";5;"
         (number->string
           (+ 232
-             (exact (floor (/ (+ red green blue) 33))))))
+             (inexact->exact (floor (/ (+ red green blue) 33))))))
       ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
       (string-append
         ";5;"
         (number->string
           (+ 16
-             (* (exact (floor (* 6 (/ red 256)))) 36)
-             (* (exact (floor (* 6 (/ green 256)))) 6)
-             (* (exact (floor (* 6 (/ blue 256)))) 1))))))
+             (* (inexact->exact (floor (* 6 (/ red 256)))) 36)
+             (* (inexact->exact (floor (* 6 (/ green 256)))) 6)
+             (* (inexact->exact (floor (* 6 (/ blue 256)))) 1))))))
 
   (define (if-gray-possible red green blue)
     (let loop ((sep 42.5)
@@ -75,7 +78,7 @@
 
   (define (duplicate-string s)
     (list->string
-      (fold-left
+      (fold
         (lambda (c r)
           (append (list c c) r))
         '() (string->list s))))
@@ -116,7 +119,8 @@
   (define (paint s . rest)
     (string-append
       (wrap (apply string-append  (make-colour rest)))
-      s (reset)))
+      s (reset))
+    )
 
   (define (pa x . rest)
     (display (apply paint x rest))

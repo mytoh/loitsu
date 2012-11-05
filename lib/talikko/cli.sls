@@ -2,7 +2,7 @@
 (library (talikko cli)
   (export runner)
   (import
-    (rnrs)
+    (scheme base)
     (match)
     (talikko commands))
 

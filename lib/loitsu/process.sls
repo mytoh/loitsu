@@ -2,7 +2,10 @@
 (library (loitsu process)
   (export process-output->string
     with-cwd)
-  (import (rnrs)
+  (import
+    (scheme base)
+    (except (mosh)
+      read-line)  
     (mosh process))
 
 
