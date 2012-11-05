@@ -24,7 +24,7 @@
 
 (define mount
   (lambda (src dest)
-    (display (string-append "mounting " source))
+    (display (string-append "mounting " src))
     (newline)
     (call-process (string-join
                     `("sudo" "mount" "-v" ,src ,dest)))))

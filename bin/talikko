@@ -1,0 +1,13 @@
+#!/usr/bin/env mosh
+
+(import (rnrs) 
+  (prefix (talikko cli)
+    cli.))
+
+(define (main args)
+  (cli.runner args))
+
+(main (command-line))
+
+
+;; vim:filetype=scheme
