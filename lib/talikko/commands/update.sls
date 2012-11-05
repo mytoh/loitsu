@@ -10,6 +10,7 @@
     (mosh process)
     (mosh file)
     (mosh)
+    (loitsu process)
     (maali))
 
   (define(update)
@@ -35,7 +36,8 @@
          ((file-exists? "/usr/src/.git")
           (call-process "sudo git pull"))
          ((file-exists? "/usr/src/.svn")
-          (call-process "sudo svn up /usr/src"))))
+          (let ((out (process-output->string "sudo svn up /usr/src")))
+            (format #t "~a\n" out)))))
       (else
         (format #t "~a\n" (paint "cloning source tree from svn" 93))
         (call-process "svn co -q http://svn.freebsd.org/base/head /usr/src")))
