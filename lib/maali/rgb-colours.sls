@@ -5,6 +5,7 @@
     rgb-colours)
   (import (scheme base))
 
+  (begin
 
   (define rgb-colours
     '((snow (255 250 250))
@@ -762,4 +763,4 @@
       ))
 
 
-  )
+  ))

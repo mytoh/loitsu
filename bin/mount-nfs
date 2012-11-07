@@ -3,6 +3,7 @@
 (import 
   (scheme base)
   (scheme process-context)
+  (scheme write)
   (only (srfi :13 strings)
     string-join)
   (match)

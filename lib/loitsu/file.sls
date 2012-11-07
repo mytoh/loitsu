@@ -13,6 +13,8 @@
       read-line)  
     (mosh file))
 
+  (begin
+
   (define (file-dirname path)
     (cond
       ((equal? "/" (string-take-right path 1))
@@ -20,5 +22,5 @@
       (else
         (string-join (drop-right (string-split path #\/)
                                  1)
-        "/"))))
+        "/"))))) 
   )

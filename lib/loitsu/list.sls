@@ -7,6 +7,8 @@
     (scheme base))
 
 
+  (begin
+
   (define (scdr lst)
     ; safe cdr
     (cond
@@ -16,13 +18,13 @@
          (pair? lst))
        (cdr lst))
       (else
-        '())))
+        '()))) 
 
   (define (scar lst)
     (cond
       ((pair? lst)
        (car lst))
       (else
-        lst)))
+        lst)))) 
 
   )

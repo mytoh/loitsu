@@ -9,6 +9,7 @@
       string-join)
     (mosh process))
 
+  (begin
   (define (darcs args)
     (cond
       ((null? args)
@@ -18,7 +19,7 @@
           ("up"
            (call-process (string-join '("darcs" "pull"))))
           (_
-            (call-process (string-join `("darcs" ,@args))))))))
+            (call-process (string-join `("darcs" ,@args))))))))) 
 
 
 

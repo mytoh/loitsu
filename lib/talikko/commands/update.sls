@@ -14,6 +14,7 @@
     (loitsu process)
     (maali))
 
+  (begin
   (define(update)
     (cond
       ((file-exists? "/usr/ports/.git")
@@ -26,7 +27,7 @@
        (call-process "sudo svn up /usr/ports"))
       (else
         (format #t "~a\n" (paint "Get ports tree" ))
-        (call-process (string-join '("svn" "checkout" "-q" "http://svn.freebsd.org/ports/head" "/usr/ports"))))))
+        (call-process (string-join '("svn" "checkout" "-q" "http://svn.freebsd.org/ports/head" "/usr/ports")))))) 
 
   (define (update-source-tree)
     (cond
@@ -42,7 +43,7 @@
       (else
         (format #t "~a\n" (paint "cloning source tree from svn" 93))
         (call-process "svn co -q http://svn.freebsd.org/base/head /usr/src")))
-    )
+    )) 
 
   ; }}}
 

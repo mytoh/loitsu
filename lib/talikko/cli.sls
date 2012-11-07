@@ -6,6 +6,7 @@
     (match)
     (talikko commands))
 
+  (begin
 
   (define (runner args)
     (match (cadr args)
@@ -27,7 +28,7 @@
       ((or "update" "up")
        (update))
       )
-    )
+    )) 
 
 
 

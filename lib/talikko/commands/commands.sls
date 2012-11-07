@@ -10,11 +10,13 @@
     (except (mosh)
       read-line))
 
+  (begin
+
   (define(commands)
     (for-each
       print
       (map
         (lambda (path) (car (string-split path #\.)))
         (directory-list (string-join `(,(car (command-line)))
-                                     "/")))))
+                                     "/")))))) 
   )

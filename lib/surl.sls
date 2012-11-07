@@ -6,8 +6,9 @@
     (irregex)
     (http))
 
-  (define (string-is-url? str)
-    (irregex-search
-      "^https?://" str))
+  (begin
+    (define (string-is-url? str)
+      (irregex-search
+        "^https?://" str)))
 
   )

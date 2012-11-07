@@ -8,6 +8,8 @@
   (import (scheme base))
 
 
+  (begin
+
   (define ansi-colours
     '((black   0)
       (red     1)
@@ -18,7 +20,7 @@
       (cyan    6)
       (white   7)
       (default 9)
-      ))
+      )) 
 
   (define ansi-effects
     '((reset 0) (nothing 0)
@@ -47,7 +49,7 @@
                 (overline       53)
                 (frame_off       54) (encircle_off      54)
                 (overline_off   55)
-                ))
+                )) 
 
   (define ansi-colours-foreground
     '((black    30)
@@ -59,7 +61,7 @@
       (cyan     36)
       (white    37)
       (default  39)
-      ))
+      )) 
 
   (define ansi-colours-background
     '((black    40)
@@ -71,6 +73,6 @@
       (cyan     46)
       (white    47)
       (default  49)
-      ))
+      ))) 
 
   )

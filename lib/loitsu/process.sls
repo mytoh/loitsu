@@ -8,10 +8,11 @@
       read-line)  
     (mosh process))
 
+  (begin
 
   (define (process-output->string cmd)
     (let-values (((cout status x) (call-process cmd)))
-      cout))
+      cout)) 
 
 (define-syntax with-cwd
   (syntax-rules ()
@@ -20,7 +21,7 @@
          (dest dir))
      (set-current-directory! dest)
      body
-     (set-current-directory! cur)))))
+     (set-current-directory! cur)))))) 
 
 
   )

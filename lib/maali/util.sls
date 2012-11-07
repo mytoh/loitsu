@@ -15,17 +15,19 @@
       string-trim-both)
     (mosh file))
 
+  (begin
+
   (define (comment? string-line)
     (cond
       ((= (string-length string-line) 0)
        #f)
       ((equal? #\# (string-ref (string-trim-both (string-trim-both string-line) #\t) 0))
        #t)
-      (else #f)))
+      (else #f))) 
 
   (define (empty-line? line)
     (if (string=? "" line)
-      #t #f))
+      #t #f)) 
 
   (define (colour-list lst)
     (map
@@ -35,7 +37,7 @@
              (,(car colours)
                ,(cadr colours)
                ,(caddr colours)))))
-      lst))
+      lst)) 
 
   (define (rgb-txt->list file)
     (colour-list
@@ -43,7 +45,7 @@
         (lambda (l)
           (or (comment? l)
             (empty-line? l)))
-        (file->list file))))
+        (file->list file))))) 
 
 
 )
