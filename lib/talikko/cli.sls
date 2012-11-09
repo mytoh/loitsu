@@ -19,8 +19,8 @@
       ;  (deinstall-package args))
       ; ((or "re" "reinstall")
       ;  (reinstall args))
-      ; ("search"
-      ;  (search args))
+      ("search"
+       (search args))
       ("srcup"
        (update-source-tree))
       ("commands"
