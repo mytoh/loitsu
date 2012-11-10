@@ -68,7 +68,7 @@
                                              "\"name\": " "\"" name "\""
                                              "}'"))))))
     (define (git-command args)
-      (call-process (string-join (append '("git" ) args)))
+      (run-command (append '(git ) args))
       )
 
     (define (git args)
