@@ -40,23 +40,22 @@
               (display "fetching repository from github")
               (newline)
               (if (string-index (cadr args) #\/)
-                (call-process (string-join `("git" "clone" ,(string-append "git@github.com:" (cadr args)))))
-                (call-process (string-join `("git" "clone"
-                                             ,(string-append "git@github.com:"
-                                                             (string-trim-right (process-output->string "git config user.name"))
-                                                             "/" (cadr args)))))))
+                (run-command `(git clone ,(string-append "git@github.com:" (cadr args))))
+                (run-command `(git clone ,(string-append "git@github.com:"
+                                                         (string-trim-right (process-output->string "git config user.name"))
+                                                         "/" (cadr args))))))
             (else
               (cond
                 ((irregex-match (irregex "^http://.*|^git://.*") (car args))
-                 (call-process (string-join `("git" "clone" "--depth" "1" ,(car args)))))
+                 (run-command `(git clone --depth 1 ,(car args))))
                 (else
                   (display "fetching repository from github")
                   (newline)
-                  (call-process (string-join `("git" "clone" "--depth" "1"  ,(string-append "git://github.com/" (car args))))))))))))
+                  (run-command `(git clone --depth 1  ,(string-append "git://github.com/" (car args)))))))))))
 
     (define (git-commit-push args)
-      (call-process (string-join `("git" "commit" "-avm" "'" ,(car args) "'")))
-      (call-process (string-join `("git" "push"))))
+      (run-command `(git commit -avm "'" ,(car args) "'"))
+      (run-command `(git push)))
 
 
     (define (github-create-new-repository args)
@@ -74,7 +73,7 @@
     (define (git args)
       (match (car args)
         ("st"
-         (call-process (string-join `("git" "status" ,@(cdr args)))))
+         (git-command `(status ,@(cdr args))))
         ("clone"
          (git-clone (cdr args)))
         ("cp"
@@ -114,8 +113,8 @@
         (define (port->string p)
           (let loop ([ret '()][c (read-char p)])
             (if (eof-object? c)
-                (list->string (reverse ret))
-                (loop (cons c ret) (read-char p)))))
+              (list->string (reverse ret))
+              (loop (cons c ret) (read-char p)))))
         (let-values ([(pid cin cout cerr) (spawn "git" '("rev-parse" "--is-inside-work-tree") (list #f out out))])
           (close-port out)
           (if (string=? "true\n" (port->string (transcoded-port in (make-transcoder (utf-8-codec)))))
