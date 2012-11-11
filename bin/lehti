@@ -1,0 +1,15 @@
+#!/usr/bin/env mosh
+
+(import
+  (scheme base)
+  (scheme process-context)
+  (prefix (lehti cli)
+          cli.))
+
+(define (main args)
+  (cli.runnur args)
+  )
+
+(main (command-line))
+
+;; vim: filetype=scheme

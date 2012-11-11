@@ -67,8 +67,7 @@
                                              "\"name\": " "\"" name "\""
                                              "}'"))))))
     (define (git-command args)
-      (run-command (append '(git ) args))
-      )
+      (run-command (append '(git ) args)))
 
     (define (git args)
       (match (car args)
