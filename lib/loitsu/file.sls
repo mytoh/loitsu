@@ -4,6 +4,7 @@
     build-path
     make-directory*
     path-extension
+    path-sans-extension
     file->string-list
     file->sexp-list
     path-dirname
@@ -45,9 +46,13 @@
         (lambda (in)
           (port->sexp-list in))))
 
+
+
     (define (make-directory* path)
       (if (not (file-exists? path))
         (create-directory path)))
+
+
 
     (define (path-extension path)
       (let ((p (string-split path #\.)))
@@ -77,6 +82,17 @@
         (else
           (apply build-path (drop-right (string-split path #\/)
                                         1)))))
+
+    (define (path-sans-extension path)
+      (let ((pt (string-split path #\.)))
+        (cond
+          ((< 1 (length pt))
+           (string-join (drop-right pt 1) "."))
+          ((eq? 1 (length pt))
+           pt)
+          (else
+            #f))
+        ))
 
 
     ))
