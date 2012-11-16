@@ -2,15 +2,19 @@
 (library (loitsu port)
   (export
     port->list
+    port->sexp-list
     port->string-list)
   (import
-    (scheme base))
+    (scheme base)
+    (scheme read))
 
   (begin
 
     (define (port->string-list port)
-      (port->list read-line port)
-      )
+      (port->list read-line port))
+
+    (define (port->sexp-list port)
+      (port->list read port))
 
     (define (port->list reader port)
       (let loop ((res '()))

@@ -41,7 +41,7 @@
             (lambda (x)
               (let ((name (car (string-split (car x) #\-)))
                     (version (cadr (string-split (car x) #\-)))
-                    (category (last (string-split (file-dirname (cadr x))
+                    (category (last (string-split (path-dirname (cadr x))
                                                   #\/)))
                     (desc (cadddr x)))
                 (display
