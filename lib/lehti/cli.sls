@@ -11,6 +11,8 @@
 
     (define (runnur args)
       (match (cadr args)
+        ("setup"
+         (setup args))
         ("install"
          (install args))
         ))

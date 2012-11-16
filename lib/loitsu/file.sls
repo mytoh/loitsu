@@ -19,6 +19,7 @@
     file->sexp-list
 
     file-exists?
+    create-symbolic-link
     directory-list
     file-directory?
     set-current-directory!
@@ -47,6 +48,7 @@
     (loitsu port)
     (kirjain)
     (only (mosh file)
+          create-symbolic-link
           file-symbolic-link?
           file-regular?
           delete-directory
@@ -90,7 +92,6 @@
 
     ;; rm -rf
     (define (remove-directory* path)
-      (o path)
       (cond
         ((file-regular? path)
          (remove-file path))

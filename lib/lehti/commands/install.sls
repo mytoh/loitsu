@@ -27,6 +27,7 @@
                                                                  (path-swap-extension package "lehspec")))))))
           (install-leh-package-files  lehspec)
           (make-executables package)
+          (remove-directory* cache-directory)
           )))
 
     (define (install-leh-package-files spec)
@@ -49,9 +50,11 @@
                                     name "bin"))
         (for-each
           (lambda (f)
-            (run-command `("chmod" "+x" ,(build-path (*lehti-dist-directory*) name "bin" f))))
+            (run-command `("chmod" "+x" ,(build-path (*lehti-dist-directory*) name "bin" f)))
+            (create-symbolic-link (build-path (*lehti-dist-directory*) name "bin" f)
+                                  (build-path (*lehti-bin-directory*) f)))
           (directory-list2 (build-path (*lehti-dist-directory*)
-                                      name "bin")))))
+                                       name "bin")))))
 
     ))
 
