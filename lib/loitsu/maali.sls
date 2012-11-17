@@ -1,5 +1,5 @@
 
-(library (maali)
+(library (loitsu maali)
   (export paint
           pa
           )
@@ -12,8 +12,8 @@
           string-trim)
     (irregex)
     (match)
-    (maali colours)
-    (maali rgb-colours))
+    (loitsu maali colours)
+    (loitsu maali rgb-colours))
 
   (begin
     (define (rgb-value red green blue)

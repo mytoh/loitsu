@@ -2,7 +2,7 @@
 
 ;; module to convert rgb.txt to list
 
-(library (maali util)
+(library (loitsu maali util)
   (export
     rgb-txt->list)
   (import

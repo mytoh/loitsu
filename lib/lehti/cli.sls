@@ -15,6 +15,10 @@
          (setup args))
         ("install"
          (install args))
+        ("deinstall"
+         (deinstall args))
+        ("clean"
+         (clean args))
         ))
 
     ))

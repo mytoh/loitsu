@@ -14,13 +14,12 @@
     (only (srfi :13 strings)
           string-contains-ci
           string-join)
-    (mosh file)
     (except (mosh)
             read-line)
     (talikko colour)
     (loitsu file)
     (loitsu process)
-    (maali))
+    )
 
   (begin
 
@@ -33,9 +32,9 @@
       (let ((package (caddr args)))
         (print
           (string-append
-            (paint "=> " colour-symbol)
-            (paint "Searching " colour-message)
-            (paint package colour-package)))
+            "=> "
+            "Searching "
+            package))
         (let ((found-list (find-package package)))
           (for-each
             (lambda (x)
@@ -47,13 +46,13 @@
                 (display
                   (string-append
                     " "
-                    (paint category colour-package-category)
+                    category
                     "/"
-                    (paint name colour-package)))
+                    name))
                 (print
-                  (string-append " [" (paint version colour-package-version ) "]"))
+                  (string-append " [" version "]"))
                 (print
-                  (string-append "    " (paint desc colour-package-description)))
+                  (string-append "    " desc))
                 ))
             found-list))))
 

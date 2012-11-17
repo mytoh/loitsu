@@ -7,18 +7,40 @@
   (import
     (scheme base)
     (only (srfi :13 strings)
-          string-join)  
+          string-join)
     (except (mosh)
             read-line)
-    (mosh process)
+    (only (mosh process)
+          call-process
+          waitpid
+          spawn pipe)
+    (only (rnrs)
+          transcoded-port make-transcoder
+          utf-8-codec)
     (loitsu string)
     )
 
   (begin
 
+    ; (define (process-output->string cmd)
+    ;   (let-values (((cout status x) (call-process cmd)))
+    ;     cout))
+
     (define (process-output->string cmd)
-      (let-values (((cout status x) (call-process cmd)))
-        cout))
+      (let ((commands (string-split cmd #\ )))
+      ;; get output as string
+      (let-values ([(in out) (pipe)])
+        (define (port->string p)
+          (let loop ([ret '()][c (read-char p)])
+            (if (eof-object? c)
+              (list->string (reverse ret))
+              (loop (cons c ret) (read-char p)))))
+        (let-values ([(pid cin cout cerr) (spawn (car commands) (cdr commands)  (list #f out out))])
+          (close-port out)
+          (let ((res (port->string (transcoded-port in (make-transcoder (utf-8-codec))))))
+            (close-port in)
+            (waitpid pid)
+            res)))))
 
     (define-syntax with-cwd
       (syntax-rules ()

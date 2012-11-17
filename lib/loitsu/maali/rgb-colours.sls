@@ -1,6 +1,6 @@
 ;; -*- coding: utf-8 -*-
 
-(library (maali rgb-colours)
+(library (loitsu maali rgb-colours)
   (export
     rgb-colours)
   (import (scheme base))

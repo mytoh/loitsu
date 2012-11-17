@@ -17,6 +17,7 @@
     directory-empty?
     file->string-list
     file->sexp-list
+    home-directory
 
     file-exists?
     create-symbolic-link
@@ -43,6 +44,7 @@
           last
           take-right
           drop-right)
+    (srfi :98)
     (except (mosh)
             read-line)
     (loitsu port)
@@ -204,7 +206,9 @@
 
     (define (path-swap-extension path ext)
       (let ((pt (path-sans-extension path)))
-        (string-append pt "." ext)
-        ))
+        (string-append pt "." ext)))
+
+    (define (home-directory)
+      (get-environment-variable "HOME"))
 
     ))

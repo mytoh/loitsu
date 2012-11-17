@@ -1,5 +1,5 @@
 
-(library (maali colours)
+(library (loitsu maali colours)
   (export
     ansi-colours
     ansi-effects
