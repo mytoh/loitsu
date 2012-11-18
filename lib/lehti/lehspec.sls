@@ -1,6 +1,7 @@
 
 (library (lehti lehspec)
   (export
+    package->lehspec
     spec
     spec-name
     spec-description
@@ -10,7 +11,8 @@
   (import
     (scheme base)
     (srfi :9)
-    (kirjain)
+    (loitsu file)
+    (lehti env)
     )
 
   (begin
@@ -41,6 +43,10 @@
               ; (register infos 'dependencies)
               lehspec))
 
+ (define (package->lehspec package)
+      (spec (cdar (file->sexp-list
+                    (build-path (*lehti-dist-directory*) package
+                                (path-swap-extension package "lehspec"))))))
 
 
     ))

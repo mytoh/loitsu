@@ -19,6 +19,22 @@
          (deinstall args))
         ("clean"
          (clean args))
+        ("reinstall"
+         (reinstall args))
+        ("update"
+         (update))
+        ("command"
+         (print-commands))
+        ("clone"
+         (clone args))
+        ("contents"
+         (contents args))
+        ("env"
+         (env))
+        ("list"
+         (list-packages))
+        ("spec"
+         (specification args))
         ))
 
     ))

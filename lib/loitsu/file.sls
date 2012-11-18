@@ -14,6 +14,7 @@
     path-absolute?
     directory-list2
     directory-list/path
+    directory-list-rec
     directory-empty?
     file->string-list
     file->sexp-list
@@ -40,6 +41,8 @@
           string-take
           string-take-right)
     (only (srfi :1 lists)
+          fold
+          fold-right
           remove
           last
           take-right
@@ -126,6 +129,21 @@
       (map
         (lambda (p) (build-path path p))
         (directory-list2 path)))
+
+    (define (directory-list-rec path)
+      (let ((files (directory-list/path path)))
+        (cond
+          ((null? files) '())
+          (else
+        (fold
+          (lambda (e res)
+            (cond
+              ((not (file-directory? e))
+               (cons e res))
+              ((file-directory? e)
+               (append (directory-list-rec e)
+                     res))))
+          '() files)))))
 
     (define (remove-file path)
       (cond
