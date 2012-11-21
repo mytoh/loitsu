@@ -1,8 +1,7 @@
 
 (library (loitsu maali)
   (export paint
-          pa
-          )
+          pa)
   (import
     (scheme base)
     (scheme write)

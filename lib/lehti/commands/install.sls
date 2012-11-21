@@ -1,6 +1,7 @@
 
 (library (lehti commands install)
-  (export install)
+  (export install
+          install-package)
   (import
     (scheme base)
     (scheme write)
@@ -8,18 +9,26 @@
     (scheme repl)
     (loitsu file)
     (loitsu process)
+    (loitsu message)
+    (loitsu maali)
     (lehti env)
     (lehti util)
     (lehti lehspec)
     (lehti commands fetch)
-    (kirjain)
-    )
+    (kirjain))
 
   (begin
 
     (define (install args)
-      (let ((package (caddr args)))
-        (cond
+      (let ((packages (cddr args)))
+        (for-each
+          (lambda (p)
+           (ohei (string-append "install " (paint p 133)))
+          (install-package p))
+        packages)))
+
+    (define (install-package package)
+      (cond
           ((and (not (package-installed? package))
                 (package-available? package))
            (fetch (string-append "git://github.com/mytoh/" package) package)
@@ -31,8 +40,7 @@
                                                                     (path-swap-extension package "lehspec")))))))
              (install-leh-package-files  lehspec)
              (make-executables package)
-             (remove-directory* cache-directory)
-             )))))
+             (remove-directory* cache-directory)))))
 
     (define (install-leh-package-files spec)
       (let ((files (spec-files spec))

@@ -1,6 +1,7 @@
 
 (library (lehti util)
   (export
+    call-with-packages
     package-installed?
     package-available?)
   (import
@@ -21,6 +22,11 @@
                                                          "leh")))
         #t #f))
 
+    (define (call-with-packages package-list proc)
+      (for-each
+        (lambda (p)
+          (proc p))
+        package-list))
 
 
     ))

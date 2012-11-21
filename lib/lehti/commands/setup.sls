@@ -36,13 +36,10 @@
         (else
           (string-join lst ":"))))
 
-
     (define (setup args)
-      (match (caddr args)  
+      (match (caddr args)
         ("load-path"
-         (display (list->path (make-load-path))))
-        ))
-
+         (display (list->path (make-load-path))))))
 
     ))
 

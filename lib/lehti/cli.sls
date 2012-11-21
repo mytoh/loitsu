@@ -13,13 +13,13 @@
       (match (cadr args)
         ("setup"
          (setup args))
-        ("install"
+        ((or "install" "i")
          (install args))
-        ("deinstall"
+        ((or "deinstall" "rm")
          (deinstall args))
         ("clean"
          (clean args))
-        ("reinstall"
+        ((or "reinstall" "re")
          (reinstall args))
         ("update"
          (update))
@@ -34,7 +34,6 @@
         ("list"
          (list-packages))
         ("spec"
-         (specification args))
-        ))
+         (specification args))))
 
     ))
