@@ -53,7 +53,7 @@
       (string-append "[" s))
 
     (define (reset)
-      (wrap (escape "0")))
+      (wrap "0"))
 
     (define (wrap str)
       (escape (string-append  str "m")))
@@ -117,10 +117,13 @@
            lst))
 
     (define (paint s . rest)
-      (string-append
-        (wrap (apply string-append  (make-colour rest)))
-        s (reset))
-      )
+      (cond
+        ((null? rest)
+         s)
+        (else
+          (string-append
+            (wrap (apply string-append  (make-colour rest)))
+            s (reset)))))
 
     (define (pa x . rest)
       (display (apply paint x rest))

@@ -19,6 +19,7 @@
     file->string-list
     file->sexp-list
     home-directory
+    find-file-in-paths
 
     file-exists?
     create-symbolic-link
@@ -41,6 +42,8 @@
           string-take
           string-take-right)
     (only (srfi :1 lists)
+          any
+          find
           fold
           fold-right
           remove
@@ -228,5 +231,11 @@
 
     (define (home-directory)
       (get-environment-variable "HOME"))
+
+    (define (find-file-in-paths file)
+      (any (lambda (p)
+             (find (lambda (s) (equal? (path-basename s) file))
+                   (if (file-exists? p) (directory-list/path p) '())))
+           (string-split (get-environment-variable "PATH") #\:)))
 
     ))
