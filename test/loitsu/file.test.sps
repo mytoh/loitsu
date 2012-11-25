@@ -1,7 +1,7 @@
 
 (import
   (scheme base)
-  (srfi :78)
+  (pieni check)
   (loitsu file))
 
 ;; build-path

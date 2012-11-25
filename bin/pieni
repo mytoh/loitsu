@@ -1,0 +1,17 @@
+#!/usr/bin/env mosh
+
+(import
+  (scheme base)
+  (scheme process-context)
+  (prefix (pieni cli)
+          cli:)  )
+
+
+(define (main args)
+  (cli:runner args))
+
+
+(main (command-line))
+
+
+;; vim:filetype=scheme
