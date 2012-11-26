@@ -112,8 +112,7 @@
              (check:write expression)
              (display " => "))
             ('dot
-             ""))
-      )
+             "")))
 
     (define (check:report-actual-result actual-result)
       (case (check:report-style)
@@ -135,11 +134,22 @@
          (display (paint "." 'green)))))
 
     (define (check:report-failed expected-result)
-      (display "*** failed ***")
-      (newline)
-      (display " ; expected result: ")
-      (check:write expected-result)
-      (newline))
+      (case (check:report-style)
+        ('defalt
+         (display "*** failed ***")
+         (newline)
+         (display " ; expected result: ")
+         (check:write expected-result)
+         (newline))
+        ('dot
+         (display (paint "F" 'red)))))
+
+    (define (check:report-result-failed expected-result)
+         (display (paint "*** failed ***" 'red))
+         (newline)
+         (display " ; expected result: ")
+         (check:write expected-result)
+         (newline))
 
     (define (check-report)
       (if (>= (check:mode) 1)
@@ -156,11 +166,12 @@
                    (expression (car w))
                    (actual-result (cadr w))
                    (expected-result (caddr w)))
+              (newline)
               (display " First failed example:")
               (newline)
               (check:report-expression expression)
               (check:report-actual-result actual-result)
-              (check:report-failed expected-result))))))
+              (check:report-result-failed expected-result))))))
 
     (define (check-passed? expected-total-count)
       (and (= (length check:failed) 0)
