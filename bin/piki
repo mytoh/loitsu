@@ -1,0 +1,11 @@
+#!/usr/bin/env nmosh
+
+(import
+  (scheme base)
+  (scheme process-context)
+  (pikkukivi cli))
+
+(define (main args)
+  (runner args))
+
+(main (command-line))

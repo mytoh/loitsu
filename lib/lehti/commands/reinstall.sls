@@ -13,8 +13,7 @@
     (loitsu maali)
     (lehti util)
     (lehti commands install)
-    (lehti commands deinstall)
-    )
+    (lehti commands deinstall))
 
   (begin
 
@@ -23,18 +22,13 @@
         (ohei "reinstall packages...")
         (display (string-join packages))
         (newline)
-      (for-each
-        (lambda (p)
-          (cond
-            ((package-installed? p)
-             (display (paint ":: deinstall "))
-             (display p)
-             (newline)
+        (for-each
+          (lambda (p)
+            (cond
+              ((package-installed? p)
                (deinstall-package p)
-             (display (paint ":: install "))
-             (display p)
-             (newline)
                (install-package p))))
-            packages)))
+          packages))
+      ( ohei "finished"))
 
     ))

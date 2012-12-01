@@ -15,7 +15,7 @@
     (lehti util)
     (lehti lehspec)
     (lehti commands fetch)
-    (kirjain))
+    )
 
   (begin
 

@@ -1,25 +1,26 @@
 
 (library (loitsu file)
   (export
-    build-path
     make-directory*
     remove-directory*
     remove-file
     copy-file
-    path-extension
-    path-sans-extension
-    path-swap-extension
-    path-dirname
-    path-basename
-    path-absolute?
     directory-list2
     directory-list/path
     directory-list-rec
     directory-empty?
     file->string-list
     file->sexp-list
-    home-directory
     find-file-in-paths
+
+    build-path
+    path-extension
+    path-sans-extension
+    path-swap-extension
+    path-dirname
+    path-basename
+    path-absolute?
+    home-directory
 
     file-exists?
     create-symbolic-link
@@ -50,11 +51,12 @@
           last
           take-right
           drop-right)
-    (srfi :98)
     (except (mosh)
             read-line)
+    (srfi :98)
     (loitsu port)
-    (kirjain)
+    (loitsu file path)
+    (loitsu control)
     (only (mosh file)
           create-symbolic-link
           file-symbolic-link?
@@ -138,15 +140,15 @@
         (cond
           ((null? files) '())
           (else
-        (fold
-          (lambda (e res)
-            (cond
-              ((not (file-directory? e))
-               (cons e res))
-              ((file-directory? e)
-               (append (directory-list-rec e)
-                     res))))
-          '() files)))))
+            (fold
+              (lambda (e res)
+                (cond
+                  ((not (file-directory? e))
+                   (cons e res))
+                  ((file-directory? e)
+                   (append (directory-list-rec e)
+                           res))))
+              '() files)))))
 
     (define (remove-file path)
       (cond
@@ -166,76 +168,15 @@
         (close-input-port pin)
         (close-output-port pout)))
 
-
-    (define (path-extension path)
-      (let ((p (string-split path #\.)))
-        (cond
-          ((< 1 (length p))
-           (last p))
-          (else
-            #f))))
-
-    (define (path-absolute? path)
-      (if (equal? "/" (string-take path 1))
-        #t #f))
-
-    (define build-path
-      (case-lambda
-        ((path) path)
-        (paths (string-join
-                 (map (lambda (s)
-                        (if (equal? "" s)
-                          ""
-                          (if (equal? "/" (string-take-right s 1))
-                            (string-trim-right s #\/)
-                            s)))
-                      paths)
-                 "/"))))
-
-    (define (path-basename path)
-      (cond
-        ((equal? "/" path) "")
-        ((equal? "" path) "")
-        (else
-          (let ((p (string-trim-right path #\/)))
-            (car (take-right (string-split p #\/) 1))))))
-
-    (define (path-dirname path)
-      (cond
-        ((equal? "" path) ".")
-        ((equal? "/" path) "/")
-        ((path-absolute? path)
-         (let* ((p (string-trim-right path #\/)))
-           (if (equal? 2 (length (string-split p #\/)))
-             "/"
-             (apply build-path (drop-right (string-split p #\/) 1)))))
-        (else
-          (let ((p (string-trim-right path #\/)))
-            (apply build-path (drop-right (string-split p #\/)
-                                          1))))))
-
-    (define (path-sans-extension path)
-      (let ((pt (string-split path #\.)))
-        (cond
-          ((< 1 (length pt))
-           (string-join (drop-right pt 1) "."))
-          ((eq? 1 (length pt))
-           (car pt))
-          (else
-            #f))))
-
-
-    (define (path-swap-extension path ext)
-      (let ((pt (path-sans-extension path)))
-        (string-append pt "." ext)))
-
-    (define (home-directory)
-      (get-environment-variable "HOME"))
-
-    (define (find-file-in-paths file)
-      (any (lambda (p)
-             (find (lambda (s) (equal? (path-basename s) file))
-                   (if (file-exists? p) (directory-list/path p) '())))
-           (string-split (get-environment-variable "PATH") #\:)))
+    (define (find-file-in-paths file . args)
+      (let-optionals* args ((paths (string-split (get-environment-variable "PATH") #\:))
+                            (proc file-regular?))
+                      (any (lambda (f)
+                             (find (lambda (s) (and (equal? (path-basename s) file)
+                                                    (proc s)))
+                                   (if (file-exists? f)
+                                     (directory-list-rec f)
+                                     '())))
+                           paths)))
 
     ))

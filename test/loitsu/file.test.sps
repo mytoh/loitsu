@@ -40,6 +40,9 @@
 (check (path-absolute? "test/file") => #f)
 (check (path-absolute? "/test") => #t)
 
+; find-file-in-paths
+(check (find-file-in-paths "env") => "/usr/bin/env")
+
 (check-report)
 
 
@@ -55,5 +58,4 @@
 ; file->string-list
 ; file->sexp-list
 ; home-directory
-; find-file-in-paths
 

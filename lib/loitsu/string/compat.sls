@@ -3,6 +3,7 @@
   (export
     string-split)
   (import
-    (mosh))
+    (only (mosh)
+          string-split))
 
   )
