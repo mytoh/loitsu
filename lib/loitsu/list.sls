@@ -5,7 +5,7 @@
     scar
     scdr)
   (import
-    (scheme base))
+    (rnrs))
 
 
   (begin

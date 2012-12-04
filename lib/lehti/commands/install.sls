@@ -3,10 +3,7 @@
   (export install
           install-package)
   (import
-    (scheme base)
-    (scheme write)
-    (scheme eval)
-    (scheme repl)
+    (rnrs)
     (loitsu file)
     (loitsu process)
     (loitsu message)

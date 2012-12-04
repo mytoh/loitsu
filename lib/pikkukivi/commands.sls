@@ -5,7 +5,7 @@
     mount-nfs
     ascii-taide)
   (import
-    (scheme base)
+    (rnrs)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)
     (pikkukivi commands ascii-taide))

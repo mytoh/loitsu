@@ -3,8 +3,7 @@
   (export paint
           pa)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (only (srfi :1)
           fold)
     (only (srfi :13)
@@ -23,15 +22,15 @@
           ";5;"
           (number->string
             (+ 232
-               (inexact->exact (floor (/ (+ red green blue) 33))))))
+               (exact (floor (/ (+ red green blue) 33))))))
         ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
         (string-append
           ";5;"
           (number->string
             (+ 16
-               (* (inexact->exact (floor (* 6 (/ red 256)))) 36)
-               (* (inexact->exact (floor (* 6 (/ green 256)))) 6)
-               (* (inexact->exact (floor (* 6 (/ blue 256)))) 1))))))
+               (* (exact (floor (* 6 (/ red 256)))) 36)
+               (* (exact (floor (* 6 (/ green 256)))) 6)
+               (* (exact (floor (* 6 (/ blue 256)))) 1))))))
 
     (define (if-gray-possible red green blue)
       (let loop ((sep 42.5)

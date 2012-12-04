@@ -3,7 +3,7 @@
   (export
     runner)
   (import
-    (scheme base)
+    (rnrs)
     (match)
     (pikkukivi commands)
     )

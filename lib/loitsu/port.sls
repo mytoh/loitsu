@@ -5,8 +5,10 @@
     port->sexp-list
     port->string-list)
   (import
-    (scheme base)
-    (scheme read))
+    (rnrs)
+    (only (mosh)
+          read-line)  
+    )
 
   (begin
 

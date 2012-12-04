@@ -3,7 +3,7 @@
   (export
     let-optionals*)
   (import
-    (scheme base)
+    (rnrs)
     (loitsu control compat))
 
   )

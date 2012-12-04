@@ -3,8 +3,7 @@
   (export
     specification)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (srfi :48)
     (only (srfi :13)
           string-join)

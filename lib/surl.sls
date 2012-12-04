@@ -2,7 +2,7 @@
 (library (surl)
   (export surl)
   (import
-    (scheme base)
+    (rnrs)
     (irregex)
     (http))
 

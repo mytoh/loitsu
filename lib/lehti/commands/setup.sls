@@ -3,10 +3,8 @@
 (library (lehti commands setup)
   (export setup)
   (import
-    (scheme base)
-    (scheme write)
-    (scheme eval)
-    (scheme repl)
+    (except (rnrs)
+            remove)  
     (only (srfi :1)
           remove)
     (only (srfi :13)

@@ -3,8 +3,7 @@
   (export
     fetch)
   (import
-    (scheme base)
-    (scheme file)
+    (rnrs)
     (only (mosh)
           set-current-directory!)
     (only (mosh file)

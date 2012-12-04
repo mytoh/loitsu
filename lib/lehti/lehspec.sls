@@ -9,7 +9,8 @@
     spec-files
     <lehspec>)
   (import
-    (scheme base)
+    (except (rnrs)
+            define-record-type)  
     (srfi :9)
     (loitsu file)
     (lehti env)

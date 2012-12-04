@@ -5,7 +5,7 @@
     run-command
     with-cwd)
   (import
-    (scheme base)
+    (rnrs)
     (only (srfi :13 strings)
           string-join)
     (except (mosh)

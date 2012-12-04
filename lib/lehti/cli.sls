@@ -2,7 +2,7 @@
 (library (lehti cli)
   (export runnur)
   (import
-    (scheme base)
+    (rnrs)
     (match)
     (lehti commands)
     )

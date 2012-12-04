@@ -1,8 +1,7 @@
 #!/usr/bin/env mosh
 
 (import
-  (scheme base)
-  (scheme process-context)
+  (rnrs)
   (prefix (lehti cli)
           cli.))
 

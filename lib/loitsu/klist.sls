@@ -4,7 +4,7 @@
     klist?
     klist-ref)
   (import
-    (scheme base)
+    (rnrs)
     (only (srfi :13)
           string-ref)
     )

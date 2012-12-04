@@ -4,8 +4,7 @@
   (export
     reinstall)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (only (srfi :13)
           string-join)
     (loitsu file)

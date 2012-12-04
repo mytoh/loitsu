@@ -3,7 +3,7 @@
   (export
     clone)
   (import
-    (scheme base)
+    (rnrs)
     (srfi :48)
     (lehti env)
     (lehti util)

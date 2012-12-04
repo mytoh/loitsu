@@ -1,8 +1,7 @@
-#!/usr/bin/env nmosh
+#!/usr/bin/env mosh
 
 (import
-  (scheme base)
-  (scheme process-context)
+  (rnrs)
   (pikkukivi cli))
 
 (define (main args)

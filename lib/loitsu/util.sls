@@ -3,9 +3,13 @@
 (library (loitsu util)
   (export
     tap
+    comment
+    nothing
+    flip
+    implications
     )
   (import
-    (scheme base))
+    (rnrs))
 
 
   (begin
@@ -29,6 +33,11 @@
         ((_ (pred => body ...) ...)
          (begin
            (when pred body ...) ...))))
+
+    (define-syntax comment
+      (syntax-rules ()
+        ((_ x ...)
+         (values))))
 
 
     ;; http://rosettacode.org/wiki/Y_combinator#Scheme
@@ -56,6 +65,4 @@
 
 
 
-    )
-
-  )
+    ))

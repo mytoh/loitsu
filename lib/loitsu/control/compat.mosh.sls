@@ -3,5 +3,5 @@
   (export
     let-optionals*)
   (import
-    (scheme base)
+    (rnrs)
     (mosh control)) )

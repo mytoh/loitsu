@@ -11,22 +11,16 @@
     home-directory
     )
   (import
-    (scheme base)
-    (scheme case-lambda)
-    (only (srfi :1 lists)
-          any
-          find
-          fold
-          fold-right
-          remove
-          last
-          take-right
-          drop-right)
+    (rnrs)
     (only (srfi :13 strings)
           string-trim-right
           string-join
           string-take
           string-take-right)
+    (only (srfi :1)
+          take-right
+          drop-right
+          last)
     (srfi :98)
     (loitsu string)
     )

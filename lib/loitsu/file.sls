@@ -32,11 +32,9 @@
     delete-directory
     )
   (import
-    (scheme base)
-    (scheme file)
-    (scheme case-lambda)
-    (scheme read)
-    (scheme write)
+    (except (rnrs)
+            remove
+            find)  
     (only (srfi :13 strings)
           string-trim-right
           string-join
@@ -44,19 +42,21 @@
           string-take-right)
     (only (srfi :1 lists)
           any
-          find
           fold
-          fold-right
+          find 
           remove
           last
           take-right
           drop-right)
-    (except (mosh)
-            read-line)
+    (only (mosh)
+          set-current-directory!
+          current-directory
+          read-line)
     (srfi :98)
     (loitsu port)
     (loitsu file path)
     (loitsu control)
+    (loitsu string)
     (only (mosh file)
           create-symbolic-link
           file-symbolic-link?

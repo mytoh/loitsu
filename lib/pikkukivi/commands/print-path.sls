@@ -3,8 +3,7 @@
   (export
     print-path)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (srfi :48)
     (srfi :98)
     (match)

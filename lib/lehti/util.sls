@@ -5,7 +5,7 @@
     package-installed?
     package-available?)
   (import
-    (scheme base)
+    (rnrs)
     (loitsu file)
     (lehti env))
 

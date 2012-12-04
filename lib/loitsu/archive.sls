@@ -3,7 +3,7 @@
   (export
     file-archive?)
   (import
-    (scheme base)
+    (rnrs)
     (only (srfi :1 lists)
           any)
     (srfi :39 parameters)

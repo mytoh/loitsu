@@ -3,7 +3,7 @@
   (export
     url-is-git?)
   (import
-    (scheme base)
+    (rnrs)
     (loitsu file)
     (irregex))
 

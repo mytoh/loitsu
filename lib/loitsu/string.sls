@@ -9,10 +9,8 @@
     pluralize
     x->string)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (only (srfi :13)
-          string-downcase
           string-join)
     (srfi :48)
     (irregex)

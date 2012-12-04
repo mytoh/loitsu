@@ -3,8 +3,7 @@
   (export
     list-packages)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (srfi :48)
     (loitsu file)
     (lehti lehspec)

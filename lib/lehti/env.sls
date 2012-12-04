@@ -8,7 +8,7 @@
     *lehti-leh-file-directory*
     )
   (import
-    (scheme base)
+    (rnrs)
     (srfi :98)
     (srfi :39)
     (loitsu file))

@@ -3,7 +3,7 @@
   (export
     print-commands)
   (import
-    (scheme base)
+    (rnrs)
     (lehti env)
     (srfi :48)
     (loitsu file)

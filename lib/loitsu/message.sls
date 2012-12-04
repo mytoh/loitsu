@@ -3,8 +3,7 @@
   (export
     ohei)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (loitsu string)
     (loitsu maali))
 

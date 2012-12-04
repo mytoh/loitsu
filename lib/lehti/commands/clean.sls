@@ -3,8 +3,7 @@
   (export
     clean)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (loitsu file)
     (lehti env))
 

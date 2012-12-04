@@ -2,9 +2,7 @@
 (library (pikkukivi commands mount-nfs)
   (export mount-nfs)
   (import
-    (scheme base)
-    (scheme process-context)
-    (scheme write)
+    (rnrs)
     (only (srfi :13 strings)
           string-join)
     (match)

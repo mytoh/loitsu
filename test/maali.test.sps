@@ -1,6 +1,6 @@
 
 (import
-  (scheme base)
+  (rnrs)
   (pieni check)
   (loitsu maali))
 

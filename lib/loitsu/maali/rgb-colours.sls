@@ -3,7 +3,8 @@
 (library (loitsu maali rgb-colours)
   (export
     rgb-colours)
-  (import (scheme base))
+  (import 
+    (rnrs))
 
   (begin
 

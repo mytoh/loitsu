@@ -4,8 +4,7 @@
     deinstall-package
     deinstall)
   (import
-    (scheme base)
-    (scheme write)
+    (rnrs)
     (loitsu file)
     (loitsu message)
     (lehti util)

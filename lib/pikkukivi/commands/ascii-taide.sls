@@ -3,9 +3,9 @@
   (export
     ascii-taide)
   (import
-    (scheme base)
-    (scheme write)
-    (scheme file)
+    (rnrs)
+    (only (mosh)
+          read-line)
     (loitsu file))
 
   (begin

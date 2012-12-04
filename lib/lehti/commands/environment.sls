@@ -4,8 +4,8 @@
   (export
     env)
   (import
-    (scheme base)
-    (scheme write)
+    (except (rnrs)
+            remove)  
     (srfi :48)
     (only (srfi :1)
           remove)

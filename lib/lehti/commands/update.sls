@@ -3,7 +3,7 @@
   (export
     update)
   (import
-    (scheme base)
+    (rnrs)
     (lehti env)
     (loitsu file)
     (loitsu process))
