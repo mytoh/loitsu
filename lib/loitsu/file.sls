@@ -21,6 +21,8 @@
     path-basename
     path-absolute?
     home-directory
+    slurp
+    spit
 
     file-exists?
     create-symbolic-link
@@ -34,7 +36,7 @@
   (import
     (except (rnrs)
             remove
-            find)  
+            find)
     (only (srfi :13 strings)
           string-trim-right
           string-join
@@ -43,20 +45,19 @@
     (only (srfi :1 lists)
           any
           fold
-          find 
+          find
           remove
           last
           take-right
           drop-right)
-    (only (mosh)
-          set-current-directory!
-          current-directory
-          read-line)
+    (srfi :48)
     (srfi :98)
     (loitsu port)
     (loitsu file path)
     (loitsu control)
     (loitsu string)
+    (surl)
+    (irregex)
     (only (mosh file)
           create-symbolic-link
           file-symbolic-link?
@@ -64,7 +65,12 @@
           delete-directory
           directory-list
           file-directory?
-          create-directory))
+          file->string
+          create-directory)
+    (only (mosh)
+          set-current-directory!
+          current-directory
+          read-line))
 
   (begin
 
@@ -97,6 +103,7 @@
 
     (define (%make-directory dir)
       (unless (or (equal? "." dir)
+                  (equal? ".." dir)
                   (equal? "" dir))
         (create-directory dir)))
 
@@ -178,5 +185,28 @@
                                      (directory-list-rec f)
                                      '())))
                            paths)))
+
+
+    (define (string-is-url? s)
+       (irregex-search "^https?://" s))
+
+    (define-syntax slurp
+        (syntax-rules ()
+          ((_ file)
+           (cond
+             ((file-exists? file)
+              (file->string file))
+             ((string-is-url? file)
+              (surl file))
+             (else
+               (error (quote file) "file not exists\n"))))))
+
+    (define (spit file s)
+      (if (not (file-exists? file))
+        (call-with-output-file
+          file
+          (lambda (out)
+            (display s out)))))
+
 
     ))

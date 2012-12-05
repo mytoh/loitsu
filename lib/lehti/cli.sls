@@ -1,6 +1,6 @@
 
 (library (lehti cli)
-  (export runnur)
+  (export runner)
   (import
     (rnrs)
     (match)
@@ -9,7 +9,7 @@
 
   (begin
 
-    (define (runnur args)
+    (define (runner args)
       (match (cadr args)
         ("setup"
          (setup args))

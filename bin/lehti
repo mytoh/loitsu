@@ -6,7 +6,7 @@
           cli.))
 
 (define (main args)
-  (cli.runnur args)
+  (cli.runner args)
   )
 
 (main (command-line))

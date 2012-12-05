@@ -18,6 +18,8 @@
          (mount-nfs args))
         ("print-path"
          (print-path args))
+        ("futaba"
+         (futaba args))
         ))
 
     ))
