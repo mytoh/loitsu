@@ -63,9 +63,6 @@
           (lambda (u)
             (display (fetch u)))
           (delete-duplicates
-            (get-image-url/thread board thread)))
-
-        )
-      )
+            (get-image-url/thread board thread))) ))
 
     ))
