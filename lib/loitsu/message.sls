@@ -1,6 +1,7 @@
 
 (library (loitsu message)
   (export
+    message
     ohei)
   (import
     (rnrs)
@@ -9,22 +10,18 @@
 
   (begin
 
-    ; (define (ohei . msg)
-    ;   )
-
     (define-syntax ohei
       (syntax-rules ()
         ((_ msg)
          (begin
-           (display (paint "==>" 42))
-           (display " ")
-           (display msg)
+           (message ">>>" msg 42)
            (newline)))
         ((_ msg ...)
          (begin
-           (display (paint "==>" 42))
-           (display " ")
-           (display (str msg ...))
+           (message ">>>" (str msg ...)  42)
            (newline)))))
+
+    (define (message symbol text colour)
+      (display (string-append (paint symbol colour) " " text)))
 
     ))
