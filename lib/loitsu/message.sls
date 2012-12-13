@@ -14,7 +14,11 @@
       (syntax-rules ()
         ((_ msg)
          (begin
-           (message ">>>" msg 42)
+           (message (string-append
+                      (paint ">" 181)
+                      (paint ">" 179)
+                      (paint ">" 178))
+                    msg 0)
            (newline)))
         ((_ msg ...)
          (begin

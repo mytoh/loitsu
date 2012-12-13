@@ -10,7 +10,6 @@
           delete-duplicates
           last)
     (loitsu file)
-    (kirjain)
     (surl))
 
   (begin

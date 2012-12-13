@@ -13,6 +13,7 @@
     sumo
     sumo2
     sumo3
+    gsp
     )
   (import
     (rnrs)

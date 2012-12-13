@@ -4,22 +4,23 @@
   (import
     (rnrs)
     (match)
+    (loitsu cli)
     (lehti commands)
     )
 
   (begin
 
     (define (runner args)
-      (match (cadr args)
+      (match-short-command (cadr args)
         ("setup"
          (setup args))
-        ((or "install" "i")
+        ("install"
          (install args))
-        ((or "deinstall" "rm")
+        ("deinstall"
          (deinstall args))
         ("clean"
          (clean args))
-        ((or "reinstall" "re")
+        ("reinstall"
          (reinstall args))
         ("update"
          (update))

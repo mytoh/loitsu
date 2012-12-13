@@ -4,7 +4,6 @@
   (rnrs)
   (pikkukivi cli))
 
-(define (main args)
-  (runner args))
+(runner (command-line))
 
-(main (command-line))
+;; vim:filetype=scheme

@@ -4,14 +4,14 @@
     runner)
   (import
     (rnrs)
-    (match)
+    (loitsu cli)
     (pikkukivi commands)
     )
 
   (begin
 
     (define (runner args)
-      (match (cadr args)
+      (match-short-command (cadr args)
         ("ascii"
          (ascii-taide args))
         ("mount-nfs"
@@ -34,6 +34,8 @@
          (sumo2))
         ("sumo3"
          (sumo3))
+        ("gsp"
+         (gsp args))
         ))
 
     ))

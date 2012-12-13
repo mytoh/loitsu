@@ -5,6 +5,7 @@
     sumo
     sumo2
     sumo3
+    gsp
     mkd)
   (import
     (rnrs)
@@ -31,5 +32,7 @@
     (define (sumo3)
       (run-command '(mplayer -playlist "mms://a792.l12513450791.c125134.a.lm.akamaistream.net/D/792/125134/v0001/reflector:50791")))
 
+    (define (gsp args)
+      (run-command `(gosh -ptime ,@(cddr args))))
 
     ))
