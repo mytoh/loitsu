@@ -7,7 +7,8 @@
     underscore
     dasherize
     pluralize
-    x->string)
+    x->string
+    conc)
   (import
     (rnrs)
     (only (srfi :13)
@@ -76,5 +77,9 @@
                              (or plural
                                  (string-append singular "s"))))))
 
+
+    (define (conc . args)
+      ;; from chicken scheme
+      (apply string-append (map x->string args)))
 
     ))

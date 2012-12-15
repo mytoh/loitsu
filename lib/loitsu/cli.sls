@@ -31,6 +31,7 @@
 
     (define (puts str)
       (display str)
-      (newline))
+      (newline)
+      (values))
 
     ))

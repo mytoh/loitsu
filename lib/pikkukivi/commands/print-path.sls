@@ -45,7 +45,13 @@
         ("lib" (paint path 7))
         ("var" (paint path 8))
         ("home" (paint path 5))
-        (_ path)))
+        (_
+          (cond
+            ((string=? (get-environment-variable "USER") path)
+             (paint path 99))
+            ((irregex-match '(: #\. (* any)) path)
+             (paint path 59))
+            (else path)))))
 
     (define (split-env env)
       (string-split env #\:))

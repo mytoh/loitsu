@@ -2,7 +2,7 @@
 
 (library (lehti commands environment)
   (export
-    env)
+    environment)
   (import
     (except (rnrs)
             remove)  
@@ -18,7 +18,7 @@
 
   (begin
 
-    (define (env)
+    (define (environment)
       (display
         (string-join
           `("Lehti Environment:"

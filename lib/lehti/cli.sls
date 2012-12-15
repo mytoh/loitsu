@@ -30,10 +30,12 @@
          (clone args))
         ("contents"
          (contents args))
-        ("env"
-         (env))
+        ("environment"
+         (environment))
         ("list"
          (list-packages))
+        ("completion"
+         (completion args))
         ("spec"
          (specification args))))
 

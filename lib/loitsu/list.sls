@@ -5,7 +5,8 @@
     scar
     scdr)
   (import
-    (rnrs))
+    (rnrs)
+    (loitsu control))
 
 
   (begin
@@ -33,7 +34,7 @@
       (cond
         ((null? lst) '())
         ((list? lst) (append (flatten (car lst)) (flatten (cdr lst))))
-        (else (list lst)))) 
+        (else (list lst))))
 
     ;; from info combinator page
     (define (safe-length lst)
@@ -41,4 +42,4 @@
         (length lst)
         #f))
 
-    ) )
+    ))

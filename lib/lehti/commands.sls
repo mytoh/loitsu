@@ -1,7 +1,8 @@
 
 (library (lehti commands)
   (export
-    env
+    environment
+    completion
     specification
     clean
     contents
@@ -25,4 +26,5 @@
     (lehti commands list)
     (lehti commands environment)
     (lehti commands specification)
+    (lehti commands completion)
     (lehti commands install)))
