@@ -14,6 +14,7 @@
     (loitsu process)
     (loitsu control)
     (loitsu cli)
+    (loitsu maali)
     (kirjain)
     (surl))
 
@@ -30,21 +31,28 @@
 
     (define (find-server board thread)
       (let ((get (lambda (s)
-                      (if (= 0 (bytevector-length (surl (string-append "http://" s ".2chan.net/"
-                                                                       board "/res/"
-                                                                       thread ".htm"))))
-                        #f  s))))
-      (match board
-        ("b"
-         (or (get "jun")
+                   (if (= 0 (bytevector-length (surl (string-append "http://" s ".2chan.net/"
+                                                                    board "/res/"
+                                                                    thread ".htm"))))
+                     #f  s))))
+        (match board
+          ("b"
+           (or (get "jun")
                (get "may")
                (get "dec")))
-        ("id"
-         (get "may")))))
+          ("l" ;二次元壁紙
+           (get  "dat" ))
+          ("k" ;壁紙
+           (get "cgi"))
+          ("7" ;ゆり
+           (get "zip"))
+          ("40" ;東方
+           (get "may"))
+          ("id"
+           (get "may")))))
 
     (define (thread-exists? board thread)
-      (find-server board thread)
-      )
+      (find-server board thread))
 
     (define (make-url board thread)
       (string-append "http://"  (find-server board thread) ".2chan.net/" board "/res/"
@@ -93,7 +101,8 @@
         (for-each
           (lambda (t)
             (futaba-get-one-thread board t))
-          threads)))
+          threads)
+        (puts (paint "-----------------------------" 29))))
 
     (define futaba-get
       (case-lambda

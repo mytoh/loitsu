@@ -7,9 +7,16 @@
     nothing
     flip
     implications
+    comp
+    partial
     )
   (import
-    (rnrs))
+    (except (rnrs)
+            cons*)
+    (only (srfi :1)
+          cons*)
+    (loitsu control)
+    )
 
 
   (begin
@@ -62,6 +69,40 @@
             (if (< x 2)
               x
               (+ (f (- x 1)) (f (- x 2))))))))
+
+    (define-syntax comp
+      (syntax-rules ()
+        ((_ f) f)
+        ((_ f g)
+         (case-lambda
+           (() (f (g)))
+           ((x) (f (g x)))
+           ((x y) (f (g x y)))
+           ((x y z) (f (g x y z)))
+           ((x y z . args) (f (apply g x y z args)))))
+        ((_ f g h)
+         (case-lambda
+           (() (f (g (h))))
+           ((x) (f (g (h x))))
+           ((x y) (f (g (h x y))))
+           ((x y z) (f (g (h x y z))))
+           ((x y z . args) (f (g (apply h x y z args))))))
+        ((_ f1 f2 f3 . fs)
+         (let ((fs (reverse (cons* f1 f2 f3 fs))))
+           (lambda args
+             (let loop ((ret (apply (car fs) args))
+                        (fs (cdr fs)))
+               (if (null? fs)
+                 ret
+                 (loop ((car fs) ret) (cdr fs)))))))))
+
+
+    (define-syntax partial
+      (syntax-rules ()
+      ((_ f arg)
+       (lambda args (apply f arg args)))
+      ((_ f arg ...)
+       (lambda args (apply f arg ... args)))))
 
 
 
