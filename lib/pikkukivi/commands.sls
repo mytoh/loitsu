@@ -5,7 +5,7 @@
     futaba
     print-path
     mount-nfs
-     ascii-taide
+    ascii-taide
 
     mkd
     starwars

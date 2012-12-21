@@ -35,13 +35,13 @@
                         (if (equal? "" s)
                           ""
                           (if (equal? "/" (string-take-right s 1))
-                            (string-trim-right s #\/)
+                            (remove-trailing-slash s)
                             s)))
                       paths)
                  "/"))))
 
     (define (path-extension path)
-      (let ((p (string-split path #\.)))
+      (let ((p (split-dot path)))
         (cond
           ((< 1 (length p))
            (last p))
@@ -49,7 +49,7 @@
             #f))))
 
     (define (path-sans-extension path)
-      (let ((pt (string-split path #\.)))
+      (let ((pt (split-dot path)))
         (cond
           ((< 1 (length pt))
            (string-join (drop-right pt 1) "."))
@@ -67,13 +67,13 @@
         ((equal? "" path) ".")
         ((equal? "/" path) "/")
         ((path-absolute? path)
-         (let* ((p (string-trim-right path #\/)))
-           (if (equal? 2 (length (string-split p #\/)))
+         (let* ((p (remove-trailing-slash path)))
+           (if (equal? 2 (length (split-slash p)))
              "/"
-             (apply build-path (drop-right (string-split p #\/) 1)))))
+             (apply build-path (drop-right (split-slash p ) 1)))))
         (else
-          (let ((p (string-trim-right path #\/)))
-            (apply build-path (drop-right (string-split p #\/)
+          (let ((p (remove-trailing-slash path )))
+            (apply build-path (drop-right (split-slash p)
                                           1))))))
 
     (define (home-directory)
@@ -89,7 +89,18 @@
         ((equal? "/" path) "")
         ((equal? "" path) "")
         (else
-          (let ((p (string-trim-right path #\/)))
-            (car (take-right (string-split p #\/) 1))))))
+          (let ((p (remove-trailing-slash path)))
+            (car (take-right (split-slash p ) 1))))))
+
+    ;; internal functions
+
+    (define (split-dot path)
+      (string-split path #\.))
+
+    (define (split-slash path)
+      (string-split path #\/))
+
+    (define (remove-trailing-slash path)
+      (string-trim-right path #\/))
 
     ))

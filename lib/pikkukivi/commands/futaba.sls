@@ -10,19 +10,20 @@
           delete-duplicates
           last)
     (srfi :39 parameters)
+    (only (mosh concurrent)
+          sleep)
     (loitsu file)
     (loitsu process)
     (loitsu control)
     (loitsu cli)
     (loitsu maali)
-    (kirjain)
+    (loitsu util)
     (surl))
 
   (begin
 
     (define (extract-file-name uri)
-      (last (irregex-split "/" uri))
-      )
+      (last (irregex-split "/" uri)))
 
     (define (fetch uri)
       (let ((file (extract-file-name uri)))
@@ -31,10 +32,15 @@
 
     (define (find-server board thread)
       (let ((get (lambda (s)
-                   (if (= 0 (bytevector-length (surl (string-append "http://" s ".2chan.net/"
-                                                                    board "/res/"
-                                                                    thread ".htm"))))
-                     #f  s))))
+                   (let ((res (bytevector-length (surl (string-append "http://" s ".2chan.net/"
+                                                                      board "/res/"
+                                                                      thread ".htm")))))
+                   (cond
+                     ((not (number? res)) #f)
+                     ((and (number? res)  
+                          (= 0 res))  
+                          #f)
+                     (else s))))))
         (match board
           ("b"
            (or (get "jun")
@@ -73,7 +79,7 @@
       (surl (make-url board thread)))
 
     (define (setup-path thread)
-      (if (not (file-exists? thread))
+      (unless (file-exists? thread)
         (make-directory* thread)))
 
     (define (valid-thread-number? num)
@@ -91,7 +97,7 @@
               (unless (= 0 (bytevector-length res))
                 (with-cwd
                   thread
-                  (map (lambda (u) (fetch u))
+                  (map  fetch
                        (get-image-url/thread board thread))))))
            (else
              (update-deleted-thread thread))))))
@@ -113,6 +119,7 @@
       (lambda args
         (let loop ()
           (apply f args)
+          (sleep (* (* 60 (* 6 1000)) 5))
           (loop))))
 
 
@@ -130,5 +137,6 @@
            (futaba-get board))
           ((board thread)
            (futaba-get board thread)))))
+
 
     ))

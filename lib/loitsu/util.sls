@@ -9,6 +9,8 @@
     implications
     comp
     partial
+    complement
+    fork
     )
   (import
     (except (rnrs)
@@ -104,6 +106,15 @@
       ((_ f arg ...)
        (lambda args (apply f arg ... args)))))
 
+    (define (complement f)
+      (case-lambda
+        (() (not (f)))
+        ((x . zs) (not (apply f x zs)))))
+
+    (define (fork f g)
+      ;; www.t3x.org/s9fes/hof.scm.html
+      (lambda x
+        (apply f (map g x))))
 
 
     ))

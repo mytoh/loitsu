@@ -5,7 +5,7 @@
     environment)
   (import
     (except (rnrs)
-            remove)  
+            remove)
     (srfi :48)
     (only (srfi :1)
           remove)
@@ -13,6 +13,7 @@
           string-join)
     (loitsu maali)
     (loitsu file)
+    (loitsu util)
     (lehti lehspec)
     (lehti env))
 
@@ -22,9 +23,9 @@
       (display
         (string-join
           `("Lehti Environment:"
-            ,(string-append "  - " (paint "INSTALLATION DIRECTORY" 109 ) ": "  (*lehti-directory*))
-            ,(string-append "  - " (paint "LEHTI BIN PATHS" 28) ": " (*lehti-bin-directory*))
-            ,(string-append "  - " (paint "LEHTI LOAD PATHS" 128) ":" )
+            ,(subject (paint "INSTALLATION DIRECTORY" 109 ) ": "  (*lehti-directory*))
+            ,(subject (paint "LEHTI BIN PATHS" 28) ": " (*lehti-bin-directory*))
+            ,(subject (paint "LEHTI LOAD PATHS" 128) ":" )
             ,@(map
                 (lambda (path)
                   (string-append
@@ -33,16 +34,20 @@
           "\n"
           'suffix)))
 
+    (define subject
+      (partial string-append " - "))
+
+
     (define (make-load-path)
       (append
         (remove null?
                 (map
                   (lambda (e)
                     (cond
-                        ((file-exists? (build-path e "lib"))
-                         (build-path e "lib"))
-                        (else
-                          '())))
+                      ((file-exists? (build-path e "lib"))
+                       (build-path e "lib"))
+                      (else
+                        '())))
                   (directory-list/path (*lehti-dist-directory* ))))))
 
     ))
