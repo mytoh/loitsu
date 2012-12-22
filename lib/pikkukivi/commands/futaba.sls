@@ -38,7 +38,7 @@
                    (cond
                      ((not (number? res)) #f)
                      ((and (number? res)  
-                          (= 0 res))  
+                          (zero? res))  
                           #f)
                      (else s))))))
         (match board
@@ -94,7 +94,7 @@
            ((thread-exists? board thread)
             (puts thread)
             (let ((res (get-thread-html board thread)))
-              (unless (= 0 (bytevector-length res))
+              (unless (zero? (bytevector-length res))
                 (with-cwd
                   thread
                   (map  fetch
