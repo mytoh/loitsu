@@ -9,6 +9,7 @@
     (only (srfi :1)
           delete-duplicates
           last)
+    (srfi :26)
     (srfi :39 parameters)
     (only (mosh concurrent)
           sleep)
@@ -35,12 +36,12 @@
                    (let ((res (bytevector-length (surl (string-append "http://" s ".2chan.net/"
                                                                       board "/res/"
                                                                       thread ".htm")))))
-                   (cond
-                     ((not (number? res)) #f)
-                     ((and (number? res)  
-                          (zero? res))  
-                          #f)
-                     (else s))))))
+                     (cond
+                       ((not (number? res)) #f)
+                       ((and (number? res)
+                             (zero? res))
+                        #f)
+                       (else s))))))
         (match board
           ("b"
            (or (get "jun")
@@ -68,7 +69,7 @@
       (let ((image-regexp `(: "http://" (+ alphabetic) ".2chan.net/" (+ alphabetic) "/"
                               ,board "/src/" (+ (~ #\")))))
         (delete-duplicates
-          (map (lambda (m) (irregex-match-substring m 0))
+          (map (cut irregex-match-substring <> 0)
                (irregex-fold image-regexp
                              (lambda (i m s) (cons m s))
                              '()
@@ -88,7 +89,7 @@
     (define (futaba-get-one-thread board thread)
       (cond
         ((and (not (member thread (deleted-thread)))
-           (valid-thread-number? thread))
+              (valid-thread-number? thread))
          (setup-path thread)
          (cond
            ((thread-exists? board thread)
@@ -98,15 +99,14 @@
                 (with-cwd
                   thread
                   (map  fetch
-                       (get-image-url/thread board thread))))))
+                        (get-image-url/thread board thread))))))
            (else
              (update-deleted-thread thread))))))
 
     (define (futaba-get-all-thread board)
       (let ((threads (directory-list2 (current-directory))))
         (for-each
-          (lambda (t)
-            (futaba-get-one-thread board t))
+          (cut futaba-get-one-thread board <>)
           threads)
         (puts (paint "-----------------------------" 29))))
 
