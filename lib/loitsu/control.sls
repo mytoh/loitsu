@@ -37,7 +37,9 @@
       (syntax-rules ()
         ((_ x) x)
         ((_ x (y ...) rest ...)
-         (->> (y ... x) rest ...))))
+         (->> (y ... x) rest ...))
+        ((_ x y rest ...)
+         (->> (y x) rest ...))))
 
     (define-syntax ->*
       (syntax-rules ()
