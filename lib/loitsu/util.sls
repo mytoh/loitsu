@@ -11,6 +11,7 @@
     partial
     complement
     fork
+    mtrace
     )
   (import
     (except (rnrs)
@@ -116,5 +117,14 @@
       (lambda x
         (apply f (map g x))))
 
+    ;; okmij.org/ftp/Scheme/macro-trace.txt
+    (define-syntax mtrace
+      (syntax-rules ()
+        ((_ x)
+         (begin
+           (display "Trace: ")
+           (write 'x)
+           (newline)
+           x))))
 
     ))

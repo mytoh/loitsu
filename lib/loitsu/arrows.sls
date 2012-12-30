@@ -9,17 +9,22 @@
   (import
     (rnrs)
     (loitsu control)
+    (loitsu util)
     )
 
   (begin
 
 
     (define-syntax -<>
-      ; (-<> <> 3 (+ 3) (* 99))
       (syntax-rules ()
-        ((_ var x form ...)
-         (let ((var x))
+        ((_ x form ...)
+         (let (('<> x))
            (-> var form ...)))))
+
+    (define-syntax diamond?
+      (syntax-rules ()
+        ((_ form)
+         (member '<> 'form))))
 
     (define-syntax -<>>
       ; (-<>> <> 3 (+ 3) (* 99))
