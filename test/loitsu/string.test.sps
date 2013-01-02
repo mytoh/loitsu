@@ -28,5 +28,9 @@
 (check (underscore "with-dashes") => "with_dashes")
 (check (underscore "with_underscores") => "with_underscores")
 
+;; x->string
+(check (x->string 'a) => "a")
+(check (x->string 1) => "1")
+(check (x->string '(1 2)) => "(1 2)")
 
 (check-report)

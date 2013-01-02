@@ -5,7 +5,7 @@
   (pieni check)
   (loitsu arrows))
 
-(check (-<> <> (car '(1))) => 1)
+; (check (-<> <> (car '(1))) => 1)
 
 ; (check (-<> <>
 ;             0
@@ -20,4 +20,4 @@
 ;                          (cons 6 <>))))
 ;        => (iota 13 -1))
 
-(check-report)
+; (check-report)

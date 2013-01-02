@@ -1,16 +1,16 @@
 
 (library (loitsu combinator)
   (export
-    comb-s
-    comb-k
-    comb-i
-    comb-b
-    comb-c
-    comb-w
-    comb-somega
-    comb-lomega
-    comb-y
-    comb-z
+    S
+    K
+    I
+    B
+    C
+    W
+    somega
+    lomega
+    Y
+    Z
     )
   (import
     (rnrs)
@@ -18,43 +18,43 @@
 
   (begin
 
-    (define (comb-s x)
+    (define (S x)
       (lambda (y)
         (lambda (z)
-        ((x z) (y z)))))
+          ((x z) (y z)))))
 
-    (define (comb-k x)
+    (define (K x)
       (lambda (y)
         x))
 
-    (define (comb-i x)
+    (define (I x)
       x)
 
-    (define (comb-b x)
+    (define (B x)
       (lambda (y)
         (lambda (z)
           (x (y z)))))
 
-    (define (comb-c x)
+    (define (C x)
       (lambda (y)
         (lambda (z)
           ((x z) y))))
 
-    (define (comb-w x)
+    (define (W x)
       (lambda (y)
         ((x y) y)))
 
-    (define (comb-somega x)
+    (define (somega x)
       (x x))
 
-    (define (comb-lomega)
-      (comb-somega comb-somega))
+    (define (lomega)
+      (somega somega))
 
-    (define (comb-y g)
+    (define (Y g)
       ((lambda (x) (g (x x)))
        (lambda (x) (g (x x)))))
 
-    (define (comb-z f)
+    (define (Z f)
       ((lambda (x)
          (f (lambda (y) ((x x) y))))
        (lambda (x)
@@ -66,7 +66,32 @@
           (if (= x 0)
             1
             (* x (f (- x 1))))))
-      ((comb-z fact) 5)
-      120)
+      ((Z fact) 5)
+      120
+
+
+      ;; http://rosettacode.org/wiki/Y_combinator#Scheme
+      (define Y
+        (lambda (f)
+          ((lambda (x) (x x))
+           (lambda (g)
+             (f (lambda args (apply (g g) args)))))))
+
+      (define fac
+        (Y
+          (lambda (f)
+            (lambda (x)
+              (if (< x 2)
+                1
+                (* x (f (- x 1))))))))
+
+      (define fib
+        (Y
+          (lambda (f)
+            (lambda (x)
+              (if (< x 2)
+                x
+                (+ (f (- x 1)) (f (- x 2))))))))
+      )
 
     ))
