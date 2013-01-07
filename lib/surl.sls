@@ -1,6 +1,7 @@
 
 (library (surl)
-  (export surl)
+  (export surl
+          surl->utf8)
   (import
     (rnrs)
     (irregex)
@@ -19,6 +20,18 @@
                      #f (car file))))
         (receive (body . rest)
           (http-get url)
+          (if ofile
+            (call-with-port
+              (open-file-output-port ofile)
+              (lambda (out)
+                (put-bytevector out body)))
+            body))))
+
+    (define (surl->utf8 url . file)
+      (let ((ofile (if (null? file)
+                     #f (car file))))
+        (receive (body . rest)
+          (http-get->utf8 url)
           (if ofile
             (call-with-port
               (open-file-output-port ofile)
