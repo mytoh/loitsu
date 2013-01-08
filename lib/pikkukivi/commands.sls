@@ -3,6 +3,7 @@
   (export
     tosixel
     futaba
+    yotsuba
     print-path
     mount-nfs
     ascii-taide
@@ -19,6 +20,7 @@
     (rnrs)
     (pikkukivi commands tosixel)
     (pikkukivi commands futaba)
+    (pikkukivi commands yotsuba)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)
     (pikkukivi commands alias)

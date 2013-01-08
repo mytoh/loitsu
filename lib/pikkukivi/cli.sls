@@ -12,7 +12,7 @@
 
     (define (runner args)
       (match-short-command (cadr args)
-        ("ascii"
+        ("ascii-taide"
          (ascii-taide args))
         ("mount-nfs"
          (mount-nfs args))
@@ -20,6 +20,8 @@
          (print-path args))
         ("futaba"
          (futaba args))
+        ("yotsuba"
+         (yotsuba args))
         ("tosixel"
          (tosixel args))
         ("mkd"

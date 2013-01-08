@@ -117,10 +117,11 @@
 
     (define (repeat f)
       (lambda args
-        (let loop ()
-          (apply f args)
-          (sleep (* (* 60 (* 6 1000)) 5))
-          (loop))))
+        (let ((wait (* (* 60 (* 6 1000)) 5)))
+          (let loop ()
+            (apply f args)
+            (sleep wait)
+            (loop)))))
 
 
     (define deleted-thread

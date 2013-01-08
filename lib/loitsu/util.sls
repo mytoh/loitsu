@@ -10,6 +10,7 @@
     comp
     partial
     complement
+    nor
     fork
     mtrace
     )
@@ -83,6 +84,11 @@
          (lambda args (apply f arg args)))
         ((_ f arg ...)
          (lambda args (apply f arg ... args)))))
+
+    (define-syntax nor
+      (syntax-rules ()
+        ((_ x ...)
+         (not (or x ...)))))
 
     (define (complement f)
       (case-lambda

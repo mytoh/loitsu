@@ -13,21 +13,17 @@
 
 
     (define (package-installed? package)
-      (if (file-directory? (build-path (*lehti-dist-directory* ) package))
-        #t #f))
+      (or (file-directory? (build-path (*lehti-dist-directory* ) package))))
 
     (define (package-available? package)
-      (if (file-exists? (build-path (*lehti-leh-file-directory* )
+      (or (file-exists? (build-path (*lehti-leh-file-directory* )
                                     (path-swap-extension package
-                                                         "leh")))
-        #t #f))
+                                                         "leh")))))
 
     (define (call-with-packages package-list proc)
       (for-each
         (lambda (p)
           (proc p))
         package-list))
-
-
 
     ))

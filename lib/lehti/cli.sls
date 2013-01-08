@@ -5,8 +5,7 @@
     (rnrs)
     (match)
     (loitsu cli)
-    (lehti commands)
-    )
+    (lehti commands))
 
   (begin
 

@@ -37,6 +37,7 @@
     (except (rnrs)
             remove
             find)
+    (srfi :8 receive)
     (only (srfi :13 strings)
           string-trim-right
           string-join
@@ -56,8 +57,8 @@
     (loitsu file path)
     (loitsu control)
     (loitsu string)
-    (surl)
     (irregex)
+    (http)
     (only (mosh file)
           create-symbolic-link
           file-symbolic-link?
@@ -197,9 +198,22 @@
              ((file-exists? file)
               (file->string file))
              ((string-is-url? file)
-              (surl file))
+              (slurp-get file))
              (else
                (error (quote file) "file not exists\n"))))))
+
+
+    (define (slurp-get url . file)
+      (let ((ofile (if (null? file)
+                     #f (car file))))
+        (receive (body . rest)
+          (http-get->utf8 url)
+          (if ofile
+            (call-with-port
+              (open-file-output-port ofile)
+              (lambda (out)
+                (put-bytevector out body)))
+            body))))
 
     (define (spit file s)
       (if (not (file-exists? file))
