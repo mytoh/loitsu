@@ -17,7 +17,7 @@
   (import
     (except (rnrs)
             cons*)
-    (only (srfi :1)
+    (only (srfi :1 lists)
           cons*)
     (loitsu control)
     )

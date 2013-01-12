@@ -4,7 +4,7 @@
     clean)
   (import
     (rnrs)
-    (loitsu file)
+    (lehti base)
     (lehti env))
 
   (begin

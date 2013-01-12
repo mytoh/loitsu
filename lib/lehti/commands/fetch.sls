@@ -7,9 +7,8 @@
     (only (mosh)
           set-current-directory!)
     (only (mosh file)
-          delete-directory)  
-    (loitsu process)
-    (loitsu file)
+          delete-directory)
+    (lehti base)
     (lehti scm)
     (lehti env))
 

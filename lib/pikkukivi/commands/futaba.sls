@@ -6,10 +6,10 @@
     (rnrs)
     (irregex)
     (match)
-    (only (srfi :1)
+    (only (srfi :1 lists)
           delete-duplicates
           last)
-    (srfi :26)
+    (srfi :26 cut)
     (srfi :39 parameters)
     (only (mosh concurrent)
           sleep)
@@ -112,7 +112,7 @@
 
     (define futaba-get
       (case-lambda
-        ((board) ((repeat futaba-get-all-thread) board))
+        ((board) (force-loop ((repeat futaba-get-all-thread) board)))
         ((board thread) (futaba-get-one-thread board thread))))
 
     (define (repeat f)
@@ -122,6 +122,13 @@
             (apply f args)
             (sleep wait)
             (loop)))))
+
+    (define (force-loop body)
+      (guard (e (else
+                   (display "error, go back loop")
+                   (newline)
+                   (force-loop body)))
+        (body)))
 
 
     (define deleted-thread

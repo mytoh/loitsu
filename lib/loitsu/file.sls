@@ -12,7 +12,9 @@
     file->string-list
     file->sexp-list
     find-file-in-paths
+    temporary-directory
 
+    ;; path
     build-path
     path-extension
     path-sans-extension
@@ -28,6 +30,8 @@
     create-symbolic-link
     directory-list
     file-directory?
+    file-regular?
+    file-symbolic-link?
     set-current-directory!
     current-directory
     create-directory
@@ -51,8 +55,9 @@
           last
           take-right
           drop-right)
-    (srfi :48)
-    (srfi :98)
+    (srfi :39 parameters)
+    (srfi :48 intermediate-format-strings)
+    (srfi :98 os-environment-variables)
     (loitsu port)
     (loitsu file path)
     (loitsu control)
@@ -222,5 +227,7 @@
           (lambda (out)
             (display s out)))))
 
+    (define temporary-directory
+      (make-parameter "/tmp"))
 
     ))

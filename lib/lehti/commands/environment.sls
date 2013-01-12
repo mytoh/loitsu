@@ -11,9 +11,7 @@
           remove)
     (only (srfi :13)
           string-join)
-    (loitsu maali)
-    (loitsu file)
-    (loitsu util)
+    (lehti base)
     (lehti lehspec)
     (lehti env))
 

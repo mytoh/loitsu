@@ -35,7 +35,7 @@
             (if (eof-object? c)
               (list->string (reverse ret))
               (loop (cons c ret) (read-char p)))))
-        (let-values ([(pid cin cout cerr) 
+        (let-values ([(pid cin cout cerr)
                       (spawn (car commands) (cdr commands)  (list #f out out))])
           (close-port out)
           (let ((res (port->string (transcoded-port in (make-transcoder (utf-8-codec))))))
@@ -53,8 +53,18 @@
            ...
            (set-current-directory! cur)))))
 
+    ; (define (run-command lst)
+    ;   (let ((command (string-join (map x->string lst))))
+    ;     (call-process command)))
+
+    (define (->string x)
+      (if (string? x)
+        x
+        (x->string x)))
+
     (define (run-command lst)
-      (let ((command (string-join (map x->string lst))))
-        (call-process command)))
+      (let-values (((pid cin cout cerr)
+                    (spawn (->string (car lst)) (map ->string (cdr lst)) '(#f #f #f))))
+        (waitpid pid)))
 
     ))

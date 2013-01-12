@@ -10,14 +10,14 @@
     x->string
     conc)
   (import
-    (rnrs)
-    (only (srfi :13)
+    (silta base)
+    (only (srfi :13 strings)
+          string-downcase
           string-join)
-    (srfi :48)
+    (srfi :48 intermediate-format-strings)
     (irregex)
     (loitsu control)
-    (loitsu string compat)
-    )
+    (loitsu string compat))
 
   (begin
 
@@ -75,7 +75,7 @@
                            (if (= 1 num)
                              singular
                              (or plural
-                                 (string-append singular "s"))))))
+                               (string-append singular "s"))))))
 
 
     (define (conc . args)
@@ -83,3 +83,4 @@
       (apply string-append (map x->string args)))
 
     ))
+

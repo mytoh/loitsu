@@ -6,8 +6,8 @@
     (rnrs)
     (lehti env)
     (srfi :48)
-    (loitsu file)
-    (loitsu process))
+    (lehti base)
+    )
 
   (begin
 

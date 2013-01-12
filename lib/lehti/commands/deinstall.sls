@@ -5,8 +5,7 @@
     deinstall)
   (import
     (rnrs)
-    (loitsu file)
-    (loitsu message)
+    (lehti base)
     (lehti util)
     (lehti env))
 

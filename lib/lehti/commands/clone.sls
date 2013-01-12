@@ -8,8 +8,8 @@
     (lehti env)
     (lehti util)
     (lehti scm)
-    (loitsu file)
-    (loitsu process))
+    (lehti base)
+    )
 
   (begin
 

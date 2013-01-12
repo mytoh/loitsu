@@ -7,6 +7,7 @@
     print-path
     mount-nfs
     ascii-taide
+    kuva
 
     mkd
     starwars
@@ -20,6 +21,7 @@
     (rnrs)
     (pikkukivi commands tosixel)
     (pikkukivi commands futaba)
+    (pikkukivi commands kuva)
     (pikkukivi commands yotsuba)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)

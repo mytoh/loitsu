@@ -7,9 +7,7 @@
     (rnrs)
     (only (srfi :13)
           string-join)
-    (loitsu file)
-    (loitsu message)
-    (loitsu maali)
+    (lehti base)
     (lehti util)
     (lehti commands install)
     (lehti commands deinstall))
@@ -28,6 +26,6 @@
                (deinstall-package p)
                (install-package p))))
           packages))
-      ( ohei "finished"))
+      (ohei "finished"))
 
     ))

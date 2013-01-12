@@ -2,6 +2,7 @@
 (library (loitsu list)
   (export
     flatten
+    reductions
     rassoc
     rassq
     rassv
@@ -62,5 +63,16 @@
     (define (rassv key alist)
       (rassoc key alist eqv?))
 
+    (define reductions
+      (case-lambda
+        ((f l)
+         (if (null? l)
+           (list (f))
+           (reductions f (car l) (cdr l))))
+        ((f init l)
+         (cons init
+               (if (null? l)
+                 '()
+                 (reductions f (f init (car l)) (cdr l)))))))
 
     ))

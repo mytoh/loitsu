@@ -4,13 +4,13 @@
   (export setup)
   (import
     (except (rnrs)
-            remove)  
+            remove)
     (only (srfi :1)
           remove)
     (only (srfi :13)
           string-join)
     (match)
-    (loitsu file)
+    (lehti base)
     (lehti env)
     )
 

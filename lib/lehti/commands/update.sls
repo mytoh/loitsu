@@ -5,8 +5,8 @@
   (import
     (rnrs)
     (lehti env)
-    (loitsu file)
-    (loitsu process))
+    (lehti base)
+    )
 
   (begin
 

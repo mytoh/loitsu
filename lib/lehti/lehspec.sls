@@ -12,7 +12,7 @@
     (except (rnrs)
             define-record-type)
     (srfi :9)
-    (loitsu file)
+    (lehti base)
     (lehti env))
 
   (begin

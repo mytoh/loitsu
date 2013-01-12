@@ -29,8 +29,8 @@
            (else
              (match-short-command short (c2 e2) ...))))))
 
-    (define (puts str)
-      (display str)
+    (define (puts s)
+      (display s)
       (newline)
       (values))
 

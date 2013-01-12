@@ -5,7 +5,7 @@
   (import
     (rnrs)
     (srfi :48)
-    (loitsu file)
+    (lehti base)
     (lehti lehspec)
     (lehti env))
 

@@ -6,7 +6,7 @@
     package-available?)
   (import
     (rnrs)
-    (loitsu file)
+    (lehti base)
     (lehti env))
 
   (begin
@@ -25,5 +25,4 @@
         (lambda (p)
           (proc p))
         package-list))
-
     ))

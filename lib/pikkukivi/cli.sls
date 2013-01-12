@@ -24,6 +24,8 @@
          (yotsuba args))
         ("tosixel"
          (tosixel args))
+        ("kuva"
+         (kuva args))
         ("mkd"
          (mkd args))
         ("starwars"

@@ -17,11 +17,11 @@
           string-join
           string-take
           string-take-right)
-    (only (srfi :1)
+    (only (srfi :1 lists)
           take-right
           drop-right
           last)
-    (srfi :98)
+    (srfi :98 os-environment-variables)
     (loitsu string)
     )
 
@@ -72,7 +72,7 @@
              "/"
              (apply build-path (drop-right (split-slash p ) 1)))))
         (else
-          (let ((p (remove-trailing-slash path )))
+          (let ((p (remove-trailing-slash path)))
             (apply build-path (drop-right (split-slash p)
                                           1))))))
 

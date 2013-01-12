@@ -4,7 +4,7 @@
     url-is-git?)
   (import
     (rnrs)
-    (loitsu file)
+    (lehti base)
     (irregex))
 
   (begin

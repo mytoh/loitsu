@@ -7,7 +7,7 @@
     (srfi :48)
     (only (srfi :13)
           string-join)
-    (loitsu file)
+    (lehti base)
     (lehti lehspec)
     (lehti env))
 

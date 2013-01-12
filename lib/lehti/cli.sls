@@ -4,7 +4,7 @@
   (import
     (rnrs)
     (match)
-    (loitsu cli)
+    (lehti base)
     (lehti commands))
 
   (begin

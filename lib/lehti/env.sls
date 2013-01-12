@@ -11,7 +11,8 @@
     (rnrs)
     (srfi :98)
     (srfi :39)
-    (loitsu file))
+    (lehti base)
+    )
 
   (begin
     (define *lehti-directory*

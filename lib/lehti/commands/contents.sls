@@ -5,7 +5,7 @@
   (import
     (rnrs)
     (srfi :48)
-    (loitsu file)
+    (lehti base)
     (lehti lehspec)
     (lehti env))
 
@@ -17,6 +17,6 @@
         (for-each
           (lambda (p)
             (format #t "~a\n" p))
-          (spec-files lehspec)) ))
+          (spec-files lehspec))))
 
     ))

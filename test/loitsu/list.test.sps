@@ -1,6 +1,9 @@
 
 (import
   (rnrs)
+  (only (srfi :1)
+        last
+        reduce)
   (pieni check)
   (loitsu list))
 
@@ -29,6 +32,12 @@
          (rassv x `((1 . (a)) (2 . ,x)))) => '(2 . (a)))
 (check (rassv 1 '((b . 2))) => #f)
 
+;; reductions
+(check (reductions + '(1 1 1 1)) => '(1 2 3 4))
+(check (reductions + '(1 2 3)) => '(1 3 6))
+(check (= (reduce + '() '(1 2 3))
+          (last (reductions + '(1 2 3))))
+       => #t)
 
 
 (check-report)
