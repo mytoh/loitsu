@@ -3,9 +3,15 @@
   (export
     futaba)
   (import
-    (rnrs)
+    (silta base)
+    (silta write)
+    (silta file)
     (irregex)
     (match)
+    (only  (rnrs)
+           latin-1-codec
+           make-transcoder
+           bytevector->string)
     (only (srfi :1 lists)
           delete-duplicates
           last)
@@ -73,11 +79,10 @@
                (irregex-fold image-regexp
                              (lambda (i m s) (cons m s))
                              '()
-                             (bytevector->string (get-thread-html board thread)
-                                                 (make-transcoder (latin-1-codec))))))))
+                             (get-thread-html board thread))))))
 
     (define (get-thread-html board thread)
-      (surl (make-url board thread)))
+      (surl->utf8 (make-url board thread)))
 
     (define (setup-path thread)
       (unless (file-exists? thread)
@@ -95,7 +100,7 @@
            ((thread-exists? board thread)
             (puts thread)
             (let ((res (get-thread-html board thread)))
-              (unless (zero? (bytevector-length res))
+              (unless (string=? "" res)
                 (with-cwd
                   thread
                   (map  fetch
