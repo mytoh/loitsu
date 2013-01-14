@@ -1,9 +1,17 @@
 
 (library (lehti commands install)
-  (export install
-          install-package)
+  (export
+    search-project-address
+    get-projects-repository
+    install
+    install-package)
   (import
-    (rnrs)
+    (scheme base)
+    (scheme file)
+    (scheme write)
+    (only (srfi :1 lists)
+          find)
+    (srfi :39 parameters)
     (lehti base)
     (lehti env)
     (lehti util)
@@ -12,6 +20,25 @@
     )
 
   (begin
+
+
+
+    (define  (get-projects-repository)
+      (cond
+        ((not (file-exists? (*lehti-projects-repository-directory*)))
+         (ohei "getting projects repository")
+         (run-command `(git clone ,(*projects-repository*) ,(*lehti-projects-repository-directory*))))))
+
+
+    (define  (project-exists? package)
+      (member package (directory-list2 (*lehti-projects-repository-directory*))))
+
+    (define (search-project-address package)
+      (if (project-exists? package)
+        (car
+          (file->sexp-list (build-path (*lehti-projects-repository-directory*)
+                                       package "source.sps")))
+        (error "project does not exists!")))
 
     (define (install args)
       (let ((packages (cddr args)))
@@ -22,10 +49,10 @@
           packages)))
 
     (define (install-package package)
+      (get-projects-repository)
       (cond
-        ((and (not (package-installed? package))
-           (package-available? package))
-         (fetch (string-append "git://github.com/mytoh/" package) package)
+        ((and (not (package-installed? package)))
+         (fetch (cadr (search-project-address package)) package)
          (set-current-directory! (build-path (*lehti-cache-directory*)
                                              package))
          (let* ((cache-directory (build-path (*lehti-cache-directory*)
@@ -34,7 +61,10 @@
                                                                   (path-swap-extension package "lehspec")))))))
            (install-leh-package-files  lehspec)
            (make-executables package)
-           (remove-directory* cache-directory)))))
+           (remove-directory* cache-directory)))
+        ((package-installed? package)
+         (display "package already installed ")
+         (newline))))
 
     (define (install-leh-package-files spec)
       (let ((files (spec-files spec))
