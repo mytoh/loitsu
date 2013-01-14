@@ -18,7 +18,7 @@
     gsp
     )
   (import
-    (rnrs)
+    (silta base)
     (pikkukivi commands tosixel)
     (pikkukivi commands futaba)
     (pikkukivi commands kuva)

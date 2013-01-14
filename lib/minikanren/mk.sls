@@ -12,6 +12,37 @@
     walk
     ext-s
     unify
+    ext-s-check
+    occurs-check
+    unify-check
+    walk*
+    reify-s
+    reify-name
+    reify
+    run
+    case-inf
+    mzero
+    unit
+    choice
+    ==
+    ==-check
+    fresh
+    all
+    conde
+    succeed
+    fail
+    bind
+    mplus
+    anye
+    alli
+    condi
+    anyi
+    bindi
+    mplusi
+    conda
+    condu
+    ifa
+    ifu
     )
   (import
     (rnrs))
@@ -44,8 +75,7 @@
 
     (define-syntax size-s
       (syntax-rules ()
-        ;; original is length
-        ((_ ls) (vector-length ls))))
+        ((_ ls) (length ls))))
 
     (define empty-s '())
 
@@ -111,7 +141,7 @@
           (else #f))))
 
     (define (walk* v s)
-      (let ((v  (wallk v s)))
+      (let ((v  (walk v s)))
         (cond
           ((var? v) v)
           ((pair? v)
@@ -137,7 +167,7 @@
     (define-syntax run
       (syntax-rules ()
         ((_ n^ (x) g ...)
-         (let ((n n^ (x (var 'x))))
+         (let ((n n^) (x (var 'x)))
            (if  (or (not n) (> n 0))
              (map-inf n
                       (lambda (s) (reify  (walk* x s)))
@@ -251,7 +281,7 @@
 
     (define-syntax condi
       (syntax-rules (else)
-        ((_) faill)
+        ((_) fail)
         ((_ (else g0 g ...)) (all g0 g ...))
         ((_ (g0 g ...) c ...)
          (anyi (all g0 g ...) (condi c ...)))))
@@ -263,7 +293,7 @@
                    (mplusi (g1 s)
                            (lambdaf@ () (g2 s)))))))
 
-    (define (bindi a-inf a)
+    (define (bindi a-inf g)
       (case-inf a-inf
                 (mzero)
                 ((a) (g a))
@@ -275,7 +305,7 @@
                 (f)
                 ((a) (choice a f))
                 ((a f0) (choice a
-                                (lambdaf@ () (mplusi (f) (f0)))))))
+                                (lambdaf@ () (mplusi (f) f0))))))
 
     (define-syntax conda
       (syntax-rules (else)
@@ -288,7 +318,8 @@
       (syntax-rules (else)
         ((_) fail)
         ((_ (else g0 g ...)) (all g0 g ...))
-        (ifu g0 (all g ...) (condu c ...))))
+        ((_ (g0 g ...) c ...)
+         (ifu g0 (all g ...) (condu c ...)))))
 
     (define-syntax ifa
       (syntax-rules ()
@@ -308,6 +339,6 @@
                      (case-inf  s-inf
                                 (g2 s)
                                 ((s) (g^ s))
-                                ((s f) (g^ s)))))))
+                                ((s f) (g^ s))))))))
 
-      ))
+    ))

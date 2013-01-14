@@ -23,6 +23,9 @@
         ((package-installed? package)
          (if (file-exists? (build-path (*lehti-bin-directory*) package))
            (remove-directory* (build-path (*lehti-bin-directory*) package)))
-         (remove-directory* (build-path (*lehti-dist-directory*) package)))))
+         (if (file-symbolic-link? (build-path (*lehti-dist-directory*) package))
+           (remove-file (build-path (*lehti-dist-directory*) package))
+           (remove-directory* (build-path (*lehti-dist-directory*) package)))
+         )))
 
     ))

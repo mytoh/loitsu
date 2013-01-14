@@ -9,6 +9,8 @@
     file-symbolic-link?
     create-symbolic-link
     directory-list
+    file->list
+    current-directory
 
     string-split
 
@@ -20,6 +22,7 @@
     (rnrs)
     (only (mosh)
           set-current-directory!
+          current-directory
           string-split)
     (only (mosh process)
           call-process
@@ -28,9 +31,10 @@
     (only (mosh file)
           delete-directory
           create-directory
-          directory-list
+          file->list
           create-symbolic-link
           file-symbolic-link?
           file-regular?
+          directory-list
           file-directory?))
 )

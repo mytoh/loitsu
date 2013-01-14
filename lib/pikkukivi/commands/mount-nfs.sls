@@ -2,7 +2,9 @@
 (library (pikkukivi commands mount-nfs)
   (export mount-nfs)
   (import
-    (rnrs)
+    (silta base)
+    (silta cxr)
+    (silta write)
     (only (srfi :13 strings)
           string-join)
     (match)
@@ -45,6 +47,6 @@
       (mount (string-append "quatrevingtdix:/Users/" user)
              "/nfs/quatre"))
 
-    ) )
+    ))
 
 ;; vim:filetype=scheme

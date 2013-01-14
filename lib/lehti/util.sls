@@ -3,7 +3,7 @@
   (export
     call-with-packages
     package-installed?
-    package-available?)
+    )
   (import
     (rnrs)
     (lehti base)
@@ -15,10 +15,6 @@
     (define (package-installed? package)
       (or (file-directory? (build-path (*lehti-dist-directory* ) package))))
 
-    (define (package-available? package)
-      (or (file-exists? (build-path (*lehti-leh-file-directory* )
-                                    (path-swap-extension package
-                                                         "leh")))))
 
     (define (call-with-packages package-list proc)
       (for-each

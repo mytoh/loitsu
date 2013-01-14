@@ -9,7 +9,7 @@
     (only (srfi :1)
           delete-duplicates
           last)
-    (srfi :26)
+    (srfi :26 cut)
     (srfi :39 parameters)
     (only (mosh concurrent)
           sleep)

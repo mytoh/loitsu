@@ -3,7 +3,7 @@
   (export
     runner)
   (import
-    (rnrs)
+    (silta base)
     (loitsu cli)
     (pikkukivi commands)
     )

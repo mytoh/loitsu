@@ -5,16 +5,20 @@
     paint
     ohei
     run-command
+    with-cwd
 
     remove-directory*
+    remove-file
     create-directory
     make-directory*
     file->sexp-list
+    file->list
     file-directory?
     copy-file
     create-symbolic-link
     directory-list2
     directory-list/path
+    file-symbolic-link?
 
     match-short-command
 
@@ -231,6 +235,17 @@
     (define (run-command lst)
       (let ((command (string-join (map x->string lst))))
         (call-process command)))
+
+
+    (define-syntax with-cwd
+      (syntax-rules ()
+        ((_ dir body ...)
+         (let ((cur (current-directory))
+               (dest dir))
+           (set-current-directory! dest)
+           body
+           ...
+           (set-current-directory! cur)))))
 
     ;; string
 

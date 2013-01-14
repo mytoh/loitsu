@@ -53,18 +53,18 @@
            ...
            (set-current-directory! cur)))))
 
-    ; (define (run-command lst)
-    ;   (let ((command (string-join (map x->string lst))))
-    ;     (call-process command)))
-
-    (define (->string x)
-      (if (string? x)
-        x
-        (x->string x)))
-
     (define (run-command lst)
-      (let-values (((pid cin cout cerr)
-                    (spawn (->string (car lst)) (map ->string (cdr lst)) '(#f #f #f))))
-        (waitpid pid)))
+      (let ((command (string-join (map x->string lst))))
+        (call-process command)))
+
+    ; (define (->string x)
+    ;   (if (string? x)
+    ;     x
+    ;     (x->string x)))
+
+    ; (define (run-command lst)
+    ;   (let-values (((pid cin cout cerr)
+    ;                 (spawn (->string (car lst)) (map ->string (cdr lst)) '(#f #f #f))))
+    ;     (waitpid pid)))
 
     ))
