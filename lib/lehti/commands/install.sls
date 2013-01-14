@@ -27,8 +27,13 @@
       (cond
         ((not (file-exists? (*lehti-projects-repository-directory*)))
          (ohei "getting projects repository")
-         (run-command `(git clone ,(*projects-repository*) ,(*lehti-projects-repository-directory*))))))
+         (run-command `(git clone ,(*projects-repository*) ,(*lehti-projects-repository-directory*))))
+        (else
+          (update-projects-repository))))
 
+    (define (update-projects-repository)
+      (with-cwd (*lehti-projects-repository-directory*)
+                (run-command `(git pull))))
 
     (define  (project-exists? package)
       (member package (directory-list2 (*lehti-projects-repository-directory*))))
