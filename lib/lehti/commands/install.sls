@@ -21,8 +21,6 @@
 
   (begin
 
-
-
     (define  (get-projects-repository)
       (cond
         ((not (file-exists? (*lehti-projects-repository-directory*)))

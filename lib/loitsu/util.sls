@@ -7,8 +7,9 @@
     nothing
     flip
     implications
-    comp
+    compose
     partial
+    rpartial
     complement
     nor
     fork
@@ -51,7 +52,7 @@
          (values))))
 
 
-    (define-syntax comp
+    (define-syntax compose
       (syntax-rules ()
         ((_ f) f)
         ((_ f g)
@@ -84,6 +85,10 @@
          (lambda args (apply f arg args)))
         ((_ f arg ...)
          (lambda args (apply f arg ... args)))))
+
+    (define (rpartial f . sargs)
+      (lambda pargs
+        (apply f (append pargs sargs))))
 
     (define-syntax nor
       (syntax-rules ()
