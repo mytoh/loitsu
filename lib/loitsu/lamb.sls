@@ -1,5 +1,6 @@
 ;;;
-;;;  gauche.experimenta.lamb - shorthand notation of lambda
+;;;  taken from
+;;;  gauche.experimental.lamb - shorthand notation of lambda
 ;;;
 
 (library (loitsu lamb)
@@ -21,7 +22,6 @@
       (syntax-rules ()
         ((^* . clauses)
          (match-lambda* . clauses))))
-
 
     ))
 
