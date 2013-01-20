@@ -20,7 +20,21 @@
     eqo
     eq-caro
     pairo
-    listo)
+    listo
+    membero
+    rembero
+    appendo
+    anyo
+    nevero
+    alwayso
+    poso
+    addero
+    pluso  ; +o
+    minuso ; -o
+    mulo ; *o
+    divo ; /o
+    splito
+    )
   (import
     (scheme base)
     (minikanren mk)
@@ -60,6 +74,253 @@
                  (cdro l d)
                  (listo d)))
         (else fail)))
+
+    (define (membero x l)
+      (conde
+        ((nullo l) fail)
+        ((eq-caro l x) succeed)
+        (else
+          (fresh (d)
+            (cdro l d)
+            (membero x d)))))
+
+    (define (rembero x l out)
+      (conde
+        ((nullo l) (== '() out))
+        ((eq-caro l x) (cdro l out))
+        (else (fresh (a d res)
+                (conso a d l)
+                (rembero x d res)
+                (conso a res out)))))
+
+    (define (appendo l s out)
+      (conde
+        ((nullo l) (== s out))
+        (else
+          (fresh (a d res)
+            (conso a d l)
+            (conso a res out)
+            (appendo d s res)))))
+
+    (define (anyo g)
+      (conde
+        (g succeed)
+        (else (anyo g))))
+
+    (define nevero (anyo fail))
+
+    (define alwayso (anyo succeed))
+
+    (define (build-num n)
+      (cond
+        ((zero? n) '())
+        ((and (not  (zero? n) (even? n)))
+         (cons 0
+               (build-num (quotient n 2))))
+        ((odd? n)
+         (cons 1
+               (build-num (quotient (- n 1) 2))))))
+
+    (define  (full-addero b x y r c)
+      (conde
+        ((== 0 b) (== 0 x) (== 0 y) (== 0 r) (== 0 c))
+        ((== 1 b) (== 0 x) (== 0 y) (== 1 r) (== 0 c))
+        ((== 0 b) (== 1 x) (== 0 y) (== 1 r) (== 0 c))
+        ((== 1 b) (== 1 x) (== 0 y) (== 0 r) (== 1 c))
+        ((== 0 b) (== 0 x) (== 1 y) (== 1 r) (== 0 c))
+        ((== 1 b) (== 0 x) (== 1 y) (== 0 r) (== 1 c))
+        ((== 0 b) (== 1 x) (== 1 y) (== 0 r) (== 1 c))
+        ((== 1 b) (== 1 x) (== 1 y) (== 1 r) (== 1 c))
+        (else fail)))
+
+    (define (poso n)
+      (fresh  (a d)
+        (== `(,a . ,d) n)))
+
+    (define (>1o n)
+      (fresh (a ad dd)
+        (== `(,a ,ad . ,dd) n)))
+
+    (define (gen-addero d n m r)
+      (fresh (a b c e x y z)
+        (== `(,a . ,x) n)
+        (== `(,b . ,y) m) (poso y)
+        (== `(,c . ,z) r) (poso z)
+        (alli
+          (full-addero d a b c e)
+          (addero e x y z))))
+
+    (define (addero d n m r)
+      (condi
+        ((== 0 d) (== '() m) (== n r))
+        ((== 0 d) (== '() n) (== m r) (poso m))
+        ((== 1 d) (== '() m) (addero 0 n '(1) r))
+        ((== 1 d) (== '() n) (poso m) (addero 0 '(1) m r))
+        ((== '(1) n) (== '(1) m)
+                     (fresh  (a c)
+                       (== `(,a ,c) r)
+                       (full-addero d 1 1 a c)))
+        ((== '(1) n) (gen-addero d n m r))
+        ((== '(1) m) (>1o n) (>1o r) (addero d '(1) n r))
+        ((>1o n) (gen-addero d n m r))
+        (else fail)))
+
+    (define (pluso n m k)
+      ;; original +o
+      (addero 0 n m k))
+
+    (define (minuso n m k)
+      ;; original -o
+      (pluso m k n))
+
+    (define  (bound-mulo q p n m)
+      ;; original bound-*o
+      (conde
+        ((nullo q)  (pairo p))
+        (else
+          (fresh (x y z)
+            (cdro q x)
+            (cdro p y)
+            (condi
+              ((nullo n)
+               (cdro m z)
+               (bound-mulo x y z '()))
+              (else
+                (cdro n z)
+                (bound-mulo x y z m)))))))
+
+    (define (odd-mulo x n m p)
+      ;; original odd-*o
+      (fresh (q)
+        (bound-mulo q p n m)
+        (mulo x m q)
+        (pluso `(0 . ,q) m p)))
+
+    (define (mulo n m p)
+      ;; original *o
+      (condi
+        ((== '() n) (== '() p))
+        ((poso n) (== '() m) (= '() p))
+        ((== '(1) n) (poso m) (== m p))
+        ((>1o n) (== '(1) m) (== n p))
+        ((fresh (x z)
+           (== `(0 . ,x) n) (poso x)
+           (== `(0 . ,z) p) (poso z)
+           (>1o m)
+           (mulo x m z)))
+        ((fresh (x y)
+           (== `(1 . ,x) n) (poso x)
+           (== `(0 . ,y) m) (poso y)
+           (mulo m n p)))
+        ((fresh (x y)
+           (== `(1 . ,x) n) (poso x)
+           (== `(1 . ,y) m) (poso y)
+           (odd-mulo x n m p)))
+        (else fail)))
+
+
+    (define (=lo n m)
+      (conde
+        ((== '() n) (== '() m))
+        ((== '(1) n) (== '(1) m))
+        (else
+          (fresh (a x b y)
+            (== `(,a . ,x) n) (poso x)
+            (== `(,b . ,y) m) (poso y)
+            (=lo x y)))))
+
+    (define (<lo n m)
+      (conde
+        ((== '() n) (poso m))
+        ((== '(1) n) (>1o m))
+        (else
+          (fresh (a x b y)
+            (== `(,a . ,x) n) (poso x)
+            (== `(,b . ,y) m) (poso y)
+            (<lo x y)))))
+
+
+    (define (<=lo n m)
+      (condi
+        ((=lo n m) succeed)
+        ((<lo n m) succeed)
+        (else fail)))
+
+    (define (<o n m)
+      (condi
+        ((<lo n m) succeed)
+        ((=lo n m)
+         (fresh (x)
+           (poso x)
+           (pluso n x m)))
+        (else fail)))
+
+    (define (<=o n m)
+      (condi
+        ((== n m) succeed)
+        ((<o n m) succeed)
+        (else fail)))
+
+    (define (splito n r l h)
+      (condi
+        ((== '() n) (== '() h) (== '() l))
+        ((fresh (b n^)
+           (== `(0 ,b . ,n^) n)
+           (== '() r)
+           (== `(,b . ,n^) h)
+           (== '() l)))
+        ((fresh (n^)
+           (== `(1 . ,n^) n)
+           (== '() r)
+           (== n^ h)
+           (== '(1) l)))
+        ((fresh (b n^ a r^)
+           (== `(0 ,b . ,n^) n)
+           (== `(,a . ,r^) r)
+           (== '() l)
+           (splito `(,b . ,n^) r^ '() h)))
+        ((fresh (n^ a r^)
+           (== `(1 . ,n^) n)
+           (== `(,a . ,r^) r)
+           (== '(1) l)
+           (splito n^ r^ '() h)))
+        ((fresh (b n^ a r^ l^)
+           (== `(,b . ,n^) n)
+           (== `(,a . ,r^) r)
+           (== `(,b . ,l^) l)
+           (poso l^)
+           (splito n^ r^ l^ h)))
+        (else fail)))
+
+    (define (divo n m q r)
+      ;; original /o
+      (condi
+        ((== r n) (== '() q) (<o n m))
+        ((== '(1) q) (=lo n m) (pluso r m n)
+                     (<o r m))
+        (else
+          (alli
+            (<lo m n)
+            (<o r m)
+            (poso q)
+            (fresh  (nh nl qh ql qlm qlmr rr rh)
+              (alli
+                (splito n r nl nh)
+                (splito q r ql qh)
+                (conde
+                  ((== '() nh)
+                   (== '() qh)
+                   (minuso nl r qlm)
+                   (mulo ql m qlm))
+                  (else
+                    (alli
+                      (poso nh)
+                      (mulo ql m qlm)
+                      (pluso qlm r qlmr)
+                      (minuso qlmr nl rr)
+                      (splito rr r '() rh)
+                      (divo nh m qh rh))))))))))
+
 
     ))
 

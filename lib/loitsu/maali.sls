@@ -1,6 +1,7 @@
 
 (library (loitsu maali)
   (export paint
+          unpaint
           pa)
   (import
     (rnrs)
@@ -14,6 +15,7 @@
     (loitsu maali rgb-colours))
 
   (begin
+
     (define (rgb-value red green blue)
       ;; receive three numbers and
       ;; return string like ";5;120"
@@ -36,16 +38,16 @@
       (let loop ((sep 42.5)
                  (cnt 1))
         (cond
-          ((or (< red (* sep cnt))
+         ((or (< red (* sep cnt))
+              (< green (* sep cnt))
+              (< blue  (* sep cnt)))
+          (and (< red (* sep cnt))
                (< green (* sep cnt))
-               (< blue  (* sep cnt)))
-           (and (< red (* sep cnt))
-                (< green (* sep cnt))
-                (< blue (* sep))))
-          ((< cnt 6)
-           (loop sep (+ cnt 1)))
-          ((< 6 cnt)
-           #t))))
+               (< blue (* sep))))
+         ((< cnt 6)
+          (loop sep (+ cnt 1)))
+         ((< 6 cnt)
+          #t))))
 
 
     (define (escape s)
@@ -130,9 +132,9 @@
       x)
 
 
-    ; (define (unpaint s)
-    ;   (irregex-replace/all '(: "[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
-
-    ; ; "\[((\d)+\;)*(\d)+m"
+     (define (unpaint s)
+       (irregex-replace/all '(: "\x1B;[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
+    ; "\[((\d)+\;)*(\d)+m"
+    ; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
 
     ))

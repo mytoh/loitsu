@@ -9,8 +9,7 @@
     (rnrs)
     (loitsu algo monad list)
     (loitsu algo monad identity)
-    (loitsu algo monad maybe)
-    )
+    (loitsu algo monad maybe))
 
   (begin
 
@@ -24,13 +23,13 @@
       (syntax-rules (<-)
         ((_ m (x <- e ) body)
          ((bind m)
-           e
-           (lambda (x)
-             ((result m) body))))
+          e
+          (lambda (x)
+            ((result m) body))))
         ((_ m (x <- e x2 <- e2 ...) body)
          ((bind m)
-           e (lambda (x)
-               (do-monad m (x2 <- e2 ...)
-                         body))))))
+          e (lambda (x)
+              (do-monad m (x2 <- e2 ...)
+                        body))))))
 
     ))

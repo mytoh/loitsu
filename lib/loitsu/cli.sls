@@ -18,16 +18,16 @@
       (syntax-rules ()
         ((_ short (command expr))
          (cond
-           ((find-short-command short command)
-            expr)
-           (else
-             (error "match-short-command" (string-append "no matching pattern for " short)))))
+          ((find-short-command short command)
+           expr)
+          (else
+           (error "match-short-command" (string-append "no matching pattern for " short)))))
         ((_ short (command expr) (c2 e2)  ...)
          (cond
-           ((find-short-command short command)
-            expr)
-           (else
-             (match-short-command short (c2 e2) ...))))))
+          ((find-short-command short command)
+           expr)
+          (else
+           (match-short-command short (c2 e2) ...))))))
 
     (define (puts s)
       (display s)

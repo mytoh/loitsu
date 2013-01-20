@@ -24,6 +24,7 @@
 (check (paint "J-_-L"  "#4183C4") =>  "\x1B;[38;5;74mJ-_-L\x1B;[0m")
 (check (paint "J-_-L"  "MediumPurple") =>   "\x1B;[38;5;141mJ-_-L\x1B;[0m")
 
+(check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
+
 
 (check-report)
-

@@ -9,8 +9,13 @@
     (only (srfi :1)
           delete-duplicates
           last)
+    (srfi :8 receive)
+    (only (srfi :13 strings)
+          string-every)
+    (srfi :14 char-sets)
     (srfi :26 cut)
     (srfi :39 parameters)
+    (srfi :37 args-fold)
     (only (mosh concurrent)
           sleep)
     (loitsu file)
@@ -74,12 +79,59 @@
          (newline))))
 
 
+    (define (string-number? s)
+      (string-every char-set:digit s))
+
+
+    (define (yotsuba-get-all-thread board)
+      (for-each (lambda (t) (yotsuba-get-one-thread board t))
+                (filter (lambda (d) (string-number? d)) (directory-list2 (current-directory)))))
+
+
+    (define (repeat f . args)
+      (let loop ()
+        (let ((wait (* (* 60 (* 6 1000)) 5)))
+          (apply f args)
+          (sleep 10000)
+          (loop))))
+
+    (define option-repeat
+      (option
+          '(#\r "repeat") #f #t
+          (lambda (option name arg repeat all)
+            (values #t all))))
+
+    (define option-all
+      (option
+          '(#\a "all") #f #t
+          (lambda (option name arg repeat all)
+            (values repeat #t))))
+
     (define (yotsuba args)
       (let ((args (cddr args)))
-        (match args
-          ((board)
-           (display board))
-          ((board thread)
-           (yotsuba-get-one-thread board thread)))))
+        (receive (repeat? all?)
+          (args-fold args
+            (list option-repeat option-all)
+            (lambda (option name arg . seeds) ; unrecognized
+              (error "Unrecognized option:" name))
+            (lambda (operand repeat all)        ; operand
+              (values repeat all))
+            #f                              ; default value of repeat?
+            #f                             ; default value of all?
+            )
+          (cond
+           (repeat?
+            (match (cdr args)
+              ((board)
+               (repeat yotsuba-get-all-thread board))
+              ((board thread)
+               (repeat yotsuba-get-one-thread board thread))))
+           (else
+            (match args
+              ((board)
+               (yotsuba-get-all-thread board))
+              ((board thread)
+               (yotsuba-get-one-thread board thread)))))
+          )))
 
     ))
