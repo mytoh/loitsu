@@ -1,0 +1,15 @@
+#!/usr/bin/env nmosh
+
+(import
+  (silta base)
+  (silta process-context)
+  (prefix (loitsu lista cli)
+          cli.))
+
+(define (main args)
+  (cli.runner args)
+  )
+
+(main (command-line))
+
+;; vim: filetype=scheme

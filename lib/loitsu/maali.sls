@@ -119,8 +119,7 @@
 
     (define (paint s . rest)
       (cond
-        ((null? rest)
-         s)
+        ((null? rest) s)
         (else
           (string-append
             (wrap (apply string-append  (make-colour rest)))

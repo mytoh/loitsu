@@ -30,7 +30,7 @@
 
     (define (make-thread-url board thread)
       (string-append "http://boards.4chan.org/"
-                     board "/res/" thread))
+        board "/res/" thread))
 
     (define (get-html board thread)
       (surl->utf8 (make-thread-url board thread)))
@@ -44,13 +44,13 @@
                               (or "jpg" "gif" "png")))
             (match->url (lambda  (m)
                           (string-append "http:"
-                                         (irregex-match-substring m)))))
+                            (irregex-match-substring m)))))
         (delete-duplicates
-          (map match->url
-               (irregex-fold image-regexp
-                             (lambda (i m s) (cons m s))
-                             '()
-                             html)))))
+            (map match->url
+                 (irregex-fold image-regexp
+                               (lambda (i m s) (cons m s))
+                               '()
+                               html)))))
 
     (define (extract-file-name uri)
       (last (irregex-split "/" uri)))
@@ -69,19 +69,20 @@
 
     (define (yotsuba-get-one-thread board thread)
       (cond
-        ((thread-exists? (make-thread-url board thread))
-         (setup-path thread)
-         (display thread)
-         (let ((urls (parse-image-url (get-html board thread))))
-           (with-cwd thread
-                     (map fetch
-                          urls)))
-         (newline))))
-
+       ((thread-exists? (make-thread-url board thread))
+        (setup-path thread)
+        (display thread)
+        (let ((urls (parse-image-url (get-html board thread))))
+          (with-cwd thread
+                    (map fetch
+                         urls)))
+        (newline))
+       (else
+        (display (string-append thread "'s gone"))
+        (newline))))
 
     (define (string-number? s)
       (string-every char-set:digit s))
-
 
     (define (yotsuba-get-all-thread board)
       (for-each (lambda (t) (yotsuba-get-one-thread board t))
@@ -131,7 +132,6 @@
               ((board)
                (yotsuba-get-all-thread board))
               ((board thread)
-               (yotsuba-get-one-thread board thread)))))
-          )))
+               (yotsuba-get-one-thread board thread))))))))
 
     ))

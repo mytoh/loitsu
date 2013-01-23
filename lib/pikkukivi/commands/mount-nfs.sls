@@ -33,7 +33,7 @@
         (display (string-append "mounting " src))
         (newline)
         (call-process (string-join
-                        `("sudo" "mount" "-v" ,src ,dest)))))
+                        `("sudo" "mount" "-v" "-o" "soft" ,src ,dest)))))
 
     (define (mount-mypassport)
       (mount "quatrevingtdix:/Volumes/MyPassport"
