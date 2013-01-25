@@ -9,6 +9,7 @@
           string-pad
           string-pad-right
           string-drop-right
+          string-take-right
           string-take)
     (only (srfi :1)
           fold)
@@ -197,7 +198,9 @@
         0 string-list))
 
     (define (remove-newline s)
-      (string-drop-right s 1))
+      (if (equal? "\n" (string-take-right s 1))
+          (string-drop-right s 1)
+          s))
 
     (define (puts-columns colour-func directory items)
       (let* ((console-width (if (< 80 (string->number (remove-newline (process-output->string "tput cols" ))))
