@@ -41,6 +41,6 @@
        ((proc key (car lst))
         (list (car lst) (cadr lst)))
        (else
-        (plist-ref key (cddr lst)))))
+        (pref key (cddr lst)))))
 
     ))
