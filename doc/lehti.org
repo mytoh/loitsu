@@ -1,14 +1,57 @@
 
 *  lehti
-
+   
 ** commands
-
+   
 *** install
+    install package
 #+BEGIN_SRC shell
    lehti install napa
 #+END_SRC
-
-*** uninstall
+    
+*** deinstall
+    deinstall package
 #+BEGIN_SRC shell
-   lehti uninstall napa
+   lehti deinstall napa
+#+END_SRC
+
+*** reinstall
+reintall package
+#+BEGIN_SRC
+lehti reinstall napa
+#+END_SRC
+    
+*** environment
+    display current environment
+#+BEGIN_SRC shell
+lehti environment
+#+END_SRC
+    
+*** specification
+    display package information
+#+BEGIN_SRC
+lehti specification napa
+#+END_SRC
+    
+*** clean
+    clean files
+#+BEGIN_SRC
+lehti clean
+#+END_SRC
+    
+    clean package fiels
+#+BEGIN_SRC
+lehti clean napa
+#+END_SRC
+
+*** contents
+display package files
+#+BEGIN_SRC
+lehti contents napa
+#+END_SRC
+
+*** list
+display installed packages
+#+BEGIN_SRC
+lehti list
 #+END_SRC
