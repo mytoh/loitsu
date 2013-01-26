@@ -17,7 +17,7 @@
 
 *** reinstall
 reintall package
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 lehti reinstall napa
 #+END_SRC
     
@@ -29,29 +29,29 @@ lehti environment
     
 *** specification
     display package information
-#+BEGIN_SRC
+#+BEGIN_SRC shel
 lehti specification napa
 #+END_SRC
     
 *** clean
     clean files
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 lehti clean
 #+END_SRC
     
     clean package fiels
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 lehti clean napa
 #+END_SRC
 
 *** contents
 display package files
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 lehti contents napa
 #+END_SRC
 
 *** list
 display installed packages
-#+BEGIN_SRC
+#+BEGIN_SRC shell
 lehti list
 #+END_SRC
