@@ -55,3 +55,19 @@ lehti contents napa
 #+BEGIN_SRC shell
 lehti list
 #+END_SRC
+
+** spec file
+
+*** example lehspec file
+
+#+BEGIN_SRC scheme
+(spec
+  '(name "lista")
+  '(files ("lib/**/*.scm"
+          "bin/*"
+          "*.lehspec"
+          "readme*"
+          "test/**/*.scm"))
+  '(dependencies
+     ("kirjasto")))
+#+END_RC
