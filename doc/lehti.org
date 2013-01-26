@@ -6,17 +6,17 @@
 *** install
     install package
 #+BEGIN_SRC shell
-   lehti install napa
+lehti install napa
 #+END_SRC
     
 *** deinstall
     deinstall package
 #+BEGIN_SRC shell
-   lehti deinstall napa
+lehti deinstall napa
 #+END_SRC
-
+    
 *** reinstall
-reintall package
+    reintall package
 #+BEGIN_SRC shell
 lehti reinstall napa
 #+END_SRC
@@ -34,24 +34,24 @@ lehti specification napa
 #+END_SRC
     
 *** clean
-    clean files
+    clean up files
 #+BEGIN_SRC shell
 lehti clean
 #+END_SRC
     
-    clean package fiels
+    clean up package fiels
 #+BEGIN_SRC shell
 lehti clean napa
 #+END_SRC
-
+    
 *** contents
-display package files
+    display package files
 #+BEGIN_SRC shell
 lehti contents napa
 #+END_SRC
-
+    
 *** list
-display installed packages
+    display installed packages
 #+BEGIN_SRC shell
 lehti list
 #+END_SRC
