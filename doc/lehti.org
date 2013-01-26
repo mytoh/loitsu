@@ -1,0 +1,14 @@
+
+*  lehti
+
+** commands
+
+*** install
+#+BEGIN_SRC shell
+   lehti install napa
+#+END_SRC
+
+*** uninstall
+#+BEGIN_SRC shell
+   lehti uninstall napa
+#+END_SRC
