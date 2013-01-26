@@ -62,12 +62,16 @@ lehti list
 
 #+BEGIN_SRC scheme
 (spec
-  '(name "lista")
-  '(files ("lib/**/*.scm"
-          "bin/*"
-          "*.lehspec"
-          "readme*"
-          "test/**/*.scm"))
-  '(dependencies
-     ("kirjasto")))
+  (name "napa")
+  (description "git helper")
+  (homepage "http://github.com/mytoh/napa")
+  (files ("bin/napa"
+          "lib/napa.sls"
+          "lib/napa/cli.sls"
+          "lib/napa/git.sls"
+          "lib/napa/cvs.sls"
+          "lib/napa/darcs.sls"
+          "lib/napa/hg.sls"
+          "lib/napa/svn.sls"
+           "napa.lehspec"  )))
 #+END_RC
