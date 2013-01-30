@@ -20,6 +20,7 @@
     (loitsu process)
     (loitsu list)
     (loitsu maali)
+    (loitsu control)
     (loitsu file))
 
   (begin
@@ -63,8 +64,7 @@
           (make-file-name-executable file))
          ((file-symbolic-link? path)
           (make-file-name-symlink file))
-         (else
-          file))))
+         (else file))))
 
     (define (make-file-name-mark colour mark)
       (lambda (f)
@@ -107,13 +107,31 @@
       (let ((size (file-size-in-bytes file)))
         (cond
          ((> size 1073741824)
-          (string-append (string-pad (number->string (truncate (/ (/ (/ size 1024) 1024) 1024))) 4) "G"))
+          (-> size (/ 1024) (/ 1024) (/ 1024)
+              truncate
+              number->string
+              (string-pad 4)
+              (string-append (paint "G" 129))))
          ((> size 1048576)
-          (string-append (string-pad (number->string (truncate (/ (/ size 1024) 1024))) 4) "M"))
+          (-> size
+              (/ 1024)
+              (/ 1024)
+              truncate
+              number->string
+              (string-pad 4)
+              (string-append (paint "M" 52))))
          ((> size 1024)
-          (string-append (string-pad  (number->string (truncate (/ size 1024))) 4) "K"))
+          (-> size
+              (/ 1024)
+              truncate
+              number->string
+              (string-pad 4)
+              (string-append (paint "K" 39))))
          (else
-          (string-append (string-pad  (number->string size) 4) "B")))))
+          (-> size
+              number->string
+              (string-pad 4)
+              (string-append (paint "B" 55)))))))
 
 
     (define (file-info-time file)
@@ -163,8 +181,12 @@
       (adjust-string (number->string (round->exact (/. time 60)))))
 
     (define (time->hour time)
-      (adjust-string
-       (number->string (round->exact  (/. (/. time 60) 60)))))
+      (-> time
+          (/. 60)
+          (/. 60)
+          round->exact
+          number->string
+          adjust-string))
 
     (define (time->day time)
       (adjust-string
