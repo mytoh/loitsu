@@ -1,21 +1,22 @@
 
 (library (loitsu list)
-  (export
-    flatten
-    reductions
-    rassoc
-    rassq
-    rassv
-    scar
-    scdr
-    drop*
-    take*
-    safe-length)
+    (export
+      flatten
+      reductions
+      rassoc
+      rassq
+      rassv
+      scar
+      scdr
+      drop*
+      take*
+      safe-length)
   (import
     (rnrs)
     (only (srfi :1)
           drop
           take)
+    (loitsu lamb)
     (loitsu control))
 
 
@@ -79,15 +80,15 @@
           (drop lis k )))
 
     (define reductions
-      (case-lambda
-          ((f l)
-           (if (null? l)
-               (list (f))
-               (reductions f (car l) (cdr l))))
-        ((f init l)
-         (cons init
-           (if (null? l)
-               '()
-               (reductions f (f init (car l)) (cdr l)))))))
+      (^:
+       ((f l)
+        (if (null? l)
+            (list (f))
+            (reductions f (car l) (cdr l))))
+       ((f init l)
+        (cons init
+          (if (null? l)
+              '()
+              (reductions f (f init (car l)) (cdr l)))))))
 
     ))

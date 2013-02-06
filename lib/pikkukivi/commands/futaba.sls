@@ -1,7 +1,7 @@
 
 (library (pikkukivi commands futaba)
-  (export
-    futaba)
+    (export
+      futaba)
   (import
     (silta base)
     (silta write)
@@ -19,6 +19,7 @@
     (srfi :39 parameters)
     (only (mosh concurrent)
           sleep)
+    (loitsu lamb)
     (loitsu file)
     (loitsu process)
     (loitsu control)
@@ -43,11 +44,11 @@
                                                                       board "/res/"
                                                                       thread ".htm")))))
                      (cond
-                       ((not (number? res)) #f)
-                       ((and (number? res)
-                             (zero? res))
-                        #f)
-                       (else s))))))
+                      ((not (number? res)) #f)
+                      ((and (number? res)
+                            (zero? res))
+                       #f)
+                      (else s))))))
         (match board
           ("b"
            (or (get "jun")
@@ -75,11 +76,11 @@
       (let ((image-regexp `(: "http://" (+ alphabetic) ".2chan.net/" (+ alphabetic) "/"
                               ,board "/src/" (+ (~ #\")))))
         (delete-duplicates
-          (map (cut irregex-match-substring <> 0)
-               (irregex-fold image-regexp
-                             (lambda (i m s) (cons m s))
-                             '()
-                             (get-thread-html board thread))))))
+            (map (cut irregex-match-substring <> 0)
+                 (irregex-fold image-regexp
+                               (lambda (i m s) (cons m s))
+                               '()
+                               (get-thread-html board thread))))))
 
     (define (get-thread-html board thread)
       (surl->utf8 (make-url board thread)))
@@ -93,32 +94,32 @@
 
     (define (futaba-get-one-thread board thread)
       (cond
-        ((and (not (member thread (deleted-thread)))
-              (valid-thread-number? thread))
-         (setup-path thread)
-         (cond
-           ((thread-exists? board thread)
-            (puts thread)
-            (let ((res (get-thread-html board thread)))
-              (unless (string=? "" res)
-                (with-cwd
-                  thread
-                  (map  fetch
-                        (get-image-url/thread board thread))))))
-           (else
-             (update-deleted-thread thread))))))
+       ((and (not (member thread (deleted-thread)))
+             (valid-thread-number? thread))
+        (setup-path thread)
+        (cond
+         ((thread-exists? board thread)
+          (puts thread)
+          (let ((res (get-thread-html board thread)))
+            (unless (string=? "" res)
+              (with-cwd
+               thread
+               (map  fetch
+                     (get-image-url/thread board thread))))))
+         (else
+          (update-deleted-thread thread))))))
 
     (define (futaba-get-all-thread board)
       (let ((threads (directory-list2 (current-directory))))
         (for-each
-          (cut futaba-get-one-thread board <>)
-          threads)
+         (cut futaba-get-one-thread board <>)
+         threads)
         (puts (paint "-----------------------------" 29))))
 
     (define futaba-get
-      (case-lambda
-        ((board) (force-loop ((repeat futaba-get-all-thread) board)))
-        ((board thread) (futaba-get-one-thread board thread))))
+      (^:
+       ((board) (force-loop ((repeat futaba-get-all-thread) board)))
+       ((board thread) (futaba-get-one-thread board thread))))
 
     (define (repeat f)
       (lambda args
@@ -130,9 +131,9 @@
 
     (define (force-loop body)
       (guard (e (else
-                   (display "error, go back loop")
-                   (newline)
-                   (force-loop body)))
+                 (display "error, go back loop")
+                 (newline)
+                 (force-loop body)))
         (body)))
 
 
@@ -141,7 +142,7 @@
 
     (define (update-deleted-thread thread)
       (if (not (memq thread (deleted-thread)))
-        (deleted-thread (cons thread (deleted-thread)))))
+          (deleted-thread (cons thread (deleted-thread)))))
 
     (define (futaba args)
       (let ((args (cddr args)))

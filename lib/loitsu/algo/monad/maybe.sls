@@ -1,7 +1,7 @@
 
 (library (loitsu algo monad maybe)
-  (export
-    maybe-m)
+    (export
+      maybe-m)
   (import
     (rnrs)
     (loitsu algo monad util))
@@ -19,7 +19,7 @@
 
     ))
 
- ; (do-monad list-m
- ;           (a <- #f)
- ;           (b <- 3)
- ;           (* a b))
+;; (do-monad list-m
+;;           (a <- #f)
+;;           (b <- 3)
+;;           (* a b))

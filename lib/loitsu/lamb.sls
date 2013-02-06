@@ -4,9 +4,10 @@
 ;;;
 
 (library (loitsu lamb)
-  (export
-    ^.
-    ^*)
+    (export
+      ^.
+      ^*
+      ^:)
   (import
     (rnrs)
     (match))
@@ -15,13 +16,17 @@
 
     (define-syntax ^.
       (syntax-rules ()
-        ((^. . clauses)
-         (match-lambda . clauses))))
+        ((_ clause ...)
+         (match-lambda  clause ...))))
 
     (define-syntax ^*
       (syntax-rules ()
-        ((^* . clauses)
-         (match-lambda* . clauses))))
+        ((_  clause ...)
+         (match-lambda* clause ...))))
+
+    (define-syntax ^:
+      (syntax-rules ()
+        ((_ clause ...)
+         (case-lambda clause ...))))
 
     ))
-
