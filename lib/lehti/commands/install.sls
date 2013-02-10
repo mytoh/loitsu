@@ -6,7 +6,8 @@
       install
       install-package)
   (import
-    (rnrs)
+    (except (rnrs)
+            find)
     (only (srfi :1 lists)
           find)
     (srfi :39 parameters)
