@@ -1,8 +1,8 @@
 
 (library (loitsu maali)
-  (export paint
-          unpaint
-          pa)
+    (export paint
+            unpaint
+            pa)
   (import
     (rnrs)
     (only (srfi :1)
@@ -10,7 +10,7 @@
     (only (srfi :13)
           string-trim)
     (irregex)
-    (match)
+    (loitsu match)
     (loitsu maali colours)
     (loitsu maali rgb-colours))
 
@@ -20,15 +20,15 @@
       ;; receive three numbers and
       ;; return string like ";5;120"
       (if (if-gray-possible red green blue)
-        (string-append
-          ";5;"
-          (number->string
+          (string-append
+           ";5;"
+           (number->string
             (+ 232
                (exact (floor (/ (+ red green blue) 33))))))
-        ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
-        (string-append
-          ";5;"
-          (number->string
+                                        ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
+          (string-append
+           ";5;"
+           (number->string
             (+ 16
                (* (exact (floor (* 6 (/ red 256)))) 36)
                (* (exact (floor (* 6 (/ green 256)))) 6)
@@ -64,25 +64,25 @@
 
     (define (colour-rgb r g b)
       (string-append
-        "38"
-        (rgb-value r g b)))
+       "38"
+       (rgb-value r g b)))
 
     (define (colour-hex colour)
       (let ((s (string-trim colour #\#)))
         (cond
-          ((= (string-length s) 6)
-           (colour-rgb (string->number (substring s 0 2) 16)
-                       (string->number (substring s 2 4) 16)
-                       (string->number (substring s 4 6) 16)))
-          ((= (string-length s) 3)
-           (colour-hex (duplicate-string s))))))
+         ((= (string-length s) 6)
+          (colour-rgb (string->number (substring s 0 2) 16)
+                      (string->number (substring s 2 4) 16)
+                      (string->number (substring s 4 6) 16)))
+         ((= (string-length s) 3)
+          (colour-hex (duplicate-string s))))))
 
     (define (duplicate-string s)
       (list->string
-        (fold
-          (lambda (c r)
-            (append (list c c) r))
-          '() (string->list s))))
+       (fold
+        (lambda (c r)
+          (append (list c c) r))
+        '() (string->list s))))
 
 
     (define (symbol-colour-foreground lyst colour)
@@ -91,7 +91,7 @@
     (define (colour-symbol colour)
       (let ((c (symbol-colour-foreground ansi-colours-foreground colour)))
         (cond
-          (c c))))
+         (c c))))
 
     (define (colour-rgb-name name)
       (let* ((cols (cadr (assoc (string->symbol name) rgb-colours)))
@@ -103,27 +103,27 @@
     (define (make-colour lst)
       (map (lambda (str)
              (match str
-               ((r g b)
-                (colour-rgb r g b))
-               ((? string? s)
-                (cond
-                  ((irregex-match (irregex "^#?(?:[a-zA-Z0-9]{3}){1,2}$" ) s)
-                   (colour-hex s))
-                  (else
-                    (colour-rgb-name s))))
-               ((? number? s)
-                (colour-simple-number s))
-               (colour
-                 (colour-symbol colour))))
+                    ((r g b)
+                     (colour-rgb r g b))
+                    ((? string? s)
+                     (cond
+                      ((irregex-match (irregex "^#?(?:[a-zA-Z0-9]{3}){1,2}$" ) s)
+                       (colour-hex s))
+                      (else
+                       (colour-rgb-name s))))
+                    ((? number? s)
+                     (colour-simple-number s))
+                    (colour
+                     (colour-symbol colour))))
            lst))
 
     (define (paint s . rest)
       (cond
-        ((null? rest) s)
-        (else
-          (string-append
-            (wrap (apply string-append  (make-colour rest)))
-            s (reset)))))
+       ((null? rest) s)
+       (else
+        (string-append
+         (wrap (apply string-append  (make-colour rest)))
+         s (reset)))))
 
     (define (pa x . rest)
       (display (apply paint x rest))
@@ -131,9 +131,9 @@
       x)
 
 
-     (define (unpaint s)
-       (irregex-replace/all '(: "\x1B;[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
-    ; "\[((\d)+\;)*(\d)+m"
-    ; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
+    (define (unpaint s)
+      (irregex-replace/all '(: "\x1B;[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
+                                        ; "\[((\d)+\;)*(\d)+m"
+                                        ; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
 
     ))

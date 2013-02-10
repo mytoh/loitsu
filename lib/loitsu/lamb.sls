@@ -9,7 +9,8 @@
       ^*
       ^:)
   (import
-    (rnrs)
+    (silta base)
+    (silta case-lambda)
     (match))
 
   (begin

@@ -1,13 +1,13 @@
 
 (library (pikkukivi commands mount-nfs)
-  (export mount-nfs)
+    (export mount-nfs)
   (import
     (silta base)
     (silta cxr)
     (silta write)
     (only (srfi :13 strings)
           string-join)
-    (match)
+    (loitsu match)
     (mosh process))
 
   (begin
@@ -15,25 +15,25 @@
     (define (mount-nfs args)
       (let ((disk (caddr args))
             (user (cadddr args)))
-      (match disk
-        ; commands
-        ("mypassport"
-         (mount-mypassport))
-        ("deskstar"
-         (mount-deskstar))
-        ("quatre"
-         (mount-quatre user))
-        ("all"
-         (mount-mypassport)
-         (mount-deskstar)
-         (mount-quatre user)))))
+        (match disk
+                                        ; commands
+               ("mypassport"
+                (mount-mypassport))
+               ("deskstar"
+                (mount-deskstar))
+               ("quatre"
+                (mount-quatre user))
+               ("all"
+                (mount-mypassport)
+                (mount-deskstar)
+                (mount-quatre user)))))
 
     (define mount
       (lambda (src dest)
         (display (string-append "mounting " src))
         (newline)
         (call-process (string-join
-                        `("sudo" "mount" "-v" "-o" "soft" ,src ,dest)))))
+                       `("sudo" "mount" "-v" "-o" "soft" ,src ,dest)))))
 
     (define (mount-mypassport)
       (mount "quatrevingtdix:/Volumes/MyPassport"
