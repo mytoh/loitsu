@@ -47,8 +47,7 @@
           string-trim-right
           string-take-right)
     (srfi :48 intermediate-format-strings)
-    (lehti base compat)
-    )
+    (lehti base compat))
 
   (begin
 
@@ -57,16 +56,16 @@
 
     (define build-path
       (case-lambda
-          ((path) path)
-        (paths (string-join
-                   (map (lambda (s)
-                          (if (equal? "" s)
-                              ""
-                              (if (equal? "/" (string-take-right s 1))
-                                  (remove-trailing-slash s)
-                                  s)))
-                        paths)
-                 "/"))))
+       ((path) path)
+       (paths (string-join
+               (map (lambda (s)
+                      (if (equal? "" s)
+                          ""
+                          (if (equal? "/" (string-take-right s 1))
+                              (remove-trailing-slash s)
+                              s)))
+                    paths)
+               "/"))))
 
     (define (remove-trailing-slash path)
       (string-trim-right path #\/))
@@ -105,7 +104,7 @@
        (else
         (let ((p (remove-trailing-slash path)))
           (apply build-path (drop-right (split-slash p)
-                              1))))))
+                                        1))))))
 
     (define (path-absolute? path)
       (if (equal? "/" (string-take path 1))
@@ -134,9 +133,9 @@
         (let loop  ((in pin))
           (let ((l (read-char in)))
             (unless (eof-object? l)
-              (write-char l pout)
-              (flush-output-port pout)
-              (loop in))))
+                    (write-char l pout)
+                    (flush-output-port pout)
+                    (loop in))))
         (close-input-port pin)
         (close-output-port pout)))
 
@@ -160,18 +159,18 @@
       (letrec ((rec (lambda (p)
                       (if (file-exists? p)
                           (unless (file-directory? p)
-                            (error "non-directory ~s is found while creating a directory ~s"))
+                                  (error "non-directory ~s is found while creating a directory ~s"))
                           (let ((d (path-dirname p)))
                             (rec d)
                             (unless (equal? (path-basename p) ".") ; omit the last component in "/a/b/c/."
-                              (%make-directory p)))))))
+                                    (%make-directory p)))))))
         (rec (string-trim-right dir #\/))))
 
     (define (%make-directory dir)
       (unless (or (equal? "." dir)
                   (equal? ".." dir)
                   (equal? "" dir))
-        (create-directory dir)))
+              (create-directory dir)))
 
     (define (remove-directory* path)
       (cond
@@ -204,9 +203,9 @@
 
     (define (directory-list2 path)
       (remove
-          (lambda (s) (or (equal? "." s)
-                          (equal? ".." s)))
-        (directory-list path)))
+       (lambda (s) (or (equal? "." s)
+                       (equal? ".." s)))
+       (directory-list path)))
 
     (define (directory-list/path path)
       (map
@@ -219,14 +218,14 @@
          ((null? files) '())
          (else
           (fold
-              (lambda (e res)
-                (cond
-                 ((not (file-directory? e))
-                  (cons e res))
-                 ((file-directory? e)
-                  (append (directory-list-rec e)
-                          res))))
-            '() files)))))
+           (lambda (e res)
+             (cond
+              ((not (file-directory? e))
+               (cons e res))
+              ((file-directory? e)
+               (append (directory-list-rec e)
+                       res))))
+           '() files)))))
 
 
 
@@ -264,9 +263,9 @@
         ((_ msg)
          (begin
            (message (string-append
-                        (paint ">" 181)
-                      (paint ">" 179)
-                      (paint ">" 178))
+                     (paint ">" 181)
+                     (paint ">" 179)
+                     (paint ">" 178))
                     msg 0)
            (newline)))
         ((_ msg ...)
