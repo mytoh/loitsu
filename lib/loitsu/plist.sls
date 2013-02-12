@@ -4,7 +4,7 @@
       plist?
       pref)
   (import
-    (rnrs)
+    (silta base)
     (only (srfi :13)
           string-ref))
 

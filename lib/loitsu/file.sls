@@ -69,7 +69,7 @@
     (loitsu file path)
     (loitsu control)
     (loitsu string)
-    (irregex)
+    (loitsu irregex)
     (http)
     (only (mosh file)
           create-symbolic-link

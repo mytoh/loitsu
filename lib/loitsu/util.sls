@@ -1,26 +1,27 @@
 
 
 (library (loitsu util)
-  (export
-    tap
-    comment
-    nothing
-    flip
-    implications
-    compose
-    partial
-    rpartial
-    complement
-    nor
-    fork
-    mtrace
-    )
+    (export
+      tap
+      comment
+      nothing
+      flip
+      implications
+      compose
+      partial
+      rpartial
+      complement
+      nor
+      fork
+      mtrace
+      )
   (import
     (except (rnrs)
             cons*)
     (only (srfi :1 lists)
           cons*)
     (loitsu control)
+    (loitsu lamb)
     )
 
 
@@ -56,27 +57,27 @@
       (syntax-rules ()
         ((_ f) f)
         ((_ f g)
-         (case-lambda
-           (() (f (g)))
-           ((x) (f (g x)))
-           ((x y) (f (g x y)))
-           ((x y z) (f (g x y z)))
-           ((x y z . args) (f (apply g x y z args)))))
+         (^:
+          (() (f (g)))
+          ((x) (f (g x)))
+          ((x y) (f (g x y)))
+          ((x y z) (f (g x y z)))
+          ((x y z . args) (f (apply g x y z args)))))
         ((_ f g h)
-         (case-lambda
-           (() (f (g (h))))
-           ((x) (f (g (h x))))
-           ((x y) (f (g (h x y))))
-           ((x y z) (f (g (h x y z))))
-           ((x y z . args) (f (g (apply h x y z args))))))
+         (^:
+          (() (f (g (h))))
+          ((x) (f (g (h x))))
+          ((x y) (f (g (h x y))))
+          ((x y z) (f (g (h x y z))))
+          ((x y z . args) (f (g (apply h x y z args))))))
         ((_ f1 f2 f3 . fs)
          (let ((fs (reverse (cons* f1 f2 f3 fs))))
            (lambda args
              (let loop ((ret (apply (car fs) args))
                         (fs (cdr fs)))
                (if (null? fs)
-                 ret
-                 (loop ((car fs) ret) (cdr fs)))))))))
+                   ret
+                   (loop ((car fs) ret) (cdr fs)))))))))
 
 
     (define-syntax partial
@@ -96,9 +97,9 @@
          (not (or x ...)))))
 
     (define (complement f)
-      (case-lambda
-        (() (not (f)))
-        ((x . zs) (not (apply f x zs)))))
+      (^:
+       (() (not (f)))
+       ((x . zs) (not (apply f x zs)))))
 
     (define (fork f g)
       ;; www.t3x.org/s9fes/hof.scm.html

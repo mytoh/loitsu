@@ -6,7 +6,8 @@
       match-short-command
       find-short-command)
   (import
-    (rnrs)
+    (silta base)
+    (silta write)
     (only (srfi :1)
           fold)
     (only (srfi :13)
@@ -15,7 +16,7 @@
     (srfi :48)
     (loitsu process)
     (loitsu list)
-    (irregex))
+    (loitsu irregex))
 
   (begin
 
@@ -48,7 +49,7 @@
               (if (< r (string-length s))
                   (string-length s)
                   r))
-        0 string-list))
+            0 string-list))
 
     (define (remove-newline s)
       (string-drop-right s 1))
@@ -66,13 +67,13 @@
             (for-each
              (lambda (s)
                (display
-                   (string-pad-right s (+ longest 2))))
+                (string-pad-right s (+ longest 2))))
              (take* items cols)))
            (else
             (for-each
              (lambda (s)
                (display
-                   (string-pad-right s (+ longest 2))))
+                (string-pad-right s (+ longest 2))))
              (take* items cols))
             (newline)
             (loop (drop* items cols)))))

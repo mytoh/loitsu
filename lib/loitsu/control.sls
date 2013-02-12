@@ -1,15 +1,14 @@
 
 (library (loitsu control)
-  (export
-    doto
-    ->
-    ->>
-    ->*
-    ->>*
-    case-lambda
-    let-optionals*)
+    (export
+      doto
+      ->
+      ->>
+      ->*
+      ->>*
+      let-optionals*)
   (import
-    (rnrs)
+    (silta base)
     (loitsu control compat))
 
   (begin
@@ -29,8 +28,7 @@
         ((_ x (f v ...) f2 ...)
          (-> (f x v ...) f2 ...))
         ((_ x f f2 ...)
-         (-> (f x) f2 ...))
-        ))
+         (-> (f x) f2 ...))))
 
 
     (define-syntax ->>
@@ -46,7 +44,7 @@
         ((_ x) x)
         ((_ x (y z ...) rest ...)
          (->* (receive args x
-                (apply y (append args (list z ...))))
+                       (apply y (append args (list z ...))))
               rest ...))))
 
     (define-syntax ->>*
@@ -54,7 +52,7 @@
         ((_ x) x)
         ((_ x (y z ...) rest ...)
          (->>* (receive args x
-                 (apply y (append (list z ...) args)))
+                        (apply y (append (list z ...) args)))
                rest ...))))
 
     ))

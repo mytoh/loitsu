@@ -84,10 +84,10 @@
             (sep2 (paint "├" 239 ))
             (sep3 (paint "┤" 239)))
         (string-append
-            sep2
-          (file-info-perm path) sep3
-          (file-info-time path) sep
-          (file-info-size path) sep name)))
+         sep2
+         (file-info-perm path) sep3
+         (file-info-time path) sep
+         (file-info-size path) sep name)))
 
 
     (define (file-info-perm file)
@@ -205,7 +205,7 @@
                             (current-directory)
                             (caddr args)))
              (files (directory-list2 directory)))
-        (puts-columns make-file-name directory files)))
+        (put-columns make-file-name directory files)))
 
     (define (list-file-long args)
       (let* ((directory (if (null? (cddr args)) (current-directory) (caddr args)))
@@ -217,14 +217,14 @@
               (if (< r (string-length s))
                   (string-length s)
                   r))
-        0 string-list))
+            0 string-list))
 
     (define (remove-newline s)
       (if (equal? "\n" (string-take-right s 1))
           (string-drop-right s 1)
           s))
 
-    (define (puts-columns colour-func directory items)
+    (define (put-columns colour-func directory items)
       (let* ((console-width (if (< 80 (string->number (remove-newline (process-output->string "tput cols" ))))
                                 80 (string->number (remove-newline (process-output->string "tput cols")))))
              (longest (string-longest items))
@@ -236,13 +236,13 @@
             (for-each
              (lambda (s)
                (display
-                   (string-pad-right (colour-func directory  s) (+ longest 2))))
+                (string-pad-right (colour-func directory  s) (+ longest 2))))
              (take* items cols)))
            (else
             (for-each
              (lambda (s)
                (display
-                   (string-pad-right (colour-func directory s) (+ longest 2))))
+                (string-pad-right (colour-func directory s) (+ longest 2))))
              (take* items cols))
             (newline)
             (loop (drop* items cols))))))

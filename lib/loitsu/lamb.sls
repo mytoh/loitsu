@@ -11,7 +11,7 @@
   (import
     (silta base)
     (silta case-lambda)
-    (match))
+    (loitsu match))
 
   (begin
 
