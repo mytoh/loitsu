@@ -6,7 +6,7 @@
     (silta base)
     (silta write)
     (silta file)
-    (irregex)
+    (loitsu irregex)
     (only  (rnrs)
            latin-1-codec
            make-transcoder
@@ -142,7 +142,7 @@
 
     (define (update-deleted-thread thread)
       (if (not (memq thread (deleted-thread)))
-          (deleted-thread (cons thread (deleted-thread)))))
+        (deleted-thread (cons thread (deleted-thread)))))
 
     (define (futaba args)
       (let ((args (cddr args)))
