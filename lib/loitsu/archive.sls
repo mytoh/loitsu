@@ -1,8 +1,8 @@
 
 (library (loitsu archive)
-  (export
-    extract-archive
-    file-archive?)
+    (export
+      extract-archive
+      file-archive?)
   (import
     (rnrs)
     (only (srfi :1 lists)
@@ -15,17 +15,17 @@
 
     (define supporting-extensions
       (make-parameter
-        '("tar" "xz" "gz" "bz2"
-          "cbz" "cbr" "cbx"
-          "rar"
-          "zip")))
+       '("tar" "xz" "gz" "bz2"
+         "cbz" "cbr" "cbx"
+         "rar"
+         "zip")))
 
     (define (file-archive? file)
       (let ((extension (path-extension file)))
         (any
-          (lambda (s)
-            (string=? extension s))
-          (supporting-extensions))))
+         (lambda (s)
+           (string=? extension s))
+         (supporting-extensions))))
 
 
     ;;; methods from
@@ -41,8 +41,8 @@
     (define (rar-unpacker file . directory)
       (cond ((null? (car directory))
              (run-command `(unrar x -ad -inul ,file)))
-        (else
-          (run-command `(unrar x -ad -inul ,file ,(caar directory))))))
+            (else
+             (run-command `(unrar x -ad -inul ,file ,(caar directory))))))
 
     (define (lha-unpacker file . diretory)
       (run-command `(lha xq ,file)))
@@ -50,9 +50,9 @@
     (define (tar-unpacker file . directory)
       (cond ((null? (car directory))
              (run-command `(tar xf ,file)))
-        (else
-          (make-directory* (caar directory))
-          (run-command `(tar xf ,file -C ,(caar directory))))))
+            (else
+             (make-directory* (caar directory))
+             (run-command `(tar xf ,file -C ,(caar directory))))))
 
     (define (sevenzip-unpacker file . directory)
       (if (null? (car directory))
@@ -89,4 +89,3 @@
           (error "unknown file type" file))))
 
     ))
-
