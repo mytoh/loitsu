@@ -1,7 +1,7 @@
 ;;;; irregex.scm -- IrRegular Expressions
 (library (loitsu irregex)
     (export
-                                        ;from irregex-chicken
+      ;;from irregex-chicken
 
       irregex string->irregex sre->irregex
       string->sre maybe-string->sre
@@ -207,23 +207,23 @@
      (else
       (let ((n (car opt)))
         (if (number? n)
-            (if (and (integer? n) (exact? n))
-                (if (irregex-match-valid-numeric-index? m n)
-                    (and (irregex-match-matched-numeric-index? m n) n)
-                    (error (string-append location ": not a valid index")
-                           m n))
-                (error (string-append location ": not an exact integer") n))
-            (let lp ((ls (irregex-match-names m))
-                     (unknown? #t))
-              (cond
-               ((null? ls)
-                (and unknown?
-                     (error (string-append location ": unknown match name") n)))
-               ((eq? n (caar ls))
-                (if (%irregex-match-start-chunk m (cdar ls))
-                    (cdar ls)
-                    (lp (cdr ls) #f)))
-               (else (lp (cdr ls) unknown?)))))))))
+          (if (and (integer? n) (exact? n))
+            (if (irregex-match-valid-numeric-index? m n)
+              (and (irregex-match-matched-numeric-index? m n) n)
+              (error (string-append location ": not a valid index")
+                     m n))
+            (error (string-append location ": not an exact integer") n))
+          (let lp ((ls (irregex-match-names m))
+                   (unknown? #t))
+            (cond
+             ((null? ls)
+              (and unknown?
+                   (error (string-append location ": unknown match name") n)))
+             ((eq? n (caar ls))
+              (if (%irregex-match-start-chunk m (cdar ls))
+                (cdar ls)
+                (lp (cdr ls) #f)))
+             (else (lp (cdr ls) unknown?)))))))))
 
   (define (irregex-match-valid-numeric-index? m n)
     (and (>= n 0) (< (+ 3 (* n 4)) (- (vector-length m) 4))))
@@ -238,12 +238,12 @@
 
   (define (irregex-match-valid-index? m n)
     (if (not (irregex-match-data? m))
-        (error "irregex-match-valid-index?: not match data" m))
+      (error "irregex-match-valid-index?: not match data" m))
     (if (integer? n)
-        (if (not (exact? n))
-            (error "irregex-match-valid-index?: not an exact integer" n)
-            (irregex-match-valid-numeric-index? m n))
-        (irregex-match-valid-named-index? m n)))
+      (if (not (exact? n))
+        (error "irregex-match-valid-index?: not an exact integer" n)
+        (irregex-match-valid-numeric-index? m n))
+      (irregex-match-valid-named-index? m n)))
 
   (define (irregex-match-substring m . opt)
     (let* ((n (irregex-match-numeric-index "irregex-match-substring" m opt))
@@ -260,12 +260,12 @@
            (cnk (irregex-match-chunker m))
            (get-subchunk (chunker-get-subchunk cnk)))
       (if (not get-subchunk)
-          (error "this chunk type does not support match subchunks")
-          (and n (get-subchunk
-                  (%irregex-match-start-chunk m n)
-                  (%irregex-match-start-index m n)
-                  (%irregex-match-end-chunk m n)
-                  (%irregex-match-end-index m n))))))
+        (error "this chunk type does not support match subchunks")
+        (and n (get-subchunk
+                (%irregex-match-start-chunk m n)
+                (%irregex-match-start-index m n)
+                (%irregex-match-end-chunk m n)
+                (%irregex-match-end-index m n))))))
 
   ;; chunkers tell us how to navigate through chained chunks of strings
 
@@ -279,27 +279,27 @@
             (or (and (pair? o) (car o))
                 (lambda (cnk1 start cnk2 end)
                   (if (eq? cnk1 cnk2)
-                      (substring (get-str cnk1) start end)
-                      (let loop ((cnk (get-next cnk1))
-                                 (res (list (substring (get-str cnk1)
-                                                       start
-                                                       (get-end cnk1)))))
-                        (if (eq? cnk cnk2)
-                            (string-cat-reverse
-                             (cons (substring (get-str cnk)
-                                              (get-start cnk)
-                                              end)
-                                   res))
-                            (loop (get-next cnk)
-                                  (cons (substring (get-str cnk)
-                                                   (get-start cnk)
-                                                   (get-end cnk))
-                                        res))))))))
+                    (substring (get-str cnk1) start end)
+                    (let loop ((cnk (get-next cnk1))
+                               (res (list (substring (get-str cnk1)
+                                                     start
+                                                     (get-end cnk1)))))
+                      (if (eq? cnk cnk2)
+                        (string-cat-reverse
+                         (cons (substring (get-str cnk)
+                                          (get-start cnk)
+                                          end)
+                               res))
+                        (loop (get-next cnk)
+                              (cons (substring (get-str cnk)
+                                               (get-start cnk)
+                                               (get-end cnk))
+                                    res))))))))
            (o (if (pair? o) (cdr o) o))
            (get-subchunk (and (pair? o) (car o))))
       (if (not (and (procedure? get-next) (procedure? get-str)
                     (procedure? get-start) (procedure? get-substr)))
-          (error "make-irregex-chunker: expected a procdure"))
+        (error "make-irregex-chunker: expected a procdure"))
       (vector get-next get-str get-start get-end get-substr get-subchunk)))
 
   (define (chunker-get-next cnk) (vector-ref cnk 0))
@@ -311,13 +311,13 @@
 
   (define (chunker-prev-chunk cnk start end)
     (if (eq? start end)
-        #f
-        (let ((get-next (chunker-get-next cnk)))
-          (let lp ((start start))
-            (let ((next (get-next start)))
-              (if (eq? next end)
-                  start
-                  (and next (lp next))))))))
+      #f
+      (let ((get-next (chunker-get-next cnk)))
+        (let lp ((start start))
+          (let ((next (get-next start)))
+            (if (eq? next end)
+              start
+              (and next (lp next))))))))
 
   (define (chunker-prev-char cnk start end)
     (let ((prev (chunker-prev-chunk cnk start end)))
@@ -336,8 +336,8 @@
          (let ((next ((chunker-get-next cnk) a)))
            (and next
                 (if (eq? next b)
-                    #t
-                    (chunk-before? cnk next b))))))
+                  #t
+                  (chunk-before? cnk next b))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; String Utilities
@@ -414,11 +414,11 @@
     (let ((res (make-string len)))
       (let lp ((i len) (ls string-list))
         (if (pair? ls)
-            (let* ((s (car ls))
-                   (slen (string-length s))
-                   (i (- i slen)))
-              (%%string-copy! res i s 0 slen)
-              (lp i (cdr ls)))))
+          (let* ((s (car ls))
+                 (slen (string-length s))
+                 (i (- i slen)))
+            (%%string-copy! res i s 0 slen)
+            (lp i (cdr ls)))))
       res))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -427,9 +427,9 @@
   ;; like the one-arg IOTA case
   (define (zero-to n)
     (if (<= n 0)
-        '()
-        (let lp ((i (- n 1)) (res '()))
-          (if (zero? i) (cons 0 res) (lp (- i 1) (cons i res))))))
+      '()
+      (let lp ((i (- n 1)) (res '()))
+        (if (zero? i) (cons 0 res) (lp (- i 1) (cons i res))))))
 
   ;; SRFI-1 extracts (simplified 1-ary versions)
 
@@ -441,31 +441,31 @@
 
   (define (last ls)
     (if (not (pair? ls))
-        (error "can't take last of empty list" ls)
-        (let lp ((ls ls))
-          (if (pair? (cdr ls))
-              (lp (cdr ls))
-              (car ls)))))
+      (error "can't take last of empty list" ls)
+      (let lp ((ls ls))
+        (if (pair? (cdr ls))
+          (lp (cdr ls))
+          (car ls)))))
 
   (define (any pred ls)
     (and (pair? ls)
          (let lp ((head (car ls)) (tail (cdr ls)))
            (if (null? tail)
-               (pred head)
-               (or (pred head) (lp (car tail) (cdr tail)))))))
+             (pred head)
+             (or (pred head) (lp (car tail) (cdr tail)))))))
 
   (define (every pred ls)
     (or (null? ls)
         (let lp ((head (car ls))  (tail (cdr ls)))
           (if (null? tail)
-              (pred head)
-              (and (pred head) (lp (car tail) (cdr tail)))))))
+            (pred head)
+            (and (pred head) (lp (car tail) (cdr tail)))))))
 
   (define (fold kons knil ls)
     (let lp ((ls ls) (res knil))
       (if (null? ls)
-          res
-          (lp (cdr ls) (kons (car ls) res)))))
+        res
+        (lp (cdr ls) (kons (car ls) res)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Flags
@@ -549,14 +549,14 @@
                   (k (reverse ls) j))
                  ((eq? x dot-token)
                   (if (null? ls)
-                      (error "bad dotted form" str)
-                      (read j (lambda (y j2)
-                                (read j2 (lambda (z j3)
-                                           (if (not (eq? z close-token))
-                                               (error "bad dotted form" str)
-                                               (k (append (reverse (cdr ls))
-                                                          (cons (car ls) y))
-                                                  j3))))))))
+                    (error "bad dotted form" str)
+                    (read j (lambda (y j2)
+                              (read j2 (lambda (z j3)
+                                         (if (not (eq? z close-token))
+                                           (error "bad dotted form" str)
+                                           (k (append (reverse (cdr ls))
+                                                      (cons (car ls) y))
+                                              j3))))))))
                  (else
                   (lp j (cons x ls))))))))
           ((#\))
@@ -564,8 +564,8 @@
           ((#\;)
            (let skip ((i (+ i 1)))
              (if (or (>= i end) (eqv? #\newline (string-ref str i)))
-                 (read (+ i 1) k)
-                 (skip (+ i 1)))))
+               (read (+ i 1) k)
+               (skip (+ i 1)))))
           ((#\' #\`)
            (read (+ i 1)
                  (lambda (sexp j)
@@ -581,11 +581,11 @@
              (define (collect)
                (if (= from i) res (cons (substring str from i) res)))
              (if (>= i end)
-                 (error "unterminated string in embeded SRE" str)
-                 (case (string-ref str i)
-                   ((#\") (k (string-cat-reverse (collect)) (+ i 1)))
-                   ((#\\) (scan (+ i 1) (+ i 2) (collect)))
-                   (else (scan from (+ i 1) res))))))
+               (error "unterminated string in embeded SRE" str)
+               (case (string-ref str i)
+                 ((#\") (k (string-cat-reverse (collect)) (+ i 1)))
+                 ((#\\) (scan (+ i 1) (+ i 2) (collect)))
+                 (else (scan from (+ i 1) res))))))
           ((#\#)
            (case (string-ref str (+ i 1))
              ((#\;)
@@ -597,8 +597,8 @@
                            ((space) #\space)
                            ((newline) #\newline)
                            (else (let ((s (if (number? sexp)
-                                              (number->string sexp)
-                                              (symbol->string sexp))))
+                                            (number->string sexp)
+                                            (symbol->string sexp))))
                                    (string-ref s 0))))
                          j))))
              ((#\t #\f)
@@ -621,8 +621,8 @@
                 (else (scan (+ j 1))))))))))))
     (read i (lambda (res j)
               (if (eq? res 'close-token)
-                  (error "unexpected ')' in SRE" str j)
-                  (proc res j)))))
+                (error "unexpected ')' in SRE" str j)
+                (proc res j)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; Parsing PCRE Strings
@@ -637,17 +637,17 @@
   (define (symbol-list->flags ls)
     (let lp ((ls ls) (res ~none))
       (if (not (pair? ls))
-          res
-          (lp (cdr ls)
-              (flag-join
-               res
-               (case (car ls)
-                 ((i ci case-insensitive) ~case-insensitive?)
-                 ((m multi-line) ~multi-line?)
-                 ((s single-line) ~single-line?)
-                 ((x ignore-space) ~ignore-space?)
-                 ((u utf8) (if *allow-utf8-mode?* ~utf8? ~none))
-                 (else #f)))))))
+        res
+        (lp (cdr ls)
+            (flag-join
+             res
+             (case (car ls)
+               ((i ci case-insensitive) ~case-insensitive?)
+               ((m multi-line) ~multi-line?)
+               ((s single-line) ~single-line?)
+               ((x ignore-space) ~ignore-space?)
+               ((u utf8) (if *allow-utf8-mode?* ~utf8? ~none))
+               (else #f)))))))
 
   (define (maybe-string->sre obj)
     (if (string? obj) (string->sre obj) obj))
@@ -663,12 +663,12 @@
         (define (cased-char ch)
           (if (and (flag-set? flags ~case-insensitive?)
                    (char-alphabetic? ch))
-              `(or ,ch ,(char-altcase ch))
-              ch))
+            `(or ,ch ,(char-altcase ch))
+            ch))
         (define (cased-string str)
           (if (flag-set? flags ~case-insensitive?)
-              (sre-sequence (map cased-char (string->list str)))
-              str))
+            (sre-sequence (map cased-char (string->list str)))
+            str))
         ;; accumulate the substring from..i as literal text
         (define (collect)
           (if (= i from) res (cons (cased-string (substring str from i)) res)))
@@ -677,15 +677,15 @@
         (define (collect/single)
           (let* ((utf8? (flag-set? flags ~utf8?))
                  (j (if (and utf8? (> i 1))
-                        (utf8-backup-to-initial-char str (- i 1))
-                        (- i 1))))
+                      (utf8-backup-to-initial-char str (- i 1))
+                      (- i 1))))
             (cond
              ((< j from)
               res)
              (else
               (let ((c (cased-char (if utf8?
-                                       (utf8-string-ref str j (- i j))
-                                       (string-ref str j)))))
+                                     (utf8-string-ref str j (- i j))
+                                     (string-ref str j)))))
                 (cond
                  ((= j from)
                   (cons c res))
@@ -706,13 +706,13 @@
                                       => submatch-named
                                       w/utf8 w/noutf8))))
                  (prefix (if (and func (memq (car func) '(=> submatch-named)))
-                             (list 'submatch-named (cadr (reverse ls)))
-                             (and func (list (car func)))))
+                           (list 'submatch-named (cadr (reverse ls)))
+                           (and func (list (car func)))))
                  (ls (if func
-                         (if (memq (car func) '(=> submatch-named))
-                             (reverse (cddr (reverse ls)))
-                             (reverse (cdr (reverse ls))))
-                         ls)))
+                       (if (memq (car func) '(=> submatch-named))
+                         (reverse (cddr (reverse ls)))
+                         (reverse (cdr (reverse ls))))
+                       ls)))
             (let lp ((ls ls) (term '()) (res '()))
               (define (shift)
                 (cons (sre-sequence term) res))
@@ -720,31 +720,31 @@
                ((null? ls)
                 (let* ((res (sre-alternate (shift)))
                        (res (if (flag-set? flags ~save?)
-                                (list 'submatch res)
-                                res)))
+                              (list 'submatch res)
+                              res)))
                   (if prefix
-                      (if (eq? 'if (car prefix))
-                          (cond
-                           ((not (pair? res))
-                            'epsilon)
-                           ((memq (car res)
-                                  '(look-ahead neg-look-ahead
-                                               look-behind neg-look-behind))
-                            res)
-                           ((eq? 'seq (car res))
-                            `(if ,(cadr res)
-                                 ,(if (pair? (cdr res))
-                                      (sre-sequence (cddr res))
-                                      'epsilon)))
-                           (else
-                            `(if ,(cadadr res)
-                                 ,(if (pair? (cdr res))
-                                      (sre-sequence (cddadr res))
-                                      'epsilon)
-                                 ,(sre-alternate
-                                   (if (pair? (cdr res)) (cddr res) '())))))
-                          `(,@prefix ,res))
-                      res)))
+                    (if (eq? 'if (car prefix))
+                      (cond
+                       ((not (pair? res))
+                        'epsilon)
+                       ((memq (car res)
+                              '(look-ahead neg-look-ahead
+                                           look-behind neg-look-behind))
+                        res)
+                       ((eq? 'seq (car res))
+                        `(if ,(cadr res)
+                           ,(if (pair? (cdr res))
+                              (sre-sequence (cddr res))
+                              'epsilon)))
+                       (else
+                        `(if ,(cadadr res)
+                           ,(if (pair? (cdr res))
+                              (sre-sequence (cddadr res))
+                              'epsilon)
+                           ,(sre-alternate
+                             (if (pair? (cdr res)) (cddr res) '())))))
+                      `(,@prefix ,res))
+                    res)))
                ((eq? 'or (car ls)) (lp (cdr ls) '() (shift)))
                (else (lp (cdr ls) (cons (car ls) term) res))))))
         (define (save)
@@ -752,345 +752,345 @@
 
         ;; main parsing
         (if (>= i end)
-            (if (pair? st)
-                (error "unterminated parenthesis in regexp" str)
-                (collect/terms))
-            (let ((c (string-ref str i)))
-              (case c
-                ((#\.)
-                 (lp (+ i 1) (+ i 1) flags
-                     (cons (if (flag-set? flags ~single-line?) 'any 'nonl)
-                           (collect))
-                     st))
-                ((#\?)
-                 (let ((res (collect/single)))
-                   (if (null? res)
-                       (error "? can't follow empty pattern" str res)
-                       (let ((x (car res)))
-                         (lp (+ i 1)
-                             (+ i 1)
-                             flags
-                             (cons
-                              (if (pair? x)
-                                  (case (car x)
-                                    ((*)  `(*? ,@(cdr x)))
-                                    ((+)  `(**? 1 #f ,@(cdr x)))
-                                    ((?)  `(?? ,@(cdr x)))
-                                    ((**) `(**? ,@(cdr x)))
-                                    ((=)  `(**? ,(cadr x) ,@(cdr x)))
-                                    ((>=)  `(**? ,(cadr x) #f ,@(cddr x)))
-                                    (else `(? ,x)))
-                                  `(? ,x))
-                              (cdr res))
-                             st)))))
-                ((#\+ #\*)
-                 (let* ((res (collect/single))
-                        (x (if (pair? res) (car res) 'epsilon))
-                        (op (string->symbol (string c))))
-                   (cond
-                    ((sre-repeater? x)
-                     (error "duplicate repetition (e.g. **) in pattern" str res))
-                    ((sre-empty? x)
-                     (error "can't repeat empty pattern (e.g. ()*)" str res))
-                    (else
-                     (lp (+ i 1) (+ i 1) flags
-                         (cons (list op x) (cdr res))
-                         st)))))
-                ((#\()
-                 (cond
-                  ((>= (+ i 1) end)
-                   (error "unterminated parenthesis in regexp" str))
-                  ((not (memv (string-ref str (+ i 1)) '(#\? #\*))) ; normal case
-                   (lp (+ i 1) (+ i 1) (flag-join flags ~save?) '() (save)))
-                  ((>= (+ i 2) end)
-                   (error "unterminated parenthesis in regexp" str))
-                  ((eqv? (string-ref str (+ i 1)) #\*)
-                   (if (eqv? #\' (string-ref str (+ i 2)))
-                       (with-read-from-string str (+ i 3)
-                                              (lambda (sre j)
-                                                (if (or (>= j end) (not (eqv? #\) (string-ref str j))))
-                                                    (error "unterminated (*'...) SRE escape" str)
-                                                    (lp (+ j 1) (+ j 1) flags (cons sre (collect)) st))))
-                       (error "bad regexp syntax: (*FOO) not supported" str)))
-                  (else                   ;; (?...) case
-                   (case (string-ref str (+ i 2))
-                     ((#\#)
-                      (let ((j (string-scan-char str #\) (+ i 3))))
-                        (lp (+ j i) (+ j 1) flags (collect) st)))
-                     ((#\:)
-                      (lp (+ i 3) (+ i 3) (flag-clear flags ~save?) '() (save)))
-                     ((#\=)
-                      (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
-                          '(look-ahead) (save)))
-                     ((#\!)
-                      (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
-                          '(neg-look-ahead) (save)))
-                     ((#\<)
-                      (cond
-                       ((>= (+ i 3) end)
-                        (error "unterminated parenthesis in regexp" str))
-                       (else
-                        (case (string-ref str (+ i 3))
-                          ((#\=)
-                           (lp (+ i 4) (+ i 4) (flag-clear flags ~save?)
-                               '(look-behind) (save)))
-                          ((#\!)
-                           (lp (+ i 4) (+ i 4) (flag-clear flags ~save?)
-                               '(neg-look-behind) (save)))
-                          (else
-                           (let ((j (and (char-alphabetic?
-                                          (string-ref str (+ i 3)))
-                                         (string-scan-char str #\> (+ i 4)))))
-                             (if j
-                                 (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
-                                     `(,(string->symbol (substring str (+ i 3) j))
-                                       submatch-named)
-                                     (save))
-                                 (error "invalid (?< sequence" str))))))))
-                     ((#\>)
-                      (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
-                          '(atomic) (save)))
-                     ;;((#\' #\P) ; named subpatterns
-                     ;; )
-                     ;;((#\R) ; recursion
-                     ;; )
-                     ((#\()
-                      (cond
-                       ((>= (+ i 3) end)
-                        (error "unterminated parenthesis in regexp" str))
-                       ((char-numeric? (string-ref str (+ i 3)))
-                        (let* ((j (string-scan-char str #\) (+ i 3)))
-                               (n (string->number (substring str (+ i 3) j))))
-                          (if (not n)
-                              (error "invalid conditional reference" str)
-                              (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
-                                  `(,n if) (save)))))
-                       ((char-alphabetic? (string-ref str (+ i 3)))
-                        (let* ((j (string-scan-char str #\) (+ i 3)))
-                               (s (string->symbol (substring str (+ i 3) j))))
-                          (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
-                              `(,s if) (save))))
-                       (else
-                        (lp (+ i 2) (+ i 2) (flag-clear flags ~save?)
-                            '(if) (save)))))
-                     ((#\{)
-                      (error "unsupported Perl-style cluster" str))
-                     (else
-                      (let ((old-flags flags))
-                        (let lp2 ((j (+ i 2)) (flags flags) (invert? #f))
-                          (define (join x)
-                            ((if invert? flag-clear flag-join) flags x))
-                          (define (new-res res)
-                            (let ((before (flag-set? old-flags ~utf8?))
-                                  (after (flag-set? flags ~utf8?)))
-                              (if (eq? before after)
-                                  res
-                                  (cons (if after 'w/utf8 'w/noutf8) res))))
-                          (cond
-                           ((>= j end)
-                            (error "incomplete cluster" str i))
-                           (else
-                            (case (string-ref str j)
-                              ((#\i)
-                               (lp2 (+ j 1) (join ~case-insensitive?) invert?))
-                              ((#\m)
-                               (lp2 (+ j 1) (join ~multi-line?) invert?))
-                              ((#\x)
-                               (lp2 (+ j 1) (join ~ignore-space?) invert?))
-                              ((#\u)
-                               (if *allow-utf8-mode?*
-                                   (lp2 (+ j 1) (join ~utf8?) invert?)
-                                   (lp2 (+ j 1) flags invert?)))
-                              ((#\-)
-                               (lp2 (+ j 1) flags (not invert?)))
-                              ((#\))
-                               (lp (+ j 1) (+ j 1) flags (new-res (collect))
-                                   st))
-                              ((#\:)
-                               (lp (+ j 1) (+ j 1) flags (new-res '())
-                                   (cons (cons old-flags (collect)) st)))
-                              (else
-                               (error "unknown regex cluster modifier" str)
-                               )))))))))))
-                ((#\))
-                 (if (null? st)
-                     (error "too many )'s in regexp" str)
+          (if (pair? st)
+            (error "unterminated parenthesis in regexp" str)
+            (collect/terms))
+          (let ((c (string-ref str i)))
+            (case c
+              ((#\.)
+               (lp (+ i 1) (+ i 1) flags
+                   (cons (if (flag-set? flags ~single-line?) 'any 'nonl)
+                         (collect))
+                   st))
+              ((#\?)
+               (let ((res (collect/single)))
+                 (if (null? res)
+                   (error "? can't follow empty pattern" str res)
+                   (let ((x (car res)))
                      (lp (+ i 1)
                          (+ i 1)
-                         (caar st)
-                         (cons (collect/terms) (cdar st))
-                         (cdr st))))
-                ((#\[)
-                 (apply
-                  (lambda (sre j)
-                    (lp (+ j 1) (+ j 1) flags (cons sre (collect)) st))
-                  (string-parse-cset str (+ i 1) flags)))
-                ((#\{)
+                         flags
+                         (cons
+                          (if (pair? x)
+                            (case (car x)
+                              ((*)  `(*? ,@(cdr x)))
+                              ((+)  `(**? 1 #f ,@(cdr x)))
+                              ((?)  `(?? ,@(cdr x)))
+                              ((**) `(**? ,@(cdr x)))
+                              ((=)  `(**? ,(cadr x) ,@(cdr x)))
+                              ((>=)  `(**? ,(cadr x) #f ,@(cddr x)))
+                              (else `(? ,x)))
+                            `(? ,x))
+                          (cdr res))
+                         st)))))
+              ((#\+ #\*)
+               (let* ((res (collect/single))
+                      (x (if (pair? res) (car res) 'epsilon))
+                      (op (string->symbol (string c))))
                  (cond
-                  ((or (>= (+ i 1) end)
-                       (not (or (char-numeric? (string-ref str (+ i 1)))
-                                (eqv? #\, (string-ref str (+ i 1))))))
-                   (lp (+ i 1) from flags res st))
+                  ((sre-repeater? x)
+                   (error "duplicate repetition (e.g. **) in pattern" str res))
+                  ((sre-empty? x)
+                   (error "can't repeat empty pattern (e.g. ()*)" str res))
                   (else
-                   (let ((res (collect/single)))
-                     (cond
-                      ((null? res)
-                       (error "{ can't follow empty pattern"))
-                      (else
-                       (let* ((x (car res))
-                              (tail (cdr res))
-                              (j (string-scan-char str #\} (+ i 1)))
-                              (s2 (string-split-char (substring str (+ i 1) j)
-                                                     #\,))
-                              (n (string->number (car s2)))
-                              (m (and (pair? (cdr s2))
-                                      (string->number (cadr s2)))))
-                         (cond
-                          ((or (not n)
-                               (and (pair? (cdr s2))
-                                    (not (equal? "" (cadr s2)))
-                                    (not m)))
-                           (error "invalid {n} repetition syntax" s2))
-                          ((null? (cdr s2))
-                           (lp (+ j 1) (+ j 1) flags `((= ,n ,x) ,@tail) st))
-                          (m
-                           (lp (+ j 1) (+ j 1) flags `((** ,n ,m ,x) ,@tail) st))
-                          (else
-                           (lp (+ j 1) (+ j 1) flags `((>= ,n ,x) ,@tail) st)
-                           )))))))))
-                ((#\\)
-                 (cond
-                  ((>= (+ i 1) end)
-                   (error "incomplete escape sequence" str))
-                  (else
-                   (let ((c (string-ref str (+ i 1))))
-                     (case c
-                       ((#\d)
-                        (lp (+ i 2) (+ i 2) flags `(numeric ,@(collect)) st))
-                       ((#\D)
-                        (lp (+ i 2) (+ i 2) flags `((~ numeric) ,@(collect)) st))
-                       ((#\s)
-                        (lp (+ i 2) (+ i 2) flags `(space ,@(collect)) st))
-                       ((#\S)
-                        (lp (+ i 2) (+ i 2) flags `((~ space) ,@(collect)) st))
-                       ((#\w)
-                        (lp (+ i 2) (+ i 2) flags
-                            `((or alphanumeric ("_")) ,@(collect)) st))
-                       ((#\W)
-                        (lp (+ i 2) (+ i 2) flags
-                            `((~ (or alphanumeric ("_"))) ,@(collect)) st))
-                       ((#\b)
-                        (lp (+ i 2) (+ i 2) flags
-                            `((or bow eow) ,@(collect)) st))
-                       ((#\B)
-                        (lp (+ i 2) (+ i 2) flags `(nwb ,@(collect)) st))
-                       ((#\A)
-                        (lp (+ i 2) (+ i 2) flags `(bos ,@(collect)) st))
-                       ((#\Z)
-                        (lp (+ i 2) (+ i 2) flags
-                            `((? #\newline) eos ,@(collect)) st))
-                       ((#\z)
-                        (lp (+ i 2) (+ i 2) flags `(eos ,@(collect)) st))
-                       ((#\R)
-                        (lp (+ i 2) (+ i 2) flags `(newline ,@(collect)) st))
-                       ((#\K)
-                        (lp (+ i 2) (+ i 2) flags `(reset ,@(collect)) st))
-                       ;; these two are from Emacs and TRE, but not in PCRE
-                       ((#\<)
-                        (lp (+ i 2) (+ i 2) flags `(bow ,@(collect)) st))
-                       ((#\>)
-                        (lp (+ i 2) (+ i 2) flags `(eow ,@(collect)) st))
-                       ((#\x)
-                        (apply
-                         (lambda (ch j)
-                           (lp (+ j 1) (+ j 1) flags `(,ch ,@(collect)) st))
-                         (string-parse-hex-escape str (+ i 2) end)))
-                       ((#\k)
-                        (let ((c (string-ref str (+ i 2))))
-                          (if (not (memv c '(#\< #\{ #\')))
-                              (error "bad \\k usage, expected \\k<...>" str)
-                              (let* ((terminal (char-mirror c))
-                                     (j (string-scan-char str terminal (+ i 2)))
-                                     (s (and j (substring str (+ i 3) j)))
-                                     (backref
-                                      (if (flag-set? flags ~case-insensitive?)
-                                          'backref-ci
-                                          'backref)))
-                                (if (not j)
-                                    (error "unterminated named backref" str)
-                                    (lp (+ j 1) (+ j 1) flags
-                                        `((,backref ,(string->symbol s))
-                                          ,@(collect))
-                                        st))))))
-                       ((#\Q)  ;; \Q..\E escapes
-                        (let ((res (collect)))
-                          (let lp2 ((j (+ i 2)))
-                            (cond
-                             ((>= j end)
-                              (lp j (+ i 2) flags res st))
-                             ((eqv? #\\ (string-ref str j))
-                              (cond
-                               ((>= (+ j 1) end)
-                                (lp (+ j 1) (+ i 2) flags res st))
-                               ((eqv? #\E (string-ref str (+ j 1)))
-                                (lp (+ j 2) (+ j 2) flags
-                                    (cons (substring str (+ i 2) j) res) st))
-                               (else
-                                (lp2 (+ j 2)))))
-                             (else
-                              (lp2 (+ j 1)))))))
-                       ((#\')
-                        (with-read-from-string str (+ i 2)
-                                               (lambda (sre j)
-                                                 (lp j j flags (cons sre (collect)) st))))
-                       ;;((#\p)  ; XXXX unicode properties
-                       ;; )
-                       ;;((#\P)
-                       ;; )
-                       (else
+                   (lp (+ i 1) (+ i 1) flags
+                       (cons (list op x) (cdr res))
+                       st)))))
+              ((#\()
+               (cond
+                ((>= (+ i 1) end)
+                 (error "unterminated parenthesis in regexp" str))
+                ((not (memv (string-ref str (+ i 1)) '(#\? #\*))) ; normal case
+                 (lp (+ i 1) (+ i 1) (flag-join flags ~save?) '() (save)))
+                ((>= (+ i 2) end)
+                 (error "unterminated parenthesis in regexp" str))
+                ((eqv? (string-ref str (+ i 1)) #\*)
+                 (if (eqv? #\' (string-ref str (+ i 2)))
+                   (with-read-from-string str (+ i 3)
+                                          (lambda (sre j)
+                                            (if (or (>= j end) (not (eqv? #\) (string-ref str j))))
+                                              (error "unterminated (*'...) SRE escape" str)
+                                              (lp (+ j 1) (+ j 1) flags (cons sre (collect)) st))))
+                   (error "bad regexp syntax: (*FOO) not supported" str)))
+                (else                   ;; (?...) case
+                 (case (string-ref str (+ i 2))
+                   ((#\#)
+                    (let ((j (string-scan-char str #\) (+ i 3))))
+                      (lp (+ j i) (+ j 1) flags (collect) st)))
+                   ((#\:)
+                    (lp (+ i 3) (+ i 3) (flag-clear flags ~save?) '() (save)))
+                   ((#\=)
+                    (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
+                        '(look-ahead) (save)))
+                   ((#\!)
+                    (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
+                        '(neg-look-ahead) (save)))
+                   ((#\<)
+                    (cond
+                     ((>= (+ i 3) end)
+                      (error "unterminated parenthesis in regexp" str))
+                     (else
+                      (case (string-ref str (+ i 3))
+                        ((#\=)
+                         (lp (+ i 4) (+ i 4) (flag-clear flags ~save?)
+                             '(look-behind) (save)))
+                        ((#\!)
+                         (lp (+ i 4) (+ i 4) (flag-clear flags ~save?)
+                             '(neg-look-behind) (save)))
+                        (else
+                         (let ((j (and (char-alphabetic?
+                                        (string-ref str (+ i 3)))
+                                       (string-scan-char str #\> (+ i 4)))))
+                           (if j
+                             (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
+                                 `(,(string->symbol (substring str (+ i 3) j))
+                                   submatch-named)
+                                 (save))
+                             (error "invalid (?< sequence" str))))))))
+                   ((#\>)
+                    (lp (+ i 3) (+ i 3) (flag-clear flags ~save?)
+                        '(atomic) (save)))
+                   ;;((#\' #\P) ; named subpatterns
+                   ;; )
+                   ;;((#\R) ; recursion
+                   ;; )
+                   ((#\()
+                    (cond
+                     ((>= (+ i 3) end)
+                      (error "unterminated parenthesis in regexp" str))
+                     ((char-numeric? (string-ref str (+ i 3)))
+                      (let* ((j (string-scan-char str #\) (+ i 3)))
+                             (n (string->number (substring str (+ i 3) j))))
+                        (if (not n)
+                          (error "invalid conditional reference" str)
+                          (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
+                              `(,n if) (save)))))
+                     ((char-alphabetic? (string-ref str (+ i 3)))
+                      (let* ((j (string-scan-char str #\) (+ i 3)))
+                             (s (string->symbol (substring str (+ i 3) j))))
+                        (lp (+ j 1) (+ j 1) (flag-clear flags ~save?)
+                            `(,s if) (save))))
+                     (else
+                      (lp (+ i 2) (+ i 2) (flag-clear flags ~save?)
+                          '(if) (save)))))
+                   ((#\{)
+                    (error "unsupported Perl-style cluster" str))
+                   (else
+                    (let ((old-flags flags))
+                      (let lp2 ((j (+ i 2)) (flags flags) (invert? #f))
+                        (define (join x)
+                          ((if invert? flag-clear flag-join) flags x))
+                        (define (new-res res)
+                          (let ((before (flag-set? old-flags ~utf8?))
+                                (after (flag-set? flags ~utf8?)))
+                            (if (eq? before after)
+                              res
+                              (cons (if after 'w/utf8 'w/noutf8) res))))
                         (cond
-                         ((char-numeric? c)
-                          (let* ((j (or (string-scan-pred
-                                         str
-                                         (lambda (c) (not (char-numeric? c)))
-                                         (+ i 2))
-                                        end))
+                         ((>= j end)
+                          (error "incomplete cluster" str i))
+                         (else
+                          (case (string-ref str j)
+                            ((#\i)
+                             (lp2 (+ j 1) (join ~case-insensitive?) invert?))
+                            ((#\m)
+                             (lp2 (+ j 1) (join ~multi-line?) invert?))
+                            ((#\x)
+                             (lp2 (+ j 1) (join ~ignore-space?) invert?))
+                            ((#\u)
+                             (if *allow-utf8-mode?*
+                               (lp2 (+ j 1) (join ~utf8?) invert?)
+                               (lp2 (+ j 1) flags invert?)))
+                            ((#\-)
+                             (lp2 (+ j 1) flags (not invert?)))
+                            ((#\))
+                             (lp (+ j 1) (+ j 1) flags (new-res (collect))
+                                 st))
+                            ((#\:)
+                             (lp (+ j 1) (+ j 1) flags (new-res '())
+                                 (cons (cons old-flags (collect)) st)))
+                            (else
+                             (error "unknown regex cluster modifier" str)
+                             )))))))))))
+              ((#\))
+               (if (null? st)
+                 (error "too many)'s in regexp" str)
+                 (lp (+ i 1)
+                     (+ i 1)
+                     (caar st)
+                     (cons (collect/terms) (cdar st))
+                     (cdr st))))
+              ((#\[)
+               (apply
+                (lambda (sre j)
+                  (lp (+ j 1) (+ j 1) flags (cons sre (collect)) st))
+                (string-parse-cset str (+ i 1) flags)))
+              ((#\{)
+               (cond
+                ((or (>= (+ i 1) end)
+                     (not (or (char-numeric? (string-ref str (+ i 1)))
+                              (eqv? #\, (string-ref str (+ i 1))))))
+                 (lp (+ i 1) from flags res st))
+                (else
+                 (let ((res (collect/single)))
+                   (cond
+                    ((null? res)
+                     (error "{ can't follow empty pattern"))
+                    (else
+                     (let* ((x (car res))
+                            (tail (cdr res))
+                            (j (string-scan-char str #\} (+ i 1)))
+                            (s2 (string-split-char (substring str (+ i 1) j)
+                                                   #\,))
+                            (n (string->number (car s2)))
+                            (m (and (pair? (cdr s2))
+                                    (string->number (cadr s2)))))
+                       (cond
+                        ((or (not n)
+                             (and (pair? (cdr s2))
+                                  (not (equal? "" (cadr s2)))
+                                  (not m)))
+                         (error "invalid {n} repetition syntax" s2))
+                        ((null? (cdr s2))
+                         (lp (+ j 1) (+ j 1) flags `((= ,n ,x) ,@tail) st))
+                        (m
+                         (lp (+ j 1) (+ j 1) flags `((** ,n ,m ,x) ,@tail) st))
+                        (else
+                         (lp (+ j 1) (+ j 1) flags `((>= ,n ,x) ,@tail) st)
+                         )))))))))
+              ((#\\)
+               (cond
+                ((>= (+ i 1) end)
+                 (error "incomplete escape sequence" str))
+                (else
+                 (let ((c (string-ref str (+ i 1))))
+                   (case c
+                     ((#\d)
+                      (lp (+ i 2) (+ i 2) flags `(numeric ,@(collect)) st))
+                     ((#\D)
+                      (lp (+ i 2) (+ i 2) flags `((~ numeric) ,@(collect)) st))
+                     ((#\s)
+                      (lp (+ i 2) (+ i 2) flags `(space ,@(collect)) st))
+                     ((#\S)
+                      (lp (+ i 2) (+ i 2) flags `((~ space) ,@(collect)) st))
+                     ((#\w)
+                      (lp (+ i 2) (+ i 2) flags
+                          `((or alphanumeric ("_")) ,@(collect)) st))
+                     ((#\W)
+                      (lp (+ i 2) (+ i 2) flags
+                          `((~ (or alphanumeric ("_"))) ,@(collect)) st))
+                     ((#\b)
+                      (lp (+ i 2) (+ i 2) flags
+                          `((or bow eow) ,@(collect)) st))
+                     ((#\B)
+                      (lp (+ i 2) (+ i 2) flags `(nwb ,@(collect)) st))
+                     ((#\A)
+                      (lp (+ i 2) (+ i 2) flags `(bos ,@(collect)) st))
+                     ((#\Z)
+                      (lp (+ i 2) (+ i 2) flags
+                          `((? #\newline) eos ,@(collect)) st))
+                     ((#\z)
+                      (lp (+ i 2) (+ i 2) flags `(eos ,@(collect)) st))
+                     ((#\R)
+                      (lp (+ i 2) (+ i 2) flags `(newline ,@(collect)) st))
+                     ((#\K)
+                      (lp (+ i 2) (+ i 2) flags `(reset ,@(collect)) st))
+                     ;; these two are from Emacs and TRE, but not in PCRE
+                     ((#\<)
+                      (lp (+ i 2) (+ i 2) flags `(bow ,@(collect)) st))
+                     ((#\>)
+                      (lp (+ i 2) (+ i 2) flags `(eow ,@(collect)) st))
+                     ((#\x)
+                      (apply
+                       (lambda (ch j)
+                         (lp (+ j 1) (+ j 1) flags `(,ch ,@(collect)) st))
+                       (string-parse-hex-escape str (+ i 2) end)))
+                     ((#\k)
+                      (let ((c (string-ref str (+ i 2))))
+                        (if (not (memv c '(#\< #\{ #\')))
+                          (error "bad \\k usage, expected \\k<...>" str)
+                          (let* ((terminal (char-mirror c))
+                                 (j (string-scan-char str terminal (+ i 2)))
+                                 (s (and j (substring str (+ i 3) j)))
                                  (backref
                                   (if (flag-set? flags ~case-insensitive?)
-                                      'backref-ci
-                                      'backref))
-                                 (res `((,backref ,(string->number
-                                                    (substring str (+ i 1) j)))
-                                        ,@(collect))))
-                            (lp j j flags res st)))
-                         ((char-alphabetic? c)
-                          (let ((cell (assv c posix-escape-sequences)))
-                            (if cell
-                                (lp (+ i 2) (+ i 2) flags
-                                    (cons (cdr cell) (collect)) st)
-                                (error "unknown escape sequence" str c))))
-                         (else
-                          (lp (+ i 2) (+ i 1) flags (collect) st)))))))))
-                ((#\|)
-                 (lp (+ i 1) (+ i 1) flags (cons 'or (collect)) st))
-                ((#\^)
-                 (let ((sym (if (flag-set? flags ~multi-line?) 'bol 'bos)))
-                   (lp (+ i 1) (+ i 1) flags (cons sym (collect)) st)))
-                ((#\$)
-                 (let ((sym (if (flag-set? flags ~multi-line?) 'eol 'eos)))
-                   (lp (+ i 1) (+ i 1) flags (cons sym (collect)) st)))
-                ((#\space)
-                 (if (flag-set? flags ~ignore-space?)
-                     (lp (+ i 1) (+ i 1) flags (collect) st)
-                     (lp (+ i 1) from flags res st)))
-                ((#\#)
-                 (if (flag-set? flags ~ignore-space?)
-                     (let ((j (or (string-scan-char str #\newline (+ i 1))
-                                  (- end 1))))
-                       (lp (+ j 1) (+ j 1) flags (collect) st))
-                     (lp (+ i 1) from flags res st)))
-                (else
-                 (lp (+ i 1) from flags res st))))))))
+                                    'backref-ci
+                                    'backref)))
+                            (if (not j)
+                              (error "unterminated named backref" str)
+                              (lp (+ j 1) (+ j 1) flags
+                                  `((,backref ,(string->symbol s))
+                                    ,@(collect))
+                                  st))))))
+                     ((#\Q)  ;; \Q..\E escapes
+                      (let ((res (collect)))
+                        (let lp2 ((j (+ i 2)))
+                          (cond
+                           ((>= j end)
+                            (lp j (+ i 2) flags res st))
+                           ((eqv? #\\ (string-ref str j))
+                            (cond
+                             ((>= (+ j 1) end)
+                              (lp (+ j 1) (+ i 2) flags res st))
+                             ((eqv? #\E (string-ref str (+ j 1)))
+                              (lp (+ j 2) (+ j 2) flags
+                                  (cons (substring str (+ i 2) j) res) st))
+                             (else
+                              (lp2 (+ j 2)))))
+                           (else
+                            (lp2 (+ j 1)))))))
+                     ((#\')
+                      (with-read-from-string str (+ i 2)
+                                             (lambda (sre j)
+                                               (lp j j flags (cons sre (collect)) st))))
+                     ;;((#\p)  ; XXXX unicode properties
+                     ;; )
+                     ;;((#\P)
+                     ;; )
+                     (else
+                      (cond
+                       ((char-numeric? c)
+                        (let* ((j (or (string-scan-pred
+                                       str
+                                       (lambda (c) (not (char-numeric? c)))
+                                       (+ i 2))
+                                      end))
+                               (backref
+                                (if (flag-set? flags ~case-insensitive?)
+                                  'backref-ci
+                                  'backref))
+                               (res `((,backref ,(string->number
+                                                  (substring str (+ i 1) j)))
+                                      ,@(collect))))
+                          (lp j j flags res st)))
+                       ((char-alphabetic? c)
+                        (let ((cell (assv c posix-escape-sequences)))
+                          (if cell
+                            (lp (+ i 2) (+ i 2) flags
+                                (cons (cdr cell) (collect)) st)
+                            (error "unknown escape sequence" str c))))
+                       (else
+                        (lp (+ i 2) (+ i 1) flags (collect) st)))))))))
+              ((#\|)
+               (lp (+ i 1) (+ i 1) flags (cons 'or (collect)) st))
+              ((#\^)
+               (let ((sym (if (flag-set? flags ~multi-line?) 'bol 'bos)))
+                 (lp (+ i 1) (+ i 1) flags (cons sym (collect)) st)))
+              ((#\$)
+               (let ((sym (if (flag-set? flags ~multi-line?) 'eol 'eos)))
+                 (lp (+ i 1) (+ i 1) flags (cons sym (collect)) st)))
+              ((#\space)
+               (if (flag-set? flags ~ignore-space?)
+                 (lp (+ i 1) (+ i 1) flags (collect) st)
+                 (lp (+ i 1) from flags res st)))
+              ((#\#)
+               (if (flag-set? flags ~ignore-space?)
+                 (let ((j (or (string-scan-char str #\newline (+ i 1))
+                              (- end 1))))
+                   (lp (+ j 1) (+ j 1) flags (collect) st))
+                 (lp (+ i 1) from flags res st)))
+              (else
+               (lp (+ i 1) from flags res st))))))))
 
   (define posix-escape-sequences
     `((#\n . #\newline)
@@ -1114,20 +1114,20 @@
      ((eqv? #\((string-ref str i))
       (let ((j (string-scan-char-escape str #\} (+ i 1))))
         (if (not j)
-            (error "incomplete hex brace escape" str i)
-            (let* ((s (substring str (+ i 1) j))
-                   (n (string->number s 16)))
-              (if n
-                  (list (integer->char n) j)
-                  (error "bad hex brace escape" s))))))
+          (error "incomplete hex brace escape" str i)
+          (let* ((s (substring str (+ i 1) j))
+                 (n (string->number s 16)))
+            (if n
+              (list (integer->char n) j)
+              (error "bad hex brace escape" s))))))
      ((>= (+ i 1) end)
       (error "incomplete hex escape" str i))
      (else
       (let* ((s (substring str i (+ i 2)))
              (n (string->number s 16)))
         (if n
-            (list (integer->char n) (+ i 2))
-            (error "bad hex escape" s))))))
+          (list (integer->char n) (+ i 2))
+          (error "bad hex escape" s))))))
 
   (define (string-parse-cset str start flags)
     (let* ((end (string-length str))
@@ -1135,90 +1135,90 @@
            (utf8? (flag-set? flags ~utf8?)))
       (define (go i prev-char cset)
         (if (>= i end)
-            (error "incomplete char set" str i end)
-            (let ((c (string-ref str i)))
-              (case c
-                ((#\])
-                 (if (cset-empty? cset)
-                     (go (+ i 1) #\] (cset-adjoin cset #\]))
-                     (let ((ci? (flag-set? flags ~case-insensitive?)))
-                       (list
-                        (let ((res (if ci? (cset-case-insensitive cset) cset)))
-                          (cset->sre (if invert? (cset-complement res) res)))
-                        i))))
-                ((#\-)
-                 (cond
-                  ((or (= i start)
-                       (and (= i (+ start 1)) (eqv? #\^ (string-ref str start)))
-                       (eqv? #\] (string-ref str (+ i 1))))
-                   (go (+ i 1) c (cset-adjoin cset c)))
-                  ((not prev-char)
-                   (error "bad char-set"))
-                  (else
-                   (let ((char (string-ref str (+ i 1))))
-                     (apply
-                      (lambda (c j)
-                        (if (char<? c prev-char)
-                            (error "inverted range in char-set" prev-char c)
-                            (go j #f (cset-union cset (range->cset prev-char c)))))
-                      (cond
-                       ((and (eqv? #\\ char) (assv char posix-escape-sequences))
-                        => (lambda (x) (list (cdr x) (+ i 3))))
-                       ((and (eqv? #\\ char)
-                             (eqv? (string-ref str (+ i 2)) #\x))
-                        (string-parse-hex-escape str (+ i 3) end))
-                       ((and utf8? (<= #x80 (char->integer char) #xFF))
-                        (let ((len (utf8-start-char->length char)))
-                          (list (utf8-string-ref str (+ i 1) len) (+ i 1 len))))
-                       (else
-                        (list char (+ i 2)))))))))
-                ((#\[)
-                 (let* ((inv? (eqv? #\^ (string-ref str (+ i 1))))
-                        (i2 (if inv? (+ i 2) (+ i 1))))
-                   (case (string-ref str i2)
-                     ((#\:)
-                      (let ((j (string-scan-char str #\: (+ i2 1))))
-                        (if (or (not j) (not (eqv? #\] (string-ref str (+ j 1)))))
-                            (error "incomplete character class" str)
-                            (let* ((class (sre->cset
-                                           (string->symbol
-                                            (substring str (+ i2 1) j))))
-                                   (class (if inv? (cset-complement class) class)))
-                              (go (+ j 2) #f (cset-union cset class))))))
-                     ((#\= #\.)
-                      (error "collating sequences not supported" str))
-                     (else
-                      (go (+ i 1) #\((cset-adjoin cset #\[))))))
-                ((#\\)
-                 (let ((c (string-ref str (+ i 1))))
-                   (case c
-                     ((#\d #\D #\s #\S #\w #\W)
-                      (go (+ i 2) #f
-                          (cset-union cset
-                                      (sre->cset (string->sre (string #\\ c))))))
-                     ((#\x)
-                      (apply
-                       (lambda (ch j)
-                         (go j ch (cset-adjoin cset ch)))
-                       (string-parse-hex-escape str (+ i 2) end)))
-                     (else
-                      (let ((c (cond ((assv c posix-escape-sequences) => cdr)
-                                     (else c))))
-                        (go (+ i 2) c (cset-adjoin cset c)))))))
+          (error "incomplete char set" str i end)
+          (let ((c (string-ref str i)))
+            (case c
+              ((#\])
+               (if (cset-empty? cset)
+                 (go (+ i 1) #\] (cset-adjoin cset #\]))
+                 (let ((ci? (flag-set? flags ~case-insensitive?)))
+                   (list
+                    (let ((res (if ci? (cset-case-insensitive cset) cset)))
+                      (cset->sre (if invert? (cset-complement res) res)))
+                    i))))
+              ((#\-)
+               (cond
+                ((or (= i start)
+                     (and (= i (+ start 1)) (eqv? #\^ (string-ref str start)))
+                     (eqv? #\] (string-ref str (+ i 1))))
+                 (go (+ i 1) c (cset-adjoin cset c)))
+                ((not prev-char)
+                 (error "bad char-set"))
                 (else
-                 (if (and utf8? (<= #x80 (char->integer c) #xFF))
-                     (let ((len (utf8-start-char->length c)))
-                       (go (+ i len)
-                           (utf8-string-ref str i len)
-                           (cset-adjoin cset (utf8-string-ref str i len))))
-                     (go (+ i 1) c (cset-adjoin cset c))))))))
+                 (let ((char (string-ref str (+ i 1))))
+                   (apply
+                    (lambda (c j)
+                      (if (char<? c prev-char)
+                        (error "inverted range in char-set" prev-char c)
+                        (go j #f (cset-union cset (range->cset prev-char c)))))
+                    (cond
+                     ((and (eqv? #\\ char) (assv char posix-escape-sequences))
+                      => (lambda (x) (list (cdr x) (+ i 3))))
+                     ((and (eqv? #\\ char)
+                           (eqv? (string-ref str (+ i 2)) #\x))
+                      (string-parse-hex-escape str (+ i 3) end))
+                     ((and utf8? (<= #x80 (char->integer char) #xFF))
+                      (let ((len (utf8-start-char->length char)))
+                        (list (utf8-string-ref str (+ i 1) len) (+ i 1 len))))
+                     (else
+                      (list char (+ i 2)))))))))
+              ((#\[)
+               (let* ((inv? (eqv? #\^ (string-ref str (+ i 1))))
+                      (i2 (if inv? (+ i 2) (+ i 1))))
+                 (case (string-ref str i2)
+                   ((#\:)
+                    (let ((j (string-scan-char str #\: (+ i2 1))))
+                      (if (or (not j) (not (eqv? #\] (string-ref str (+ j 1)))))
+                        (error "incomplete character class" str)
+                        (let* ((class (sre->cset
+                                       (string->symbol
+                                        (substring str (+ i2 1) j))))
+                               (class (if inv? (cset-complement class) class)))
+                          (go (+ j 2) #f (cset-union cset class))))))
+                   ((#\= #\.)
+                    (error "collating sequences not supported" str))
+                   (else
+                    (go (+ i 1) #\((cset-adjoin cset #\[))))))
+              ((#\\)
+               (let ((c (string-ref str (+ i 1))))
+                 (case c
+                   ((#\d #\D #\s #\S #\w #\W)
+                    (go (+ i 2) #f
+                        (cset-union cset
+                                    (sre->cset (string->sre (string #\\ c))))))
+                   ((#\x)
+                    (apply
+                     (lambda (ch j)
+                       (go j ch (cset-adjoin cset ch)))
+                     (string-parse-hex-escape str (+ i 2) end)))
+                   (else
+                    (let ((c (cond ((assv c posix-escape-sequences) => cdr)
+                                   (else c))))
+                      (go (+ i 2) c (cset-adjoin cset c)))))))
+              (else
+               (if (and utf8? (<= #x80 (char->integer c) #xFF))
+                 (let ((len (utf8-start-char->length c)))
+                   (go (+ i len)
+                       (utf8-string-ref str i len)
+                       (cset-adjoin cset (utf8-string-ref str i len))))
+                 (go (+ i 1) c (cset-adjoin cset c))))))))
       (if invert?
-          (go (+ start 1)
-              #f
-              (if (flag-set? flags ~multi-line?)
-                  (char->cset #\newline)
-                  (make-cset)))
-          (go start #f (make-cset)))))
+        (go (+ start 1)
+            #f
+            (if (flag-set? flags ~multi-line?)
+              (char->cset #\newline)
+              (make-cset)))
+        (go start #f (make-cset)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; UTF-8 Utilities
@@ -1312,8 +1312,8 @@
   (define (sre->irregex sre . o)
     (let* ((pat-flags (symbol-list->flags o))
            (sre (if *allow-utf8-mode?*
-                    (sre-adjust-utf8 sre pat-flags)
-                    sre))
+                  (sre-adjust-utf8 sre pat-flags)
+                  sre))
            (searcher? (sre-searcher? sre))
            (sre-dfa (if searcher? (sre-remove-initial-bos sre) sre))
            (dfa-limit (cond ((memq 'small o) 1) ((memq 'fast o) 50) (else 10)))
@@ -1349,14 +1349,14 @@
   ;; returns #t if the sre can ever be empty
   (define (sre-empty? sre)
     (if (pair? sre)
-        (case (car sre)
-          ((* ? look-ahead look-behind neg-look-ahead neg-look-behind) #t)
-          ((**) (or (not (number? (cadr sre))) (zero? (cadr sre))))
-          ((or) (any sre-empty? (cdr sre)))
-          ((: seq $ submatch => submatch-named + atomic)
-           (every sre-empty? (cdr sre)))
-          (else #f))
-        (memq sre '(epsilon bos eos bol eol bow eow commit))))
+      (case (car sre)
+        ((* ? look-ahead look-behind neg-look-ahead neg-look-behind) #t)
+        ((**) (or (not (number? (cadr sre))) (zero? (cadr sre))))
+        ((or) (any sre-empty? (cdr sre)))
+        ((: seq $ submatch => submatch-named + atomic)
+         (every sre-empty? (cdr sre)))
+        (else #f))
+      (memq sre '(epsilon bos eos bol eol bow eow commit))))
 
   (define (sre-any? sre)
     (or (eq? sre 'any)
@@ -1377,43 +1377,43 @@
 
   (define (sre-searcher? sre)
     (if (pair? sre)
-        (case (car sre)
-          ((* +) (sre-any? (sre-sequence (cdr sre))))
-          ((seq : $ submatch => submatch-named)
-           (and (pair? (cdr sre)) (sre-searcher? (cadr sre))))
-          ((or) (every sre-searcher? (cdr sre)))
-          (else #f))
-        (eq? 'bos sre)))
+      (case (car sre)
+        ((* +) (sre-any? (sre-sequence (cdr sre))))
+        ((seq : $ submatch => submatch-named)
+         (and (pair? (cdr sre)) (sre-searcher? (cadr sre))))
+        ((or) (every sre-searcher? (cdr sre)))
+        (else #f))
+      (eq? 'bos sre)))
 
   (define (sre-consumer? sre)
     (if (pair? sre)
-        (case (car sre)
-          ((* +) (sre-any? (sre-sequence (cdr sre))))
-          ((seq : $ submatch => submatch-named)
-           (and (pair? (cdr sre)) (sre-consumer? (last sre))))
-          ((or) (every sre-consumer? (cdr sre)))
-          (else #f))
-        (eq? 'eos sre)))
+      (case (car sre)
+        ((* +) (sre-any? (sre-sequence (cdr sre))))
+        ((seq : $ submatch => submatch-named)
+         (and (pair? (cdr sre)) (sre-consumer? (last sre))))
+        ((or) (every sre-consumer? (cdr sre)))
+        (else #f))
+      (eq? 'eos sre)))
 
   (define (sre-has-submatches? sre)
     (and (pair? sre)
          (or (memq (car sre) '($ submatch => submatch-named))
              (if (eq? 'posix-string (car sre))
-                 (sre-has-submatches? (string->sre (cadr sre)))
-                 (any sre-has-submatches? (cdr sre))))))
+               (sre-has-submatches? (string->sre (cadr sre)))
+               (any sre-has-submatches? (cdr sre))))))
 
   (define (sre-count-submatches sre)
     (let count ((sre sre) (sum 0))
       (if (pair? sre)
-          (fold count
-                (+ sum (case (car sre)
-                         (($ submatch => submatch-named) 1)
-                         ((dsm) (+ (cadr sre) (caddr sre)))
-                         ((posix-string)
-                          (sre-count-submatches (string->sre (cadr sre))))
-                         (else 0)))
-                (cdr sre))
-          sum)))
+        (fold count
+              (+ sum (case (car sre)
+                       (($ submatch => submatch-named) 1)
+                       ((dsm) (+ (cadr sre) (caddr sre)))
+                       ((posix-string)
+                        (sre-count-submatches (string->sre (cadr sre))))
+                       (else 0)))
+              (cdr sre))
+        sum)))
 
   (define (sre-length-ranges sre . o)
     (let ((names (if (pair? o) (car o) (sre-names sre 1 '())))
@@ -1426,120 +1426,120 @@
          (cond
           ((pair? sre)
            (if (string? (car sre))
-               (grow 1)
-               (case (car sre)
-                 ((/ ~ & -)
-                  (grow 1))
-                 ((posix-string)
-                  (lp (string->sre (cadr sre)) n lo hi return))
-                 ((seq : w/case w/nocase atomic)
-                  (let lp2 ((ls (cdr sre)) (n n) (lo2 0) (hi2 0))
-                    (if (null? ls)
-                        (return (+ lo lo2) (and hi hi2 (+ hi hi2)))
-                        (lp (car ls) n 0 0
-                            (lambda (lo3 hi3)
-                              (lp2 (cdr ls)
-                                   (+ n (sre-count-submatches (car ls)))
-                                   (+ lo2 lo3)
-                                   (and hi2 hi3 (+ hi2 hi3))))))))
-                 ((or)
-                  (let lp2 ((ls (cdr sre)) (n n) (lo2 #f) (hi2 0))
-                    (if (null? ls)
-                        (return (+ lo (or lo2 1)) (and hi hi2 (+ hi hi2)))
-                        (lp (car ls) n 0 0
-                            (lambda (lo3 hi3)
-                              (lp2 (cdr ls)
-                                   (+ n (sre-count-submatches (car ls)))
-                                   (if lo2 (min lo2 lo3) lo3)
-                                   (and hi2 hi3 (max hi2 hi3))))))))
-                 ((if)
-                  (cond
-                   ((or (null? (cdr sre)) (null? (cddr sre)))
-                    (return lo hi))
-                   (else
-                    (let ((n1 (sre-count-submatches (car sre)))
-                          (n2 (sre-count-submatches (cadr sre))))
-                      (lp (if (or (number? (cadr sre)) (symbol? (cadr sre)))
-                              'epsilon
-                              (cadr sre))
-                          n lo hi
-                          (lambda (lo2 hi2)
-                            (lp (caddr sre) (+ n n1) 0 0
-                                (lambda (lo3 hi3)
-                                  (lp (if (pair? (cdddr sre))
-                                          (cadddr sre)
-                                          'epsilon)
-                                      (+ n n1 n2) 0 0
-                                      (lambda (lo4 hi4)
-                                        (return (+ lo2 (min lo3 lo4))
-                                                (and hi2 hi3 hi4
-                                                     (+ hi2 (max hi3 hi4))
-                                                     ))))))))))))
-                 ((dsm)
-                  (lp (sre-sequence (cdddr sre)) (+ n (cadr sre)) lo hi return))
-                 (($ submatch => submatch-named)
-                  (lp (sre-sequence
-                       (if (eq? 'submatch (car sre)) (cdr sre) (cddr sre)))
-                      (+ n 1) lo hi
-                      (lambda (lo2 hi2)
-                        (vector-set! sublens n (cons lo2 hi2))
-                        (return lo2 hi2))))
-                 ((backref backref-ci)
-                  (let ((n (cond
-                            ((number? (cadr sre)) (cadr sre))
-                            ((assq (cadr sre) names) => cdr)
-                            (else (error "unknown backreference" (cadr sre))))))
-                    (cond
-                     ((or (not (integer? n))
-                          (not (< 0 n (vector-length sublens))))
-                      (error "sre-length: invalid backreference" sre))
-                     ((not (vector-ref sublens n))
-                      (error "sre-length: invalid forward backreference" sre))
-                     (else
-                      (let ((lo2 (car (vector-ref sublens n)))
-                            (hi2 (cdr (vector-ref sublens n))))
-                        (return (+ lo lo2) (and hi hi2 (+ hi hi2))))))))
-                 ((* *?)
-                  (lp (sre-sequence (cdr sre)) n lo hi (lambda (lo hi) #f))
-                  (return lo #f))
-                 ((** **?)
-                  (cond
-                   ((or (and (number? (cadr sre))
-                             (number? (caddr sre))
-                             (> (cadr sre) (caddr sre)))
-                        (and (not (cadr sre)) (caddr sre)))
-                    (return lo hi))
-                   (else
-                    (if (caddr sre)
-                        (lp (sre-sequence (cdddr sre)) n 0 0
-                            (lambda (lo2 hi2)
-                              (return (+ lo (* (cadr sre) lo2))
-                                      (and hi hi2 (+ hi (* (caddr sre) hi2))))))
-                        (lp (sre-sequence (cdddr sre)) n 0 0
-                            (lambda (lo2 hi2)
-                              (return (+ lo (* (cadr sre) lo2)) #f)))))))
-                 ((+)
-                  (lp (sre-sequence (cdr sre)) n lo hi
-                      (lambda (lo2 hi2)
-                        (return (+ lo lo2) #f))))
-                 ((? ??)
-                  (lp (sre-sequence (cdr sre)) n lo hi
-                      (lambda (lo2 hi2)
-                        (return lo (and hi hi2 (+ hi hi2))))))
-                 ((= =? >= >=?)
-                  (lp `(** ,(cadr sre)
-                           ,(if (memq (car sre) '(>= >=?)) #f (cadr sre))
-                           ,@(cddr sre))
-                      n lo hi return))
-                 ((look-ahead neg-look-ahead look-behind neg-look-behind)
+             (grow 1)
+             (case (car sre)
+               ((/ ~ & -)
+                (grow 1))
+               ((posix-string)
+                (lp (string->sre (cadr sre)) n lo hi return))
+               ((seq : w/case w/nocase atomic)
+                (let lp2 ((ls (cdr sre)) (n n) (lo2 0) (hi2 0))
+                  (if (null? ls)
+                    (return (+ lo lo2) (and hi hi2 (+ hi hi2)))
+                    (lp (car ls) n 0 0
+                        (lambda (lo3 hi3)
+                          (lp2 (cdr ls)
+                               (+ n (sre-count-submatches (car ls)))
+                               (+ lo2 lo3)
+                               (and hi2 hi3 (+ hi2 hi3))))))))
+               ((or)
+                (let lp2 ((ls (cdr sre)) (n n) (lo2 #f) (hi2 0))
+                  (if (null? ls)
+                    (return (+ lo (or lo2 1)) (and hi hi2 (+ hi hi2)))
+                    (lp (car ls) n 0 0
+                        (lambda (lo3 hi3)
+                          (lp2 (cdr ls)
+                               (+ n (sre-count-submatches (car ls)))
+                               (if lo2 (min lo2 lo3) lo3)
+                               (and hi2 hi3 (max hi2 hi3))))))))
+               ((if)
+                (cond
+                 ((or (null? (cdr sre)) (null? (cddr sre)))
                   (return lo hi))
                  (else
+                  (let ((n1 (sre-count-submatches (car sre)))
+                        (n2 (sre-count-submatches (cadr sre))))
+                    (lp (if (or (number? (cadr sre)) (symbol? (cadr sre)))
+                          'epsilon
+                          (cadr sre))
+                        n lo hi
+                        (lambda (lo2 hi2)
+                          (lp (caddr sre) (+ n n1) 0 0
+                              (lambda (lo3 hi3)
+                                (lp (if (pair? (cdddr sre))
+                                      (cadddr sre)
+                                      'epsilon)
+                                    (+ n n1 n2) 0 0
+                                    (lambda (lo4 hi4)
+                                      (return (+ lo2 (min lo3 lo4))
+                                              (and hi2 hi3 hi4
+                                                   (+ hi2 (max hi3 hi4))
+                                                   ))))))))))))
+               ((dsm)
+                (lp (sre-sequence (cdddr sre)) (+ n (cadr sre)) lo hi return))
+               (($ submatch => submatch-named)
+                (lp (sre-sequence
+                     (if (eq? 'submatch (car sre)) (cdr sre) (cddr sre)))
+                    (+ n 1) lo hi
+                    (lambda (lo2 hi2)
+                      (vector-set! sublens n (cons lo2 hi2))
+                      (return lo2 hi2))))
+               ((backref backref-ci)
+                (let ((n (cond
+                          ((number? (cadr sre)) (cadr sre))
+                          ((assq (cadr sre) names) => cdr)
+                          (else (error "unknown backreference" (cadr sre))))))
                   (cond
-                   ((assq (car sre) sre-named-definitions)
-                    => (lambda (cell)
-                         (lp (apply (cdr cell) (cdr sre)) n lo hi return)))
+                   ((or (not (integer? n))
+                        (not (< 0 n (vector-length sublens))))
+                    (error "sre-length: invalid backreference" sre))
+                   ((not (vector-ref sublens n))
+                    (error "sre-length: invalid forward backreference" sre))
                    (else
-                    (error "sre-length-ranges: unknown sre operator" sre)))))))
+                    (let ((lo2 (car (vector-ref sublens n)))
+                          (hi2 (cdr (vector-ref sublens n))))
+                      (return (+ lo lo2) (and hi hi2 (+ hi hi2))))))))
+               ((* *?)
+                (lp (sre-sequence (cdr sre)) n lo hi (lambda (lo hi) #f))
+                (return lo #f))
+               ((** **?)
+                (cond
+                 ((or (and (number? (cadr sre))
+                           (number? (caddr sre))
+                           (> (cadr sre) (caddr sre)))
+                      (and (not (cadr sre)) (caddr sre)))
+                  (return lo hi))
+                 (else
+                  (if (caddr sre)
+                    (lp (sre-sequence (cdddr sre)) n 0 0
+                        (lambda (lo2 hi2)
+                          (return (+ lo (* (cadr sre) lo2))
+                                  (and hi hi2 (+ hi (* (caddr sre) hi2))))))
+                    (lp (sre-sequence (cdddr sre)) n 0 0
+                        (lambda (lo2 hi2)
+                          (return (+ lo (* (cadr sre) lo2)) #f)))))))
+               ((+)
+                (lp (sre-sequence (cdr sre)) n lo hi
+                    (lambda (lo2 hi2)
+                      (return (+ lo lo2) #f))))
+               ((? ??)
+                (lp (sre-sequence (cdr sre)) n lo hi
+                    (lambda (lo2 hi2)
+                      (return lo (and hi hi2 (+ hi hi2))))))
+               ((= =? >= >=?)
+                (lp `(** ,(cadr sre)
+                         ,(if (memq (car sre) '(>= >=?)) #f (cadr sre))
+                         ,@(cddr sre))
+                    n lo hi return))
+               ((look-ahead neg-look-ahead look-behind neg-look-behind)
+                (return lo hi))
+               (else
+                (cond
+                 ((assq (car sre) sre-named-definitions)
+                  => (lambda (cell)
+                       (lp (apply (cdr cell) (cdr sre)) n lo hi return)))
+                 (else
+                  (error "sre-length-ranges: unknown sre operator" sre)))))))
           ((char? sre)
            (grow 1))
           ((string? sre)
@@ -1551,9 +1551,9 @@
           (else
            (let ((cell (assq sre sre-named-definitions)))
              (if cell
-                 (lp (if (procedure? (cdr cell)) ((cdr cell)) (cdr cell))
-                     n lo hi return)
-                 (error "sre-length-ranges: unknown sre" sre)))))))
+               (lp (if (procedure? (cdr cell)) ((cdr cell)) (cdr cell))
+                   n lo hi return)
+               (error "sre-length-ranges: unknown sre" sre)))))))
       sublens))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -1576,12 +1576,12 @@
   ;; returns an equivalent SRE without any match information
   (define (sre-strip-submatches sre)
     (if (not (pair? sre))
-        sre
-        (case (car sre)
-          (($ submatch) (sre-strip-submatches (sre-sequence (cdr sre))))
-          ((=> submatch-named) (sre-strip-submatches (sre-sequence (cddr sre))))
-          ((dsm) (sre-strip-submatches (sre-sequence (cdddr sre))))
-          (else (map sre-strip-submatches sre)))))
+      sre
+      (case (car sre)
+        (($ submatch) (sre-strip-submatches (sre-sequence (cdr sre))))
+        ((=> submatch-named) (sre-strip-submatches (sre-sequence (cddr sre))))
+        ((dsm) (sre-strip-submatches (sre-sequence (cdddr sre))))
+        (else (map sre-strip-submatches sre)))))
 
   ;; given a char-set list of chars and strings, flattens them into
   ;; chars only
@@ -1597,32 +1597,32 @@
 
   (define (sre-names sre n names)
     (if (not (pair? sre))
-        names
-        (case (car sre)
-          (($ submatch)
-           (sre-names (sre-sequence (cdr sre)) (+ n 1) names))
-          ((=> submatch-named)
-           (sre-names (sre-sequence (cddr sre))
-                      (+ n 1)
-                      (cons (cons (cadr sre) n) names)))
-          ((dsm)
-           (sre-names (sre-sequence (cdddr sre)) (+ n (cadr sre)) names))
-          ((seq : or * + ? *? ?? w/case w/nocase atomic
-                look-ahead look-behind neg-look-ahead neg-look-behind)
-           (sre-sequence-names (cdr sre) n names))
-          ((= >=)
-           (sre-sequence-names (cddr sre) n names))
-          ((** **?)
-           (sre-sequence-names (cdddr sre) n names))
-          (else
-           names))))
+      names
+      (case (car sre)
+        (($ submatch)
+         (sre-names (sre-sequence (cdr sre)) (+ n 1) names))
+        ((=> submatch-named)
+         (sre-names (sre-sequence (cddr sre))
+                    (+ n 1)
+                    (cons (cons (cadr sre) n) names)))
+        ((dsm)
+         (sre-names (sre-sequence (cdddr sre)) (+ n (cadr sre)) names))
+        ((seq : or * + ? *? ?? w/case w/nocase atomic
+              look-ahead look-behind neg-look-ahead neg-look-behind)
+         (sre-sequence-names (cdr sre) n names))
+        ((= >=)
+         (sre-sequence-names (cddr sre) n names))
+        ((** **?)
+         (sre-sequence-names (cdddr sre) n names))
+        (else
+         names))))
 
   (define (sre-sequence-names ls n names)
     (if (null? ls)
-        names
-        (sre-sequence-names (cdr ls)
-                            (+ n (sre-count-submatches (car ls)))
-                            (sre-names (car ls) n names))))
+      names
+      (sre-sequence-names (cdr ls)
+                          (+ n (sre-count-submatches (car ls)))
+                          (sre-names (car ls) n names))))
 
   (define (sre-remove-initial-bos sre)
     (cond
@@ -1660,9 +1660,9 @@
     (let ((start (or (and (pair? o) (car o)) 0))
           (end (or (and (pair? o) (pair? (cdr o)) (cadr o)) (string-length str))))
       (if (not (and (integer? start) (exact? start)))
-          (error "irregex-search: not an exact integer" start))
+        (error "irregex-search: not an exact integer" start))
       (if (not (and (integer? end) (exact? end)))
-          (error "irregex-search: not an exact integer" end))
+        (error "irregex-search: not an exact integer" end))
       (irregex-search/chunked x
                               irregex-basic-string-chunker
                               (list str start end)
@@ -1732,35 +1732,35 @@
           (get-next (chunker-get-next cnk))
           (init (cons src i)))
       (if (flag-set? (irregex-flags irx) ~searcher?)
-          (matcher cnk init src str i end matches (lambda () #f))
-          (let lp ((src2 src)
-                   (str str)
-                   (i i)
-                   (end end))
-            (cond
-             ((matcher cnk init src2 str i end matches (lambda () #f))
-              (irregex-match-start-chunk-set! matches 0 src2)
-              (irregex-match-start-index-set! matches 0 i)
-              matches)
-             ((< i end)
-              (lp src2 str (+ i 1) end))
-             (else
-              (let ((src2 (get-next src2)))
-                (if src2
-                    (lp src2
-                        ((chunker-get-str cnk) src2)
-                        ((chunker-get-start cnk) src2)
-                        ((chunker-get-end cnk) src2))
-                    #f))))))))
+        (matcher cnk init src str i end matches (lambda () #f))
+        (let lp ((src2 src)
+                 (str str)
+                 (i i)
+                 (end end))
+          (cond
+           ((matcher cnk init src2 str i end matches (lambda () #f))
+            (irregex-match-start-chunk-set! matches 0 src2)
+            (irregex-match-start-index-set! matches 0 i)
+            matches)
+           ((< i end)
+            (lp src2 str (+ i 1) end))
+           (else
+            (let ((src2 (get-next src2)))
+              (if src2
+                (lp src2
+                    ((chunker-get-str cnk) src2)
+                    ((chunker-get-start cnk) src2)
+                    ((chunker-get-end cnk) src2))
+                #f))))))))
 
   (define (irregex-match irx str . o)
     (if (not (string? str)) (error "irregex-match: not a string" str))
     (let ((start (or (and (pair? o) (car o)) 0))
           (end (or (and (pair? o) (pair? (cdr o)) (cadr o)) (string-length str))))
       (if (not (and (integer? start) (exact? start)))
-          (error "irregex-match: not an exact integer" start))
+        (error "irregex-match: not an exact integer" start))
       (if (not (and (integer? end) (exact? end)))
-          (error "irregex-match: not an exact integer" end))
+        (error "irregex-match: not an exact integer" end))
       (irregex-match/chunked irx
                              irregex-basic-string-chunker
                              (list str start end))))
@@ -1883,10 +1883,10 @@
                 (irregex-match-end-index-set! matches index res-index)))
               (let ((next (and (not (eq? src end-src)) (get-next src))))
                 (if next
-                    (lp1 next (get-start next) state res-src res-index)
-                    (and index
-                         (%irregex-match-end-chunk matches index)
-                         #t))))
+                  (lp1 next (get-start next) state res-src res-index)
+                  (and index
+                       (%irregex-match-end-chunk matches index)
+                       #t))))
              (else
               (let* ((ch (string-ref str i))
                      (cell (find (lambda (x)
@@ -1898,8 +1898,8 @@
                  (cell
                   (let ((next (dfa-next-state dfa cell)))
                     (if (dfa-final-state? dfa next)
-                        (lp2 (+ i 1) next src (+ i 1))
-                        (lp2 (+ i 1) next res-src res-index))))
+                      (lp2 (+ i 1) next src (+ i 1))
+                      (lp2 (+ i 1) next res-src res-index))))
                  (res-src
                   (cond
                    (index
@@ -2050,7 +2050,7 @@
   (define (nfa-add-epsilon! nfa i x)
     (let ((eps (nfa-get-epsilons nfa i)))
       (if (not (memq x eps))
-          (nfa-set-epsilons! nfa i (cons x eps)))))
+        (nfa-set-epsilons! nfa i (cons x eps)))))
 
   (define (nfa-get-state-closure nfa i)
     (vector-ref nfa (+ (* i *nfa-num-fields*) 2)))
@@ -2082,11 +2082,11 @@
           (max n (+ 1 state)))
         (define (add-state! n2 trans-ls)
           (if (>= (* n2 *nfa-num-fields*) (vector-length buf))
-              (let ((tmp (make-vector (* 2 (vector-length buf)) '())))
-                (do ((i (- (vector-length buf) 1) (- i 1)))
-                    ((< i 0))
-                  (vector-set! tmp i (vector-ref buf i)))
-                (set! buf tmp)))
+            (let ((tmp (make-vector (* 2 (vector-length buf)) '())))
+              (do ((i (- (vector-length buf) 1) (- i 1)))
+                  ((< i 0))
+                (vector-set! tmp i (vector-ref buf i)))
+              (set! buf tmp)))
           (nfa-set-state-trans! buf n2 trans-ls)
           n2)
         (define (extend-state! next trans-cs)
@@ -2095,160 +2095,160 @@
         (define (add-char-state! next ch)
           (let ((alt (char-altcase ch)))
             (if (flag-set? flags ~case-insensitive?)
-                (extend-state! next (cset-union (char->cset ch) (char->cset alt)))
-                (extend-state! next (char->cset ch)))))
+              (extend-state! next (cset-union (char->cset ch) (char->cset alt)))
+              (extend-state! next (char->cset ch)))))
         (if (null? ls)
-            next
+          next
+          (cond
+           ((or (eq? 'epsilon (car ls)) (equal? "" (car ls)))
+            ;; chars and epsilons go directly into the transition table
+            (let ((next (lp (cdr ls) n flags next)))
+              (and next
+                   (let ((new (add-state! (new-state-number next) '())))
+                     (nfa-add-epsilon! buf new next)
+                     new))))
+           ((string? (car ls))
+            ;; process literal strings a char at a time
+            (let ((next (lp (cdr ls) n flags next)))
+              (and next
+                   (let lp2 ((i (- (string-length (car ls)) 1))
+                             (next next))
+                     (if (< i 0)
+                       next
+                       (lp2 (- i 1)
+                            (add-char-state! next (string-ref (car ls) i))))
+                     ))))
+           ((char? (car ls))
+            (add-char-state! (lp (cdr ls) n flags next) (car ls)))
+           ((symbol? (car ls))
+            (let ((cell (assq (car ls) sre-named-definitions)))
+              (and cell
+                   (lp (cons (if (procedure? (cdr cell))
+                               ((cdr cell))
+                               (cdr cell))
+                             (cdr ls))
+                       n
+                       flags
+                       next))))
+           ((pair? (car ls))
             (cond
-             ((or (eq? 'epsilon (car ls)) (equal? "" (car ls)))
-              ;; chars and epsilons go directly into the transition table
-              (let ((next (lp (cdr ls) n flags next)))
-                (and next
-                     (let ((new (add-state! (new-state-number next) '())))
-                       (nfa-add-epsilon! buf new next)
-                       new))))
-             ((string? (car ls))
-              ;; process literal strings a char at a time
-              (let ((next (lp (cdr ls) n flags next)))
-                (and next
-                     (let lp2 ((i (- (string-length (car ls)) 1))
-                               (next next))
-                       (if (< i 0)
-                           next
-                           (lp2 (- i 1)
-                                (add-char-state! next (string-ref (car ls) i))))
-                       ))))
-             ((char? (car ls))
-              (add-char-state! (lp (cdr ls) n flags next) (car ls)))
-             ((symbol? (car ls))
-              (let ((cell (assq (car ls) sre-named-definitions)))
-                (and cell
-                     (lp (cons (if (procedure? (cdr cell))
-                                   ((cdr cell))
-                                   (cdr cell))
-                               (cdr ls))
-                         n
-                         flags
-                         next))))
-             ((pair? (car ls))
-              (cond
-               ((string? (caar ls))       ; Enumerated character set
-                (let ((set (if (flag-set? flags ~case-insensitive?)
-                               (cset-case-insensitive (string->cset (caar ls)))
-                               (string->cset (caar ls)))))
-                  (extend-state! (lp (cdr ls) n flags next) set)))
-               (else
-                (case (caar ls)
-                  ((seq :)
-                   ;; for an explicit sequence, just append to the list
-                   (lp (append (cdar ls) (cdr ls)) n flags next))
-                  ((w/case w/nocase w/utf8 w/noutf8)
-                   (let* ((next (lp (cdr ls) n flags next))
-                          (flags ((if (memq (caar ls) '(w/case w/utf8))
-                                      flag-clear
-                                      flag-join)
-                                  flags
-                                  (if (memq (caar ls) '(w/case w/nocase))
-                                      ~case-insensitive?
-                                      ~utf8?))))
-                     (and next
-                          (lp (cdar ls) (new-state-number next) flags next))))
-                  ((/ - & ~)
-                   (let ((range (sre->cset (car ls)
-                                           (flag-set? flags ~case-insensitive?))))
-                     (extend-state! (lp (cdr ls) n flags next)
-                                    range)))
-                  ((or)
-                   (let ((next (lp (cdr ls) n flags next)))
-                     (and
-                      next
-                      (if (null? (cdar ls))
-                          ;; empty (or) always fails
-                          (add-state! (new-state-number next) '())
-                          ;; compile both branches and insert epsilon
-                          ;; transitions to either
-                          (let* ((b (lp (list (sre-alternate (cddar ls)))
-                                        (new-state-number next)
-                                        flags
-                                        next))
-                                 (a (and b
-                                         (lp (list (cadar ls))
-                                             (new-state-number (max b next))
-                                             flags
-                                             next))))
-                            (and a
-                                 (let ((c (add-state! (new-state-number a)
-                                                      '())))
-                                   (nfa-add-epsilon! buf c a)
-                                   (nfa-add-epsilon! buf c b)
-                                   c)))))))
-                  ((?)
-                   (let ((next (lp (cdr ls) n flags next)))
-                     ;; insert an epsilon transition directly to next
-                     (and
-                      next
-                      (let ((a (lp (cdar ls) (new-state-number next) flags next)))
-                        (if a
-                            (nfa-add-epsilon! buf a next))
-                        a))))
-                  ((+ *)
-                   (let ((next (lp (cdr ls) n flags next)))
-                     (and
-                      next
-                      (let* ((new (lp '(epsilon)
-                                      (new-state-number next)
-                                      flags
-                                      next))
-                             (a (lp (cdar ls) (new-state-number new) flags new)))
-                        (cond
-                         (a
-                          ;; for *, insert an epsilon transition as in ? above
-                          (if (eq? '* (caar ls))
-                              (nfa-add-epsilon! buf a new))
-                          ;; for both, insert a loop back to self
-                          (nfa-add-epsilon! buf new a)))
-                        a))))
-                  ;; need to add these to the match extractor first,
-                  ;; but they tend to generate large DFAs
-                  ;;((=)
-                  ;; (lp (append (vector->list
-                  ;;              (make-vector (cadar ls)
-                  ;;                           (sre-sequence (cddar ls))))
-                  ;;             (cdr ls))
-                  ;;     n flags next))
-                  ;;((>=)
-                  ;; (lp (append (vector->list
-                  ;;              (make-vector (- (cadar ls) 1)
-                  ;;                           (sre-sequence (cddar ls))))
-                  ;;             (cons `(+ ,@(cddar ls)) (cdr ls)))
-                  ;;     n flags next))
-                  ;;((**)
-                  ;; (lp (append (vector->list
-                  ;;              (make-vector (cadar ls)
-                  ;;                           (sre-sequence (cdddar ls))))
-                  ;;             (map
-                  ;;              (lambda (x) `(? ,x))
-                  ;;              (vector->list
-                  ;;               (make-vector (- (caddar ls) (cadar ls))
-                  ;;                            (sre-sequence (cdddar ls)))))
-                  ;;             (cdr ls))
-                  ;;     n flags next))
-                  ;; ignore submatches altogether
-                  (($ submatch)
-                   (lp (cons (sre-sequence (cdar ls)) (cdr ls)) n flags next))
-                  ((=> submatch-named)
-                   (lp (cons (sre-sequence (cddar ls)) (cdr ls)) n flags next))
-                  (else
-                   (cond
-                    ((assq (caar ls) sre-named-definitions)
-                     => (lambda (cell)
-                          (if (procedure? (cdr cell))
-                              (lp (cons (apply (cdr cell) (cdar ls)) (cdr ls))
-                                  n flags next)
-                              (error "non-procedure in op position" (caar ls)))))
-                    (else #f)))))))
+             ((string? (caar ls))       ; Enumerated character set
+              (let ((set (if (flag-set? flags ~case-insensitive?)
+                           (cset-case-insensitive (string->cset (caar ls)))
+                           (string->cset (caar ls)))))
+                (extend-state! (lp (cdr ls) n flags next) set)))
              (else
-              #f))))
+              (case (caar ls)
+                ((seq :)
+                 ;; for an explicit sequence, just append to the list
+                 (lp (append (cdar ls) (cdr ls)) n flags next))
+                ((w/case w/nocase w/utf8 w/noutf8)
+                 (let* ((next (lp (cdr ls) n flags next))
+                        (flags ((if (memq (caar ls) '(w/case w/utf8))
+                                  flag-clear
+                                  flag-join)
+                                flags
+                                (if (memq (caar ls) '(w/case w/nocase))
+                                  ~case-insensitive?
+                                  ~utf8?))))
+                   (and next
+                        (lp (cdar ls) (new-state-number next) flags next))))
+                ((/ - & ~)
+                 (let ((range (sre->cset (car ls)
+                                         (flag-set? flags ~case-insensitive?))))
+                   (extend-state! (lp (cdr ls) n flags next)
+                                  range)))
+                ((or)
+                 (let ((next (lp (cdr ls) n flags next)))
+                   (and
+                    next
+                    (if (null? (cdar ls))
+                      ;; empty (or) always fails
+                      (add-state! (new-state-number next) '())
+                      ;; compile both branches and insert epsilon
+                      ;; transitions to either
+                      (let* ((b (lp (list (sre-alternate (cddar ls)))
+                                    (new-state-number next)
+                                    flags
+                                    next))
+                             (a (and b
+                                     (lp (list (cadar ls))
+                                         (new-state-number (max b next))
+                                         flags
+                                         next))))
+                        (and a
+                             (let ((c (add-state! (new-state-number a)
+                                                  '())))
+                               (nfa-add-epsilon! buf c a)
+                               (nfa-add-epsilon! buf c b)
+                               c)))))))
+                ((?)
+                 (let ((next (lp (cdr ls) n flags next)))
+                   ;; insert an epsilon transition directly to next
+                   (and
+                    next
+                    (let ((a (lp (cdar ls) (new-state-number next) flags next)))
+                      (if a
+                        (nfa-add-epsilon! buf a next))
+                      a))))
+                ((+ *)
+                 (let ((next (lp (cdr ls) n flags next)))
+                   (and
+                    next
+                    (let* ((new (lp '(epsilon)
+                                    (new-state-number next)
+                                    flags
+                                    next))
+                           (a (lp (cdar ls) (new-state-number new) flags new)))
+                      (cond
+                       (a
+                        ;; for *, insert an epsilon transition as in ? above
+                        (if (eq? '* (caar ls))
+                          (nfa-add-epsilon! buf a new))
+                        ;; for both, insert a loop back to self
+                        (nfa-add-epsilon! buf new a)))
+                      a))))
+                ;; need to add these to the match extractor first,
+                ;; but they tend to generate large DFAs
+                ;;((=)
+                ;; (lp (append (vector->list
+                ;;              (make-vector (cadar ls)
+                ;;                           (sre-sequence (cddar ls))))
+                ;;             (cdr ls))
+                ;;     n flags next))
+                ;;((>=)
+                ;; (lp (append (vector->list
+                ;;              (make-vector (- (cadar ls) 1)
+                ;;                           (sre-sequence (cddar ls))))
+                ;;             (cons `(+ ,@(cddar ls)) (cdr ls)))
+                ;;     n flags next))
+                ;;((**)
+                ;; (lp (append (vector->list
+                ;;              (make-vector (cadar ls)
+                ;;                           (sre-sequence (cdddar ls))))
+                ;;             (map
+                ;;              (lambda (x) `(? ,x))
+                ;;              (vector->list
+                ;;               (make-vector (- (caddar ls) (cadar ls))
+                ;;                            (sre-sequence (cdddar ls)))))
+                ;;             (cdr ls))
+                ;;     n flags next))
+                ;; ignore submatches altogether
+                (($ submatch)
+                 (lp (cons (sre-sequence (cdar ls)) (cdr ls)) n flags next))
+                ((=> submatch-named)
+                 (lp (cons (sre-sequence (cddar ls)) (cdr ls)) n flags next))
+                (else
+                 (cond
+                  ((assq (caar ls) sre-named-definitions)
+                   => (lambda (cell)
+                        (if (procedure? (cdr cell))
+                          (lp (cons (apply (cdr cell) (cdar ls)) (cdr ls))
+                              n flags next)
+                          (error "non-procedure in op position" (caar ls)))))
+                  (else #f)))))))
+           (else
+            #f))))
       (let ((len (lp (list sre) 1 init-flags 0)))
         (and len
              (let ((nfa (make-vector (* *nfa-num-fields* (+ len 1)))))
@@ -2396,15 +2396,15 @@
       (let lp1 ((i 0)
                 (acc knil))
         (if (>= i limit)
-            acc
-            (let lp2 ((n (vector-ref mst i))
-                      (acc acc))
-              (if (zero? n)
-                  (lp1 (+ i 1) acc)
-                  (let* ((n2 (bit-and n (- n 1)))
-                         (n-tail (- n n2))
-                         (bit (+ (* i 24) (integer-log n-tail))))
-                    (lp2 n2 (kons bit acc)))))))))
+          acc
+          (let lp2 ((n (vector-ref mst i))
+                    (acc acc))
+            (if (zero? n)
+              (lp1 (+ i 1) acc)
+              (let* ((n2 (bit-and n (- n 1)))
+                     (n-tail (- n n2))
+                     (bit (+ (* i 24) (integer-log n-tail))))
+                (lp2 n2 (kons bit acc)))))))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;;; NFA->DFA compilation
@@ -2474,8 +2474,8 @@
                 (lambda (st res)
                   (let ((trans (nfa-get-state-trans nfa st)))
                     (if (null? trans)
-                        res
-                        (nfa-join-transitions! nfa res (car trans) (cdr trans)))))
+                      res
+                      (nfa-join-transitions! nfa res (car trans) (cdr trans)))))
                 '())))
       (for-each (lambda (x) (set-cdr! x (nfa-closure nfa (cdr x)))) res)
       res))
@@ -2503,9 +2503,9 @@
                  (states-for-old (and (not (cset-empty? only-in-old))
                                       (nfa-multi-state-copy (cdar ls))))
                  (result (if states-for-old
-                             (cons (cons only-in-old states-for-old)
-                                   (append res (cdr ls)))
-                             (append res (cdr ls))))
+                           (cons (cons only-in-old states-for-old)
+                                 (append res (cdr ls)))
+                           (append res (cdr ls))))
                  (only-in-new (cset-difference elt (caar ls))))
             ;; Add this state to the states already here and restrict to
             ;; the overlapping charset
@@ -2514,8 +2514,8 @@
             ;; Continue with the remaining subset of the new cset (if nonempty)
             (cons (car ls)
                   (if (cset-empty? only-in-new)
-                      result
-                      (nfa-join-transitions! nfa result only-in-new state))))))
+                    result
+                    (nfa-join-transitions! nfa result only-in-new state))))))
        (else
         (lp (cdr ls) (cons (car ls) res))))))
 
@@ -2573,10 +2573,10 @@
         (cond
          ((not (sre-has-submatches? sre))
           (if (not submatch-deps?)
-              (lambda (cnk start i end j matches) #t)
-              (let ((dfa (nfa->dfa (sre->nfa sre ~none))))
-                (lambda (cnk start i end j matches)
-                  (dfa-match/longest dfa cnk start i end j matches tmp)))))
+            (lambda (cnk start i end j matches) #t)
+            (let ((dfa (nfa->dfa (sre->nfa sre ~none))))
+              (lambda (cnk start i end j matches)
+                (dfa-match/longest dfa cnk start i end j matches tmp)))))
          ((pair? sre)
           (case (car sre)
             ((: seq)
@@ -2587,85 +2587,85 @@
                (lambda (cnk start i end j matches)
                  (let lp1 ((end2 end) (j2 j) (best-src #f) (best-index #f))
                    (let ((limit (if (eq? start end2)
-                                    i
-                                    ((chunker-get-start cnk) end2))))
+                                  i
+                                  ((chunker-get-start cnk) end2))))
                      (let lp2 ((k j2) (best-src best-src) (best-index best-index))
                        (if (< k limit)
-                           (cond
-                            ((not (eq? start end2))
-                             (let ((prev (chunker-prev-chunk cnk start end2)))
-                               (lp1 prev
-                                    ((chunker-get-end cnk) prev)
-                                    best-src
-                                    best-index)))
-                            (best-src
-                             (vector-set! matches tmp-end-src-offset best-src)
-                             (vector-set! matches tmp-end-index-offset best-index)
-                             #t)
-                            (else
-                             #f))
-                           (if (and (match-left cnk start i end2 k matches)
-                                    (eq? end2 (vector-ref matches
-                                                          tmp-end-src-offset))
-                                    (eqv? k (vector-ref matches
-                                                        tmp-end-index-offset))
-                                    (match-right cnk end2 k end j matches))
-                               (let ((right-src
-                                      (vector-ref matches tmp-end-src-offset))
-                                     (right
-                                      (vector-ref matches tmp-end-index-offset)))
-                                 (cond
-                                  ((and (eq? end right-src) (eqv? j right))
-                                   (vector-set! matches tmp-end-src-offset end)
-                                   (vector-set! matches tmp-end-index-offset j)
-                                   #t)
-                                  ((or (not best-src)
-                                       (if (eq? best-src right-src)
-                                           (> right best-index)
-                                           (chunk-before? cnk
-                                                          best-src
-                                                          right-src)))
-                                   (lp2 (- k 1) right-src right))
-                                  (else
-                                   (lp2 (- k 1) best-src best-index))))
-                               (lp2 (- k 1) best-src best-index)))))))))
+                         (cond
+                          ((not (eq? start end2))
+                           (let ((prev (chunker-prev-chunk cnk start end2)))
+                             (lp1 prev
+                                  ((chunker-get-end cnk) prev)
+                                  best-src
+                                  best-index)))
+                          (best-src
+                           (vector-set! matches tmp-end-src-offset best-src)
+                           (vector-set! matches tmp-end-index-offset best-index)
+                           #t)
+                          (else
+                           #f))
+                         (if (and (match-left cnk start i end2 k matches)
+                                  (eq? end2 (vector-ref matches
+                                                        tmp-end-src-offset))
+                                  (eqv? k (vector-ref matches
+                                                      tmp-end-index-offset))
+                                  (match-right cnk end2 k end j matches))
+                           (let ((right-src
+                                  (vector-ref matches tmp-end-src-offset))
+                                 (right
+                                  (vector-ref matches tmp-end-index-offset)))
+                             (cond
+                              ((and (eq? end right-src) (eqv? j right))
+                               (vector-set! matches tmp-end-src-offset end)
+                               (vector-set! matches tmp-end-index-offset j)
+                               #t)
+                              ((or (not best-src)
+                                   (if (eq? best-src right-src)
+                                     (> right best-index)
+                                     (chunk-before? cnk
+                                                    best-src
+                                                    right-src)))
+                               (lp2 (- k 1) right-src right))
+                              (else
+                               (lp2 (- k 1) best-src best-index))))
+                           (lp2 (- k 1) best-src best-index)))))))))
             ((or)
              (if (null? (cdr sre))
-                 (lambda (cnk start i end j matches) #f)
-                 (let* ((rest (sre-alternate (cddr sre)))
-                        (match-first
-                         (lp (cadr sre) n #t))
-                        (match-rest
-                         (lp rest
-                             (+ n (sre-count-submatches (cadr sre)))
-                             submatch-deps?)))
-                   (lambda (cnk start i end j matches)
-                     (or (and (match-first cnk start i end j matches)
-                              (eq? end (vector-ref matches tmp-end-src-offset))
-                              (eqv? j (vector-ref matches tmp-end-index-offset)))
-                         (match-rest cnk start i end j matches))))))
+               (lambda (cnk start i end j matches) #f)
+               (let* ((rest (sre-alternate (cddr sre)))
+                      (match-first
+                       (lp (cadr sre) n #t))
+                      (match-rest
+                       (lp rest
+                           (+ n (sre-count-submatches (cadr sre)))
+                           submatch-deps?)))
+                 (lambda (cnk start i end j matches)
+                   (or (and (match-first cnk start i end j matches)
+                            (eq? end (vector-ref matches tmp-end-src-offset))
+                            (eqv? j (vector-ref matches tmp-end-index-offset)))
+                       (match-rest cnk start i end j matches))))))
             ((* +)
              (letrec ((match-once
                        (lp (sre-sequence (cdr sre)) n #t))
                       (match-all
                        (lambda (cnk start i end j matches)
                          (if (match-once cnk start i end j matches)
-                             (let ((src (vector-ref matches tmp-end-src-offset))
-                                   (k (vector-ref matches tmp-end-index-offset)))
-                               (if (and src (or (not (eq? start src)) (< i k)))
-                                   (match-all cnk src k end j matches)
-                                   #t))
-                             (begin
-                               (vector-set! matches tmp-end-src-offset start)
-                               (vector-set! matches tmp-end-index-offset i)
-                               #t)))))
+                           (let ((src (vector-ref matches tmp-end-src-offset))
+                                 (k (vector-ref matches tmp-end-index-offset)))
+                             (if (and src (or (not (eq? start src)) (< i k)))
+                               (match-all cnk src k end j matches)
+                               #t))
+                           (begin
+                             (vector-set! matches tmp-end-src-offset start)
+                             (vector-set! matches tmp-end-index-offset i)
+                             #t)))))
                (if (eq? '* (car sre))
-                   match-all
-                   (lambda (cnk start i end j matches)
-                     (and (match-once cnk start i end j matches)
-                          (let ((src (vector-ref matches tmp-end-src-offset))
-                                (k (vector-ref matches tmp-end-index-offset)))
-                            (match-all cnk src k end j matches)))))))
+                 match-all
+                 (lambda (cnk start i end j matches)
+                   (and (match-once cnk start i end j matches)
+                        (let ((src (vector-ref matches tmp-end-src-offset))
+                              (k (vector-ref matches tmp-end-index-offset)))
+                          (match-all cnk src k end j matches)))))))
             ((?)
              (let ((match-once (lp (sre-sequence (cdr sre)) n #t)))
                (lambda (cnk start i end j matches)
@@ -2679,8 +2679,8 @@
             (($ submatch => submatch-named)
              (let ((match-one
                     (lp (sre-sequence (if (memq (car sre) '($ submatch))
-                                          (cdr sre)
-                                          (cddr sre)))
+                                        (cdr sre)
+                                        (cddr sre)))
                         (+ n 1)
                         #t))
                    (start-src-offset (+ 3 (* n 4)))
@@ -2730,450 +2730,450 @@
       (cond
        ((pair? sre)
         (if (string? (car sre))
-            (sre-cset->procedure
-             (sre->cset (car sre) (flag-set? flags ~case-insensitive?))
-             next)
-            (case (car sre)
-              ((~ - & /)
-               (sre-cset->procedure
-                (sre->cset sre (flag-set? flags ~case-insensitive?))
-                next))
-              ((or)
-               (case (length (cdr sre))
-                 ((0) (lambda (cnk init src str i end matches fail) (fail)))
-                 ((1) (rec (cadr sre)))
-                 (else
-                  (let* ((first (rec (cadr sre)))
-                         (rest (lp (sre-alternate (cddr sre))
-                                   (+ n (sre-count-submatches (cadr sre)))
-                                   flags
-                                   next)))
-                    (lambda (cnk init src str i end matches fail)
-                      (first cnk init src str i end matches
-                             (lambda ()
-                               (rest cnk init src str i end matches fail))))))))
-              ((w/case)
-               (lp (sre-sequence (cdr sre))
-                   n
-                   (flag-clear flags ~case-insensitive?)
-                   next))
-              ((w/nocase)
-               (lp (sre-sequence (cdr sre))
-                   n
-                   (flag-join flags ~case-insensitive?)
-                   next))
-              ((w/utf8)
-               (lp (sre-sequence (cdr sre)) n (flag-join flags ~utf8?) next))
-              ((w/noutf8)
-               (lp (sre-sequence (cdr sre)) n (flag-clear flags ~utf8?) next))
-              ((seq :)
-               (case (length (cdr sre))
-                 ((0) next)
-                 ((1) (rec (cadr sre)))
-                 (else
-                  (let ((rest (lp (sre-sequence (cddr sre))
-                                  (+ n (sre-count-submatches (cadr sre)))
-                                  flags
-                                  next)))
-                    (lp (cadr sre) n flags rest)))))
-              ((?)
-               (let ((body (rec (sre-sequence (cdr sre)))))
+          (sre-cset->procedure
+           (sre->cset (car sre) (flag-set? flags ~case-insensitive?))
+           next)
+          (case (car sre)
+            ((~ - & /)
+             (sre-cset->procedure
+              (sre->cset sre (flag-set? flags ~case-insensitive?))
+              next))
+            ((or)
+             (case (length (cdr sre))
+               ((0) (lambda (cnk init src str i end matches fail) (fail)))
+               ((1) (rec (cadr sre)))
+               (else
+                (let* ((first (rec (cadr sre)))
+                       (rest (lp (sre-alternate (cddr sre))
+                                 (+ n (sre-count-submatches (cadr sre)))
+                                 flags
+                                 next)))
+                  (lambda (cnk init src str i end matches fail)
+                    (first cnk init src str i end matches
+                           (lambda ()
+                             (rest cnk init src str i end matches fail))))))))
+            ((w/case)
+             (lp (sre-sequence (cdr sre))
+                 n
+                 (flag-clear flags ~case-insensitive?)
+                 next))
+            ((w/nocase)
+             (lp (sre-sequence (cdr sre))
+                 n
+                 (flag-join flags ~case-insensitive?)
+                 next))
+            ((w/utf8)
+             (lp (sre-sequence (cdr sre)) n (flag-join flags ~utf8?) next))
+            ((w/noutf8)
+             (lp (sre-sequence (cdr sre)) n (flag-clear flags ~utf8?) next))
+            ((seq :)
+             (case (length (cdr sre))
+               ((0) next)
+               ((1) (rec (cadr sre)))
+               (else
+                (let ((rest (lp (sre-sequence (cddr sre))
+                                (+ n (sre-count-submatches (cadr sre)))
+                                flags
+                                next)))
+                  (lp (cadr sre) n flags rest)))))
+            ((?)
+             (let ((body (rec (sre-sequence (cdr sre)))))
+               (lambda (cnk init src str i end matches fail)
+                 (body cnk init src str i end matches
+                       (lambda () (next cnk init src str i end matches fail))))))
+            ((??)
+             (let ((body (rec (sre-sequence (cdr sre)))))
+               (lambda (cnk init src str i end matches fail)
+                 (next cnk init src str i end matches
+                       (lambda () (body cnk init src str i end matches fail))))))
+            ((*)
+             (cond
+              ((sre-empty? (sre-sequence (cdr sre)))
+               (error "invalid sre: empty *" sre))
+              (else
+               (letrec
+                   ((body
+                     (lp (sre-sequence (cdr sre))
+                         n
+                         flags
+                         (lambda (cnk init src str i end matches fail)
+                           (body cnk init src str i end matches
+                                 (lambda ()
+                                   (next cnk init src str i end matches fail)
+                                   ))))))
                  (lambda (cnk init src str i end matches fail)
                    (body cnk init src str i end matches
-                         (lambda () (next cnk init src str i end matches fail))))))
-              ((??)
-               (let ((body (rec (sre-sequence (cdr sre)))))
+                         (lambda ()
+                           (next cnk init src str i end matches fail))))))))
+            ((*?)
+             (cond
+              ((sre-empty? (sre-sequence (cdr sre)))
+               (error "invalid sre: empty *?" sre))
+              (else
+               (letrec
+                   ((body
+                     (lp (sre-sequence (cdr sre))
+                         n
+                         flags
+                         (lambda (cnk init src str i end matches fail)
+                           (next cnk init src str i end matches
+                                 (lambda ()
+                                   (body cnk init src str i end matches fail)
+                                   ))))))
                  (lambda (cnk init src str i end matches fail)
                    (next cnk init src str i end matches
-                         (lambda () (body cnk init src str i end matches fail))))))
-              ((*)
-               (cond
-                ((sre-empty? (sre-sequence (cdr sre)))
-                 (error "invalid sre: empty *" sre))
-                (else
-                 (letrec
-                     ((body
-                       (lp (sre-sequence (cdr sre))
-                           n
-                           flags
-                           (lambda (cnk init src str i end matches fail)
-                             (body cnk init src str i end matches
-                                   (lambda ()
-                                     (next cnk init src str i end matches fail)
-                                     ))))))
-                   (lambda (cnk init src str i end matches fail)
-                     (body cnk init src str i end matches
-                           (lambda ()
-                             (next cnk init src str i end matches fail))))))))
-              ((*?)
-               (cond
-                ((sre-empty? (sre-sequence (cdr sre)))
-                 (error "invalid sre: empty *?" sre))
-                (else
-                 (letrec
-                     ((body
-                       (lp (sre-sequence (cdr sre))
-                           n
-                           flags
-                           (lambda (cnk init src str i end matches fail)
-                             (next cnk init src str i end matches
-                                   (lambda ()
-                                     (body cnk init src str i end matches fail)
-                                     ))))))
-                   (lambda (cnk init src str i end matches fail)
-                     (next cnk init src str i end matches
-                           (lambda ()
-                             (body cnk init src str i end matches fail))))))))
-              ((+)
-               (lp (sre-sequence (cdr sre))
-                   n
-                   flags
-                   (rec (list '* (sre-sequence (cdr sre))))))
-              ((=)
-               (rec `(** ,(cadr sre) ,(cadr sre) ,@(cddr sre))))
-              ((>=)
-               (rec `(** ,(cadr sre) #f ,@(cddr sre))))
-              ((** **?)
-               (cond
-                ((or (and (number? (cadr sre))
-                          (number? (caddr sre))
-                          (> (cadr sre) (caddr sre)))
-                     (and (not (cadr sre)) (caddr sre)))
-                 (lambda (cnk init src str i end matches fail) (fail)))
-                (else
-                 (let* ((from (cadr sre))
-                        (to (caddr sre))
-                        (? (if (eq? '** (car sre)) '? '??))
-                        (* (if (eq? '** (car sre)) '* '*?))
-                        (sre (sre-sequence (cdddr sre)))
-                        (x-sre (sre-strip-submatches sre))
-                        (next (if to
-                                  (if (= from to)
-                                      next
-                                      (fold (lambda (x next)
-                                              (lp `(,? ,sre) n flags next))
-                                            next
-                                            (zero-to (- to from))))
-                                  (rec `(,* ,sre)))))
-                   (if (zero? from)
-                       next
-                       (lp `(seq ,@(map (lambda (x) x-sre) (zero-to (- from 1)))
-                                 ,sre)
-                           n
-                           flags
-                           next))))))
-              ((word)
-               (rec `(seq bow ,@(cdr sre) eow)))
-              ((word+)
-               (rec `(seq bow (+ (& (or alphanumeric "_")
-                                    (or ,@(cdr sre)))) eow)))
-              ((posix-string)
-               (rec (string->sre (cadr sre))))
-              ((look-ahead)
-               (let ((check
-                      (lp (sre-sequence (cdr sre))
-                          n
-                          flags
-                          (lambda (cnk init src str i end matches fail) i))))
-                 (lambda (cnk init src str i end matches fail)
-                   (if (check cnk init src str i end matches (lambda () #f))
-                       (next cnk init src str i end matches fail)
-                       (fail)))))
-              ((neg-look-ahead)
-               (let ((check
-                      (lp (sre-sequence (cdr sre))
-                          n
-                          flags
-                          (lambda (cnk init src str i end matches fail) i))))
-                 (lambda (cnk init src str i end matches fail)
-                   (if (check cnk init src str i end matches (lambda () #f))
-                       (fail)
-                       (next cnk init src str i end matches fail)))))
-              ((look-behind neg-look-behind)
-               (let ((check
-                      (lp (sre-sequence
-                           (cons '(* any) (append (cdr sre) '(eos))))
-                          n
-                          flags
-                          (lambda (cnk init src str i end matches fail) i))))
-                 (lambda (cnk init src str i end matches fail)
-                   (let* ((prev ((chunker-get-substring cnk)
-                                 (car init)
-                                 (cdr init)
-                                 src
-                                 i))
-                          (len (string-length prev))
-                          (src2 (list prev 0 len)))
-                     (if ((if (eq? (car sre) 'look-behind) (lambda (x) x) not)
-                          (check irregex-basic-string-chunker
-                                 (cons src2 0) src2 prev 0 len matches (lambda () #f)))
-                         (next cnk init src str i end matches fail)
-                         (fail))))))
-              ((atomic)
-               (let ((once
-                      (lp (sre-sequence (cdr sre))
-                          n
-                          flags
-                          (lambda (cnk init src str i end matches fail) i))))
-                 (lambda (cnk init src str i end matches fail)
-                   (let ((j (once cnk init src str i end matches (lambda () #f))))
-                     (if j
-                         (next cnk init src str j end matches fail)
-                         (fail))))))
-              ((if)
-               (let* ((test-submatches (sre-count-submatches (cadr sre)))
-                      (pass (lp (caddr sre) flags (+ n test-submatches) next))
-                      (fail (if (pair? (cdddr sre))
-                                (lp (cadddr sre)
-                                    (+ n test-submatches
-                                       (sre-count-submatches (caddr sre)))
-                                    flags
-                                    next)
-                                (lambda (cnk init src str i end matches fail)
-                                  (fail)))))
-                 (cond
-                  ((or (number? (cadr sre)) (symbol? (cadr sre)))
-                   (let ((index
-                          (if (symbol? (cadr sre))
-                              (cond
-                               ((assq (cadr sre) names) => cdr)
-                               (else
-                                (error "unknown named backref in SRE IF" sre)))
-                              (cadr sre))))
-                     (lambda (cnk init src str i end matches fail2)
-                       (if (%irregex-match-end-chunk matches index)
-                           (pass cnk init src str i end matches fail2)
-                           (fail cnk init src str i end matches fail2)))))
-                  (else
-                   (let ((test (lp (cadr sre) n flags pass)))
-                     (lambda (cnk init src str i end matches fail2)
-                       (test cnk init src str i end matches
-                             (lambda () (fail cnk init src str i end matches fail2)))
-                       ))))))
-              ((backref backref-ci)
-               (let ((n (cond ((number? (cadr sre)) (cadr sre))
-                              ((assq (cadr sre) names) => cdr)
-                              (else (error "unknown backreference" (cadr sre)))))
-                     (compare (if (or (eq? (car sre) 'backref-ci)
-                                      (flag-set? flags ~case-insensitive?))
-                                  string-ci=?
-                                  string=?)))
-                 (lambda (cnk init src str i end matches fail)
-                   (let ((s (irregex-match-substring matches n)))
-                     (if (not s)
-                         (fail)
-                         ;; XXXX create an abstract subchunk-compare
-                         (let lp ((src src)
-                                  (str str)
-                                  (i i)
-                                  (end end)
-                                  (j 0)
-                                  (len (string-length s)))
-                           (cond
-                            ((<= len (- end i))
-                             (cond
-                              ((compare (substring s j (string-length s))
-                                        (substring str i (+ i len)))
-                               (next cnk init src str (+ i len) end matches fail))
-                              (else
-                               (fail))))
-                            (else
-                             (cond
-                              ((compare (substring s j (+ j (- end i)))
-                                        (substring str i end))
-                               (let ((src2 ((chunker-get-next cnk) src)))
-                                 (if src2
-                                     (lp src2
-                                         ((chunker-get-str cnk) src2)
-                                         ((chunker-get-start cnk) src2)
-                                         ((chunker-get-end cnk) src2)
-                                         (+ j (- end i))
-                                         (- len (- end i)))
-                                     (fail))))
-                              (else
-                               (fail)))))))))))
-              ((dsm)
-               (lp (sre-sequence (cdddr sre)) (+ n (cadr sre)) flags next))
-              (($ submatch)
-               (let ((body
-                      (lp (sre-sequence (cdr sre))
-                          (+ n 1)
-                          flags
-                          (lambda (cnk init src str i end matches fail)
-                            (let ((old-source
-                                   (%irregex-match-end-chunk matches n))
-                                  (old-index
-                                   (%irregex-match-end-index matches n)))
-                              (irregex-match-end-chunk-set! matches n src)
-                              (irregex-match-end-index-set! matches n i)
-                              (next cnk init src str i end matches
-                                    (lambda ()
-                                      (irregex-match-end-chunk-set!
-                                       matches n old-source)
-                                      (irregex-match-end-index-set!
-                                       matches n old-index)
-                                      (fail))))))))
-                 (lambda (cnk init src str i end matches fail)
-                   (let ((old-source (%irregex-match-start-chunk matches n))
-                         (old-index (%irregex-match-start-index matches n)))
-                     (irregex-match-start-chunk-set! matches n src)
-                     (irregex-match-start-index-set! matches n i)
-                     (body cnk init src str i end matches
-                           (lambda ()
-                             (irregex-match-start-chunk-set!
-                              matches n old-source)
-                             (irregex-match-start-index-set!
-                              matches n old-index)
-                             (fail)))))))
-              ((=> submatch-named)
-               (rec `(submatch ,@(cddr sre))))
+                         (lambda ()
+                           (body cnk init src str i end matches fail))))))))
+            ((+)
+             (lp (sre-sequence (cdr sre))
+                 n
+                 flags
+                 (rec (list '* (sre-sequence (cdr sre))))))
+            ((=)
+             (rec `(** ,(cadr sre) ,(cadr sre) ,@(cddr sre))))
+            ((>=)
+             (rec `(** ,(cadr sre) #f ,@(cddr sre))))
+            ((** **?)
+             (cond
+              ((or (and (number? (cadr sre))
+                        (number? (caddr sre))
+                        (> (cadr sre) (caddr sre)))
+                   (and (not (cadr sre)) (caddr sre)))
+               (lambda (cnk init src str i end matches fail) (fail)))
               (else
-               (error "unknown regexp operator" sre)))))
+               (let* ((from (cadr sre))
+                      (to (caddr sre))
+                      (? (if (eq? '** (car sre)) '? '??))
+                      (* (if (eq? '** (car sre)) '* '*?))
+                      (sre (sre-sequence (cdddr sre)))
+                      (x-sre (sre-strip-submatches sre))
+                      (next (if to
+                              (if (= from to)
+                                next
+                                (fold (lambda (x next)
+                                        (lp `(,? ,sre) n flags next))
+                                      next
+                                      (zero-to (- to from))))
+                              (rec `(,* ,sre)))))
+                 (if (zero? from)
+                   next
+                   (lp `(seq ,@(map (lambda (x) x-sre) (zero-to (- from 1)))
+                             ,sre)
+                       n
+                       flags
+                       next))))))
+            ((word)
+             (rec `(seq bow ,@(cdr sre) eow)))
+            ((word+)
+             (rec `(seq bow (+ (& (or alphanumeric "_")
+                                  (or ,@(cdr sre)))) eow)))
+            ((posix-string)
+             (rec (string->sre (cadr sre))))
+            ((look-ahead)
+             (let ((check
+                    (lp (sre-sequence (cdr sre))
+                        n
+                        flags
+                        (lambda (cnk init src str i end matches fail) i))))
+               (lambda (cnk init src str i end matches fail)
+                 (if (check cnk init src str i end matches (lambda () #f))
+                   (next cnk init src str i end matches fail)
+                   (fail)))))
+            ((neg-look-ahead)
+             (let ((check
+                    (lp (sre-sequence (cdr sre))
+                        n
+                        flags
+                        (lambda (cnk init src str i end matches fail) i))))
+               (lambda (cnk init src str i end matches fail)
+                 (if (check cnk init src str i end matches (lambda () #f))
+                   (fail)
+                   (next cnk init src str i end matches fail)))))
+            ((look-behind neg-look-behind)
+             (let ((check
+                    (lp (sre-sequence
+                         (cons '(* any) (append (cdr sre) '(eos))))
+                        n
+                        flags
+                        (lambda (cnk init src str i end matches fail) i))))
+               (lambda (cnk init src str i end matches fail)
+                 (let* ((prev ((chunker-get-substring cnk)
+                               (car init)
+                               (cdr init)
+                               src
+                               i))
+                        (len (string-length prev))
+                        (src2 (list prev 0 len)))
+                   (if ((if (eq? (car sre) 'look-behind) (lambda (x) x) not)
+                        (check irregex-basic-string-chunker
+                               (cons src2 0) src2 prev 0 len matches (lambda () #f)))
+                     (next cnk init src str i end matches fail)
+                     (fail))))))
+            ((atomic)
+             (let ((once
+                    (lp (sre-sequence (cdr sre))
+                        n
+                        flags
+                        (lambda (cnk init src str i end matches fail) i))))
+               (lambda (cnk init src str i end matches fail)
+                 (let ((j (once cnk init src str i end matches (lambda () #f))))
+                   (if j
+                     (next cnk init src str j end matches fail)
+                     (fail))))))
+            ((if)
+             (let* ((test-submatches (sre-count-submatches (cadr sre)))
+                    (pass (lp (caddr sre) flags (+ n test-submatches) next))
+                    (fail (if (pair? (cdddr sre))
+                            (lp (cadddr sre)
+                                (+ n test-submatches
+                                   (sre-count-submatches (caddr sre)))
+                                flags
+                                next)
+                            (lambda (cnk init src str i end matches fail)
+                              (fail)))))
+               (cond
+                ((or (number? (cadr sre)) (symbol? (cadr sre)))
+                 (let ((index
+                        (if (symbol? (cadr sre))
+                          (cond
+                           ((assq (cadr sre) names) => cdr)
+                           (else
+                            (error "unknown named backref in SRE IF" sre)))
+                          (cadr sre))))
+                   (lambda (cnk init src str i end matches fail2)
+                     (if (%irregex-match-end-chunk matches index)
+                       (pass cnk init src str i end matches fail2)
+                       (fail cnk init src str i end matches fail2)))))
+                (else
+                 (let ((test (lp (cadr sre) n flags pass)))
+                   (lambda (cnk init src str i end matches fail2)
+                     (test cnk init src str i end matches
+                           (lambda () (fail cnk init src str i end matches fail2)))
+                     ))))))
+            ((backref backref-ci)
+             (let ((n (cond ((number? (cadr sre)) (cadr sre))
+                            ((assq (cadr sre) names) => cdr)
+                            (else (error "unknown backreference" (cadr sre)))))
+                   (compare (if (or (eq? (car sre) 'backref-ci)
+                                    (flag-set? flags ~case-insensitive?))
+                              string-ci=?
+                              string=?)))
+               (lambda (cnk init src str i end matches fail)
+                 (let ((s (irregex-match-substring matches n)))
+                   (if (not s)
+                     (fail)
+                     ;; XXXX create an abstract subchunk-compare
+                     (let lp ((src src)
+                              (str str)
+                              (i i)
+                              (end end)
+                              (j 0)
+                              (len (string-length s)))
+                       (cond
+                        ((<= len (- end i))
+                         (cond
+                          ((compare (substring s j (string-length s))
+                                    (substring str i (+ i len)))
+                           (next cnk init src str (+ i len) end matches fail))
+                          (else
+                           (fail))))
+                        (else
+                         (cond
+                          ((compare (substring s j (+ j (- end i)))
+                                    (substring str i end))
+                           (let ((src2 ((chunker-get-next cnk) src)))
+                             (if src2
+                               (lp src2
+                                   ((chunker-get-str cnk) src2)
+                                   ((chunker-get-start cnk) src2)
+                                   ((chunker-get-end cnk) src2)
+                                   (+ j (- end i))
+                                   (- len (- end i)))
+                               (fail))))
+                          (else
+                           (fail)))))))))))
+            ((dsm)
+             (lp (sre-sequence (cdddr sre)) (+ n (cadr sre)) flags next))
+            (($ submatch)
+             (let ((body
+                    (lp (sre-sequence (cdr sre))
+                        (+ n 1)
+                        flags
+                        (lambda (cnk init src str i end matches fail)
+                          (let ((old-source
+                                 (%irregex-match-end-chunk matches n))
+                                (old-index
+                                 (%irregex-match-end-index matches n)))
+                            (irregex-match-end-chunk-set! matches n src)
+                            (irregex-match-end-index-set! matches n i)
+                            (next cnk init src str i end matches
+                                  (lambda ()
+                                    (irregex-match-end-chunk-set!
+                                     matches n old-source)
+                                    (irregex-match-end-index-set!
+                                     matches n old-index)
+                                    (fail))))))))
+               (lambda (cnk init src str i end matches fail)
+                 (let ((old-source (%irregex-match-start-chunk matches n))
+                       (old-index (%irregex-match-start-index matches n)))
+                   (irregex-match-start-chunk-set! matches n src)
+                   (irregex-match-start-index-set! matches n i)
+                   (body cnk init src str i end matches
+                         (lambda ()
+                           (irregex-match-start-chunk-set!
+                            matches n old-source)
+                           (irregex-match-start-index-set!
+                            matches n old-index)
+                           (fail)))))))
+            ((=> submatch-named)
+             (rec `(submatch ,@(cddr sre))))
+            (else
+             (error "unknown regexp operator" sre)))))
        ((symbol? sre)
         (case sre
           ((any)
            (lambda (cnk init src str i end matches fail)
              (if (< i end)
-                 (next cnk init src str (+ i 1) end matches fail)
-                 (let ((src2 ((chunker-get-next cnk) src)))
-                   (if src2
-                       (let ((str2 ((chunker-get-str cnk) src2))
-                             (i2 ((chunker-get-start cnk) src2))
-                             (end2 ((chunker-get-end cnk) src2)))
-                         (next cnk init src2 str2 (+ i2 1) end2 matches fail))
-                       (fail))))))
+               (next cnk init src str (+ i 1) end matches fail)
+               (let ((src2 ((chunker-get-next cnk) src)))
+                 (if src2
+                   (let ((str2 ((chunker-get-str cnk) src2))
+                         (i2 ((chunker-get-start cnk) src2))
+                         (end2 ((chunker-get-end cnk) src2)))
+                     (next cnk init src2 str2 (+ i2 1) end2 matches fail))
+                   (fail))))))
           ((nonl)
            (lambda (cnk init src str i end matches fail)
              (if (< i end)
-                 (if (not (eqv? #\newline (string-ref str i)))
-                     (next cnk init src str (+ i 1) end matches fail)
-                     (fail))
-                 (let ((src2 ((chunker-get-next cnk) src)))
-                   (if src2
-                       (let ((str2 ((chunker-get-str cnk) src2))
-                             (i2 ((chunker-get-start cnk) src2))
-                             (end2 ((chunker-get-end cnk) src2)))
-                         (if (not (eqv? #\newline (string-ref str2 i2)))
-                             (next cnk init src2 str2 (+ i2 1) end2 matches fail)
-                             (fail)))
-                       (fail))))))
+               (if (not (eqv? #\newline (string-ref str i)))
+                 (next cnk init src str (+ i 1) end matches fail)
+                 (fail))
+               (let ((src2 ((chunker-get-next cnk) src)))
+                 (if src2
+                   (let ((str2 ((chunker-get-str cnk) src2))
+                         (i2 ((chunker-get-start cnk) src2))
+                         (end2 ((chunker-get-end cnk) src2)))
+                     (if (not (eqv? #\newline (string-ref str2 i2)))
+                       (next cnk init src2 str2 (+ i2 1) end2 matches fail)
+                       (fail)))
+                   (fail))))))
           ((bos)
            (lambda (cnk init src str i end matches fail)
              (if (and (eq? src (car init)) (eqv? i (cdr init)))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((bol)
            (lambda (cnk init src str i end matches fail)
              (if (or (and (eq? src (car init)) (eqv? i (cdr init)))
                      (and (> i ((chunker-get-start cnk) src))
                           (eqv? #\newline (string-ref str (- i 1)))))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((bow)
            (lambda (cnk init src str i end matches fail)
              (if (and (or (if (> i ((chunker-get-start cnk) src))
-                              (not (char-alphanumeric? (string-ref str (- i 1))))
-                              (let ((ch (chunker-prev-char cnk src end)))
-                                (and ch (not (char-alphanumeric? ch)))))
+                            (not (char-alphanumeric? (string-ref str (- i 1))))
+                            (let ((ch (chunker-prev-char cnk src end)))
+                              (and ch (not (char-alphanumeric? ch)))))
                           (and (eq? src (car init)) (eqv? i (cdr init))))
                       (if (< i end)
-                          (char-alphanumeric? (string-ref str i))
-                          (let ((next ((chunker-get-next cnk) src)))
-                            (and next
-                                 (char-alphanumeric?
-                                  (string-ref ((chunker-get-str cnk) next)
-                                              ((chunker-get-start cnk) next)))))))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+                        (char-alphanumeric? (string-ref str i))
+                        (let ((next ((chunker-get-next cnk) src)))
+                          (and next
+                               (char-alphanumeric?
+                                (string-ref ((chunker-get-str cnk) next)
+                                            ((chunker-get-start cnk) next)))))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((eos)
            (lambda (cnk init src str i end matches fail)
              (if (and (>= i end) (not ((chunker-get-next cnk) src)))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((eol)
            (lambda (cnk init src str i end matches fail)
              (if (if (< i end)
-                     (eqv? #\newline (string-ref str i))
-                     (let ((src2 ((chunker-get-next cnk) src)))
-                       (if (not src2)
-                           #t
-                           (eqv? #\newline
-                                 (string-ref ((chunker-get-str cnk) src2)
-                                             ((chunker-get-start cnk) src2))))))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+                   (eqv? #\newline (string-ref str i))
+                   (let ((src2 ((chunker-get-next cnk) src)))
+                     (if (not src2)
+                       #t
+                       (eqv? #\newline
+                             (string-ref ((chunker-get-str cnk) src2)
+                                         ((chunker-get-start cnk) src2))))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((eow)
            (lambda (cnk init src str i end matches fail)
              (if (and (if (< i end)
-                          (not (char-alphanumeric? (string-ref str i)))
-                          (let ((ch (chunker-next-char cnk src)))
-                            (or (not ch) (not (char-alphanumeric? ch)))))
+                        (not (char-alphanumeric? (string-ref str i)))
+                        (let ((ch (chunker-next-char cnk src)))
+                          (or (not ch) (not (char-alphanumeric? ch)))))
                       (if (> i ((chunker-get-start cnk) src))
-                          (char-alphanumeric? (string-ref str (- i 1)))
-                          (let ((prev (chunker-prev-char cnk init src)))
-                            (or (not prev) (char-alphanumeric? prev)))))
-                 (next cnk init src str i end matches fail)
-                 (fail))))
+                        (char-alphanumeric? (string-ref str (- i 1)))
+                        (let ((prev (chunker-prev-char cnk init src)))
+                          (or (not prev) (char-alphanumeric? prev)))))
+               (next cnk init src str i end matches fail)
+               (fail))))
           ((nwb)  ;; non-word-boundary
            (lambda (cnk init src str i end matches fail)
              (let ((c1 (if (< i end)
-                           (string-ref str i)
-                           (chunker-next-char cnk src)))
+                         (string-ref str i)
+                         (chunker-next-char cnk src)))
                    (c2 (if (> i ((chunker-get-start cnk) src))
-                           (string-ref str (- i 1))
-                           (chunker-prev-char cnk init src))))
+                         (string-ref str (- i 1))
+                         (chunker-prev-char cnk init src))))
                (if (and c1 c2
                         (if (char-alphanumeric? c1)
-                            (char-alphanumeric? c2)
-                            (not (char-alphanumeric? c2))))
-                   (next cnk init src str i end matches fail)
-                   (fail)))))
+                          (char-alphanumeric? c2)
+                          (not (char-alphanumeric? c2))))
+                 (next cnk init src str i end matches fail)
+                 (fail)))))
           ((epsilon)
            next)
           (else
            (let ((cell (assq sre sre-named-definitions)))
              (if cell
-                 (rec (cdr cell))
-                 (error "unknown regexp" sre))))))
+               (rec (cdr cell))
+               (error "unknown regexp" sre))))))
        ((char? sre)
         (if (flag-set? flags ~case-insensitive?)
-            ;; case-insensitive
-            (lambda (cnk init src str i end matches fail)
-              (if (>= i end)
-                  (let lp ((src2 ((chunker-get-next cnk) src)))
-                    (if src2
-                        (let ((str2 ((chunker-get-str cnk) src2))
-                              (i2 ((chunker-get-start cnk) src2))
-                              (end2 ((chunker-get-end cnk) src2)))
-                          (if (>= i2 end2)
-                              (lp ((chunker-get-next cnk) src2))
-                              (if (char-ci=? sre (string-ref str2 i2))
-                                  (next cnk init src2 str2 (+ i2 1) end2
-                                        matches fail)
-                                  (fail))))
-                        (fail)))
-                  (if (char-ci=? sre (string-ref str i))
-                      (next cnk init src str (+ i 1) end matches fail)
-                      (fail))))
-            ;; case-sensitive
-            (lambda (cnk init src str i end matches fail)
-              (if (>= i end)
-                  (let lp ((src2 ((chunker-get-next cnk) src)))
-                    (if src2
-                        (let ((str2 ((chunker-get-str cnk) src2))
-                              (i2 ((chunker-get-start cnk) src2))
-                              (end2 ((chunker-get-end cnk) src2)))
-                          (if (>= i2 end2)
-                              (lp ((chunker-get-next cnk) src2))
-                              (if (char=? sre (string-ref str2 i2))
-                                  (next cnk init src2 str2 (+ i2 1) end2
-                                        matches fail)
-                                  (fail))))
-                        (fail)))
-                  (if (char=? sre (string-ref str i))
-                      (next cnk init src str (+ i 1) end matches fail)
-                      (fail))))
-            ))
+          ;; case-insensitive
+          (lambda (cnk init src str i end matches fail)
+            (if (>= i end)
+              (let lp ((src2 ((chunker-get-next cnk) src)))
+                (if src2
+                  (let ((str2 ((chunker-get-str cnk) src2))
+                        (i2 ((chunker-get-start cnk) src2))
+                        (end2 ((chunker-get-end cnk) src2)))
+                    (if (>= i2 end2)
+                      (lp ((chunker-get-next cnk) src2))
+                      (if (char-ci=? sre (string-ref str2 i2))
+                        (next cnk init src2 str2 (+ i2 1) end2
+                              matches fail)
+                        (fail))))
+                  (fail)))
+              (if (char-ci=? sre (string-ref str i))
+                (next cnk init src str (+ i 1) end matches fail)
+                (fail))))
+          ;; case-sensitive
+          (lambda (cnk init src str i end matches fail)
+            (if (>= i end)
+              (let lp ((src2 ((chunker-get-next cnk) src)))
+                (if src2
+                  (let ((str2 ((chunker-get-str cnk) src2))
+                        (i2 ((chunker-get-start cnk) src2))
+                        (end2 ((chunker-get-end cnk) src2)))
+                    (if (>= i2 end2)
+                      (lp ((chunker-get-next cnk) src2))
+                      (if (char=? sre (string-ref str2 i2))
+                        (next cnk init src2 str2 (+ i2 1) end2
+                              matches fail)
+                        (fail))))
+                  (fail)))
+              (if (char=? sre (string-ref str i))
+                (next cnk init src str (+ i 1) end matches fail)
+                (fail))))
+          ))
        ((string? sre)
         (rec (sre-sequence (string->list sre)))
         ;; XXXX reintroduce faster string matching on chunks
@@ -3199,18 +3199,18 @@
   (define (sre-cset->procedure cset next)
     (lambda (cnk init src str i end matches fail)
       (if (< i end)
-          (if (cset-contains? cset (string-ref str i))
-              (next cnk init src str (+ i 1) end matches fail)
-              (fail))
-          (let ((src2 ((chunker-get-next cnk) src)))
-            (if src2
-                (let ((str2 ((chunker-get-str cnk) src2))
-                      (i2 ((chunker-get-start cnk) src2))
-                      (end2 ((chunker-get-end cnk) src2)))
-                  (if (cset-contains? cset (string-ref str2 i2))
-                      (next cnk init src2 str2 (+ i2 1) end2 matches fail)
-                      (fail)))
-                (fail))))))
+        (if (cset-contains? cset (string-ref str i))
+          (next cnk init src str (+ i 1) end matches fail)
+          (fail))
+        (let ((src2 ((chunker-get-next cnk) src)))
+          (if src2
+            (let ((str2 ((chunker-get-str cnk) src2))
+                  (i2 ((chunker-get-start cnk) src2))
+                  (end2 ((chunker-get-end cnk) src2)))
+              (if (cset-contains? cset (string-ref str2 i2))
+                (next cnk init src2 str2 (+ i2 1) end2 matches fail)
+                (fail)))
+            (fail))))))
 
   (define (make-cset) (vector))
   (define (range->cset from to) (vector (cons from to)))
@@ -3219,8 +3219,8 @@
   (define (maybe-cset->char cs)
     (if (and (= (vector-length cs) 1)
              (char=? (car (vector-ref cs 0)) (cdr (vector-ref cs 0))))
-        (car (vector-ref cs 0))
-        cs))
+      (car (vector-ref cs 0))
+      cs))
 
   ;; Since csets are sorted, there's only one possible representation of any cset
   (define cset=? equal?)
@@ -3229,24 +3229,24 @@
     (let ((len (vector-length cs)))
       (let lp ((i 0) (size 0))
         (if (= i len)
-            size
-            (lp (+ i 1) (+ size 1
-                           (- (char->integer (cdr (vector-ref cs i)))
-                              (char->integer (car (vector-ref cs i))))))))))
+          size
+          (lp (+ i 1) (+ size 1
+                         (- (char->integer (cdr (vector-ref cs i)))
+                            (char->integer (car (vector-ref cs i))))))))))
 
   (define (cset->plist cs)
     (let lp ((i (- (vector-length cs) 1))
              (res '()))
       (if (= i -1)
-          res
-          (lp (- i 1) (cons (car (vector-ref cs i))
-                            (cons (cdr (vector-ref cs i)) res))))))
+        res
+        (lp (- i 1) (cons (car (vector-ref cs i))
+                          (cons (cdr (vector-ref cs i)) res))))))
 
   (define (plist->cset ls)
     (let lp ((ls ls) (res (make-cset)))
       (if (null? ls)
-          res
-          (lp (cddr ls) (cset-union (range->cset (car ls) (cadr ls)) res)))))
+        res
+        (lp (cddr ls) (cset-union (range->cset (car ls) (cadr ls)) res)))))
 
   (define (string->cset s)
     (fold (lambda (ch cs)
@@ -3260,41 +3260,41 @@
       (cond
        ((pair? sre)
         (if (string? (car sre))
-            (if ci?
-                (cset-case-insensitive (string->cset (car sre)))
-                (string->cset (car sre)))
-            (case (car sre)
-              ((~)
-               (cset-complement
-                (fold cset-union (rec (cadr sre)) (map rec (cddr sre)))))
-              ((&)
-               (fold cset-intersection (rec (cadr sre)) (map rec (cddr sre))))
-              ((-)
-               (fold (lambda (x res) (cset-difference res x))
-                     (rec (cadr sre))
-                     (map rec (cddr sre))))
-              ((/)
-               (let ((res (plist->cset (sre-flatten-ranges (cdr sre)))))
-                 (if ci?
-                     (cset-case-insensitive res)
-                     res)))
-              ((or)
-               (fold cset-union (rec (cadr sre)) (map rec (cddr sre))))
-              ((w/case)
-               (lp (sre-alternate (cdr sre)) #f))
-              ((w/nocase)
-               (lp (sre-alternate (cdr sre)) #t))
-              (else
-               (error "not a valid sre char-set operator" sre)))))
+          (if ci?
+            (cset-case-insensitive (string->cset (car sre)))
+            (string->cset (car sre)))
+          (case (car sre)
+            ((~)
+             (cset-complement
+              (fold cset-union (rec (cadr sre)) (map rec (cddr sre)))))
+            ((&)
+             (fold cset-intersection (rec (cadr sre)) (map rec (cddr sre))))
+            ((-)
+             (fold (lambda (x res) (cset-difference res x))
+                   (rec (cadr sre))
+                   (map rec (cddr sre))))
+            ((/)
+             (let ((res (plist->cset (sre-flatten-ranges (cdr sre)))))
+               (if ci?
+                 (cset-case-insensitive res)
+                 res)))
+            ((or)
+             (fold cset-union (rec (cadr sre)) (map rec (cddr sre))))
+            ((w/case)
+             (lp (sre-alternate (cdr sre)) #f))
+            ((w/nocase)
+             (lp (sre-alternate (cdr sre)) #t))
+            (else
+             (error "not a valid sre char-set operator" sre)))))
        ((char? sre) (if ci?
-                        (cset-case-insensitive (range->cset sre sre))
-                        (range->cset sre sre)))
+                      (cset-case-insensitive (range->cset sre sre))
+                      (range->cset sre sre)))
        ((string? sre) (rec (list sre)))
        (else
         (let ((cell (assq sre sre-named-definitions)))
           (if cell
-              (rec (cdr cell))
-              (error "not a valid sre char-set" sre)))))))
+            (rec (cdr cell))
+            (error "not a valid sre char-set" sre)))))))
 
   (define (cset->sre cset)
     (sre-alternate
@@ -3348,8 +3348,8 @@
 
   (define (char-idx obj)
     (if (char? obj)
-        (char->integer obj)
-        obj))
+      (char->integer obj)
+      obj))
   (define (i/char<? x y)
     (< (char-idx x)
        (char-idx y)))
@@ -3407,22 +3407,22 @@
                     (b (vector->list b))
                     (res '()))
       (if (or (null? a) (null? b))
-          (list->vector (reverse res))
-          (let ((a-range (car a))
-                (b-range (car b)))
-            (cond
-             ((char<? (cdr a-range) (car b-range))
-              (intersect (cdr a) b res))
-             ((char>? (car a-range) (cdr b-range))
-              (intersect a (cdr b) res))
-             (else
-              (let ((result (cons (max-char (car b-range) (car a-range))
-                                  (min-char (cdr a-range) (cdr b-range)))))
-                (intersect (if (char>? (cdr a-range) (cdr result))
-                               a (cdr a))
-                           (if (char>? (cdr b-range) (cdr result))
-                               b (cdr b))
-                           (cons result res)))))))))
+        (list->vector (reverse res))
+        (let ((a-range (car a))
+              (b-range (car b)))
+          (cond
+           ((char<? (cdr a-range) (car b-range))
+            (intersect (cdr a) b res))
+           ((char>? (car a-range) (cdr b-range))
+            (intersect a (cdr b) res))
+           (else
+            (let ((result (cons (max-char (car b-range) (car a-range))
+                                (min-char (cdr a-range) (cdr b-range)))))
+              (intersect (if (char>? (cdr a-range) (cdr result))
+                           a (cdr a))
+                         (if (char>? (cdr b-range) (cdr result))
+                           b (cdr b))
+                         (cons result res)))))))))
 
   (define (cset-complement a)
     (cset-difference (sre->cset *all-chars*) a))
@@ -3454,28 +3454,28 @@
            (finish (or (and (pair? o) (car o)) (lambda (i acc) acc)))
            (start (if (and (pair? o) (pair? (cdr o))) (cadr o) 0))
            (end (if (and (pair? o) (pair? (cdr o)) (pair? (cddr o)))
-                    (caddr o)
-                    (string-length str))))
+                  (caddr o)
+                  (string-length str))))
       (if (not (and (integer? start) (exact? start)))
-          (error "irregex-fold: not an exact integer" start))
+        (error "irregex-fold: not an exact integer" start))
       (if (not (and (integer? end) (exact? end)))
-          (error "irregex-fold: not an exact integer" end))
+        (error "irregex-fold: not an exact integer" end))
       (irregex-match-chunker-set! matches irregex-basic-string-chunker)
       (let lp ((i start) (acc knil))
         (if (>= i end)
-            (finish i acc)
-            (let ((m (irregex-search/matches
-                      irx
-                      irregex-basic-string-chunker
-                      (list str i end)
-                      i
-                      matches)))
-              (if (not m)
-                  (finish i acc)
-                  (let* ((end (%irregex-match-end-index m 0))
-                         (acc (kons i m acc)))
-                    (irregex-reset-matches! matches)
-                    (lp end acc))))))))
+          (finish i acc)
+          (let ((m (irregex-search/matches
+                    irx
+                    irregex-basic-string-chunker
+                    (list str i end)
+                    i
+                    matches)))
+            (if (not m)
+              (finish i acc)
+              (let* ((end (%irregex-match-end-index m 0))
+                     (acc (kons i m acc)))
+                (irregex-reset-matches! matches)
+                (lp end acc))))))))
 
   (define (irregex-fold irx kons . args)
     (if (not (procedure? kons)) (error "irregex-fold: not a procedure" kons))
@@ -3487,21 +3487,21 @@
            (matches (irregex-new-matches irx))
            (finish (or (and (pair? o) (car o)) (lambda (src i acc) acc)))
            (i (if (and (pair? o) (pair? (cdr o)))
-                  (cadr o)
-                  ((chunker-get-start cnk) start))))
+                (cadr o)
+                ((chunker-get-start cnk) start))))
       (if (not (integer? i)) (error "irregex-fold/chunked: not an integer" i))
       (irregex-match-chunker-set! matches cnk)
       (let lp ((start start) (i i) (acc knil))
         (if (not start)
-            (finish start i acc)
-            (let ((m (irregex-search/matches irx cnk start i matches)))
-              (if (not m)
-                  (finish start i acc)
-                  (let* ((acc (kons start i m acc))
-                         (end-src (%irregex-match-end-chunk m 0))
-                         (end-index (%irregex-match-end-index m 0)))
-                    (irregex-reset-matches! matches)
-                    (lp end-src end-index acc))))))))
+          (finish start i acc)
+          (let ((m (irregex-search/matches irx cnk start i matches)))
+            (if (not m)
+              (finish start i acc)
+              (let* ((acc (kons start i m acc))
+                     (end-src (%irregex-match-end-chunk m 0))
+                     (end-index (%irregex-match-end-index m 0)))
+                (irregex-reset-matches! matches)
+                (lp end-src end-index acc))))))))
 
   (define (irregex-fold/chunked irx kons . args)
     (if (not (procedure? kons)) (error "irregex-fold/chunked: not a procedure" kons))
@@ -3527,49 +3527,49 @@
        (let ((m-start (%irregex-match-start-index m 0)))
          (append (irregex-apply-match m o)
                  (if (>= i m-start)
-                     acc
-                     (cons (substring str i m-start) acc)))))
+                   acc
+                   (cons (substring str i m-start) acc)))))
      '()
      str
      (lambda (i acc)
        (let ((end (string-length str)))
          (string-cat-reverse (if (>= i end)
-                                 acc
-                                 (cons (substring str i end) acc)))))))
+                               acc
+                               (cons (substring str i end) acc)))))))
 
   (define (irregex-apply-match m ls)
     (let lp ((ls ls) (res '()))
       (if (null? ls)
-          res
-          (cond
-           ((integer? (car ls))
-            (lp (cdr ls)
-                (cons (or (irregex-match-substring m (car ls)) "") res)))
-           ((procedure? (car ls))
-            (lp (cdr ls) (cons ((car ls) m) res)))
-           ((symbol? (car ls))
-            (case (car ls)
-              ((pre)
+        res
+        (cond
+         ((integer? (car ls))
+          (lp (cdr ls)
+              (cons (or (irregex-match-substring m (car ls)) "") res)))
+         ((procedure? (car ls))
+          (lp (cdr ls) (cons ((car ls) m) res)))
+         ((symbol? (car ls))
+          (case (car ls)
+            ((pre)
+             (lp (cdr ls)
+                 (cons (substring (car (%irregex-match-start-chunk m 0))
+                                  0
+                                  (%irregex-match-start-index m 0))
+                       res)))
+            ((post)
+             (let ((str (car (%irregex-match-start-chunk m 0))))
                (lp (cdr ls)
-                   (cons (substring (car (%irregex-match-start-chunk m 0))
-                                    0
-                                    (%irregex-match-start-index m 0))
-                         res)))
-              ((post)
-               (let ((str (car (%irregex-match-start-chunk m 0))))
-                 (lp (cdr ls)
-                     (cons (substring str
-                                      (%irregex-match-end-index m 0)
-                                      (string-length str))
-                           res))))
+                   (cons (substring str
+                                    (%irregex-match-end-index m 0)
+                                    (string-length str))
+                         res))))
+            (else
+             (cond
+              ((assq (car ls) (irregex-match-names m))
+               => (lambda (x) (lp (cons (cdr x) (cdr ls)) res)))
               (else
-               (cond
-                ((assq (car ls) (irregex-match-names m))
-                 => (lambda (x) (lp (cons (cdr x) (cdr ls)) res)))
-                (else
-                 (error "unknown match replacement" (car ls)))))))
-           (else
-            (lp (cdr ls) (cons (car ls) res)))))))
+               (error "unknown match replacement" (car ls)))))))
+         (else
+          (lp (cdr ls) (cons (car ls) res)))))))
 
   (define (irregex-extract irx str . o)
     (if (not (string? str)) (error "irregex-extract: not a string" str))
@@ -3589,8 +3589,8 @@
        irx
        (lambda (i m a)
          (if (= i (%irregex-match-start-index m 0))
-             a
-             (cons (substring str i (%irregex-match-start-index m 0)) a)))
+           a
+           (cons (substring str i (%irregex-match-start-index m 0)) a)))
        '()
        str
        (lambda (i a)
