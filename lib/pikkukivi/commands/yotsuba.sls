@@ -4,7 +4,7 @@
       yotsuba)
   (import
     (rnrs)
-    (irregex)
+    (loitsu irregex)
     (only (srfi :1)
           delete-duplicates
           last)

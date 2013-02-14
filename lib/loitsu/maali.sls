@@ -9,7 +9,7 @@
           fold)
     (only (srfi :13)
           string-trim)
-    (irregex)
+    (loitsu irregex)
     (loitsu match)
     (loitsu maali colours)
     (loitsu maali rgb-colours))
@@ -20,19 +20,19 @@
       ;; receive three numbers and
       ;; return string like ";5;120"
       (if (if-gray-possible red green blue)
-          (string-append
-           ";5;"
-           (number->string
-            (+ 232
-               (exact (floor (/ (+ red green blue) 33))))))
+        (string-append
+         ";5;"
+         (number->string
+          (+ 232
+             (exact (floor (/ (+ red green blue) 33))))))
                                         ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
-          (string-append
-           ";5;"
-           (number->string
-            (+ 16
-               (* (exact (floor (* 6 (/ red 256)))) 36)
-               (* (exact (floor (* 6 (/ green 256)))) 6)
-               (* (exact (floor (* 6 (/ blue 256)))) 1))))))
+        (string-append
+         ";5;"
+         (number->string
+          (+ 16
+             (* (exact (floor (* 6 (/ red 256)))) 36)
+             (* (exact (floor (* 6 (/ green 256)))) 6)
+             (* (exact (floor (* 6 (/ blue 256)))) 1))))))
 
     (define (if-gray-possible red green blue)
       (let loop ((sep 42.5)
@@ -132,7 +132,7 @@
 
 
     (define (unpaint s)
-      (irregex-replace/all '(: "\x1B;[" (* (+ numeric ) ";" ) (+ numeric) "m") s "" ))
+      (irregex-replace/all '(: "\x1B;[" (* (+ numeric) ";" ) (+ numeric) "m") s "" ))
                                         ; "\[((\d)+\;)*(\d)+m"
                                         ; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
 
