@@ -70,6 +70,7 @@
     (loitsu control)
     (loitsu string)
     (loitsu irregex)
+    (loitsu lamb)
     (http)
     (only (mosh file)
           create-symbolic-link
@@ -112,12 +113,12 @@
     (define (make-directory* dir)
       (letrec ((rec (lambda (p)
                       (if (file-exists? p)
-                          (unless (file-directory? p)
-                                  (error "non-directory ~s is found while creating a directory ~s"))
-                          (let ((d (path-dirname p)))
-                            (rec d)
-                            (unless (equal? (path-basename p) ".") ; omit the last component in "/a/b/c/."
-                                    (%make-directory p)))))))
+                        (unless (file-directory? p)
+                                (error "non-directory ~s is found while creating a directory ~s"))
+                        (let ((d (path-dirname p)))
+                          (rec d)
+                          (unless (equal? (path-basename p) ".") ; omit the last component in "/a/b/c/."
+                                  (%make-directory p)))))))
         (rec (string-trim-right dir #\/))))
 
     (define (%make-directory dir)
@@ -146,7 +147,7 @@
       (cond
        ((file-directory? dir)
         (if (null? (directory-list2 dir))
-            #t #f))
+          #t #f))
        (else
         (error "not a directory"))))
 
@@ -194,16 +195,25 @@
         (close-input-port pin)
         (close-output-port pout)))
 
-    (define (find-file-in-paths file . args)
-      (let-optionals* args ((paths (string-split (get-environment-variable "PATH") #\:))
-                            (proc file-regular?))
-                      (any (lambda (f)
-                             (find (lambda (s) (and (equal? (path-basename s) file)
-                                                    (proc s)))
-                                   (if (file-exists? f)
-                                       (directory-list-rec f)
-                                       '())))
-                           paths)))
+
+    (define find-file-in-paths
+      (let ((find-helper (lambda (file paths proc)
+                           (any (lambda (f)
+                                  (find (lambda (s) (and (equal? (path-basename s) file)
+                                                         (proc s)))
+                                        (if (file-exists? f)
+                                          (directory-list-rec f)
+                                          '())))
+                                paths)))
+            (default-paths (string-split (get-environment-variable "PATH") #\:))
+            (default-proc file-regular?))
+        (^:
+         ((file)
+          (find-helper file default-paths default-proc))
+         ((file paths)
+          (find-helper file paths default-proc))
+         ((file paths proc)
+          (find-helper file paths proc)))))
 
 
     (define (string-is-url? s)
@@ -223,22 +233,22 @@
 
     (define (slurp-get url . file)
       (let ((ofile (if (null? file)
-                       #f (car file))))
+                     #f (car file))))
         (receive (body . rest)
                  (http-get->utf8 url)
                  (if ofile
-                     (call-with-port
-                      (open-file-output-port ofile)
-                      (lambda (out)
-                        (put-bytevector out body)))
-                     body))))
+                   (call-with-port
+                    (open-file-output-port ofile)
+                    (lambda (out)
+                      (put-bytevector out body)))
+                   body))))
 
     (define (spit file s)
       (if (not (file-exists? file))
-          (call-with-output-file
-              file
-            (lambda (out)
-              (display s out)))))
+        (call-with-output-file
+            file
+          (lambda (out)
+            (display s out)))))
 
     (define temporary-directory
       (make-parameter "/tmp"))

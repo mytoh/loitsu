@@ -40,22 +40,23 @@
 (check (path-absolute? "test/file") => #f)
 (check (path-absolute? "/test") => #t)
 
-; find-file-in-paths
+;; find-file-in-paths
 (check (find-file-in-paths "env") => "/usr/bin/env")
+(check (find-file-in-paths "env" '("/usr/local/bin" "/usr/bin")) => "/usr/bin/env")
+(check (find-file-in-paths "env" '("/usr/local/bin" "/usr/bin") file-executable?) => "/usr/bin/env")
 
 (check-report)
 
 
 
-; make-directory*
-; remove-directory*
-; remove-file
-; copy-file
-; directory-list2
-; directory-list/path
-; directory-list-rec
-; directory-empty?
-; file->string-list
-; file->sexp-list
-; home-directory
-
+;; make-directory*
+;; remove-directory*
+;; remove-file
+;; copy-file
+;; directory-list2
+;; directory-list/path
+;; directory-list-rec
+;; directory-empty?
+;; file->string-list
+;; file->sexp-list
+;; home-directory
