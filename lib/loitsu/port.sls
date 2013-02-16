@@ -1,14 +1,13 @@
 
 (library (loitsu port)
-  (export
-    port->list
-    port->sexp-list
-    port->string-list)
+    (export
+      port->list
+      port->sexp-list
+      port->string-list)
   (import
     (rnrs)
     (only (mosh)
-          read-line)  
-    )
+          read-line))
 
   (begin
 
@@ -26,4 +25,3 @@
             (cons l (loop res))))))
 
     ))
-

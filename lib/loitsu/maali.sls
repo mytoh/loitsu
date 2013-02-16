@@ -1,4 +1,3 @@
-
 (library (loitsu maali)
     (export paint
             unpaint
@@ -25,7 +24,7 @@
          (number->string
           (+ 232
              (exact (floor (/ (+ red green blue) 33))))))
-                                        ; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
+        ;; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
         (string-append
          ";5;"
          (number->string
@@ -40,7 +39,7 @@
         (cond
          ((or (< red (* sep cnt))
               (< green (* sep cnt))
-              (< blue  (* sep cnt)))
+              (< blue (* sep cnt)))
           (and (< red (* sep cnt))
                (< green (* sep cnt))
                (< blue (* sep))))
@@ -122,7 +121,7 @@
        ((null? rest) s)
        (else
         (string-append
-         (wrap (apply string-append  (make-colour rest)))
+         (wrap (apply string-append (make-colour rest)))
          s (reset)))))
 
     (define (pa x . rest)
@@ -133,7 +132,7 @@
 
     (define (unpaint s)
       (irregex-replace/all '(: "\x1B;[" (* (+ numeric) ";" ) (+ numeric) "m") s "" ))
-                                        ; "\[((\d)+\;)*(\d)+m"
-                                        ; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
+    ;; "\[((\d)+\;)*(\d)+m"
+    ;; (check (unpaint "\x1B;[38;5;39mJ-_-L\x1B;[0m") => "J-_-L")
 
     ))

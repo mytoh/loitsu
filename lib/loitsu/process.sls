@@ -1,9 +1,9 @@
 
 (library (loitsu process)
-  (export
-    process-output->string
-    run-command
-    with-cwd)
+    (export
+      process-output->string
+      run-command
+      with-cwd)
   (import
     (rnrs)
     (only (srfi :13 strings)
@@ -17,31 +17,30 @@
     (only (rnrs)
           transcoded-port make-transcoder
           utf-8-codec)
-    (loitsu string)
-    )
+    (loitsu string))
 
   (begin
 
-    ; (define (process-output->string cmd)
-    ;   (let-values (((cout status x) (call-process cmd)))
-    ;     cout))
+    ;; (define (process-output->string cmd)
+    ;;   (let-values (((cout status x) (call-process cmd)))
+    ;;     cout))
 
     (define (process-output->string cmd)
       (let ((commands (string-split cmd #\ )))
-      ;; get output as string
-      (let-values ([(in out) (pipe)])
-        (define (port->string p)
-          (let loop ([ret '()][c (read-char p)])
-            (if (eof-object? c)
-              (list->string (reverse ret))
-              (loop (cons c ret) (read-char p)))))
-        (let-values ([(pid cin cout cerr)
-                      (spawn (car commands) (cdr commands)  (list #f out out))])
-          (close-port out)
-          (let ((res (port->string (transcoded-port in (make-transcoder (utf-8-codec))))))
-            (close-port in)
-            (waitpid pid)
-            res)))))
+        ;; get output as string
+        (let-values ([(in out) (pipe)])
+          (define (port->string p)
+            (let loop ([ret '()][c (read-char p)])
+              (if (eof-object? c)
+                (list->string (reverse ret))
+                (loop (cons c ret) (read-char p)))))
+          (let-values ([(pid cin cout cerr)
+                        (spawn (car commands) (cdr commands)  (list #f out out))])
+            (close-port out)
+            (let ((res (port->string (transcoded-port in (make-transcoder (utf-8-codec))))))
+              (close-port in)
+              (waitpid pid)
+              res)))))
 
     (define-syntax with-cwd
       (syntax-rules ()
@@ -57,14 +56,14 @@
       (let ((command (string-join (map x->string lst))))
         (call-process command)))
 
-    ; (define (->string x)
-    ;   (if (string? x)
-    ;     x
-    ;     (x->string x)))
+    ;; (define (->string x)
+    ;;   (if (string? x)
+    ;;     x
+    ;;     (x->string x)))
 
-    ; (define (run-command lst)
-    ;   (let-values (((pid cin cout cerr)
-    ;                 (spawn (->string (car lst)) (map ->string (cdr lst)) '(#f #f #f))))
-    ;     (waitpid pid)))
+    ;; (define (run-command lst)
+    ;;   (let-values (((pid cin cout cerr)
+    ;;                 (spawn (->string (car lst)) (map ->string (cdr lst)) '(#f #f #f))))
+    ;;     (waitpid pid)))
 
     ))

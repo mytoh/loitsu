@@ -1,5 +1,3 @@
-
-
 (library (loitsu util)
     (export
       tap
@@ -50,7 +48,7 @@
     (define-syntax comment
       (syntax-rules ()
         ((_ x ...)
-         (values))))
+         (nothing))))
 
 
     (define-syntax compose
@@ -76,8 +74,8 @@
              (let loop ((ret (apply (car fs) args))
                         (fs (cdr fs)))
                (if (null? fs)
-                   ret
-                   (loop ((car fs) ret) (cdr fs)))))))))
+                 ret
+                 (loop ((car fs) ret) (cdr fs)))))))))
 
 
     (define-syntax partial
