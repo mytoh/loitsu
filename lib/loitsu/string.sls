@@ -23,11 +23,11 @@
 
     (define (x->string obj)
       (cond
-       ((string? obj) obj)
-       ((number? obj) (number->string obj))
-       ((symbol? obj) (symbol->string obj))
-       ((char?   obj) (string obj))
-       (else (format "~a" obj))))
+          ((string? obj) obj)
+        ((number? obj) (number->string obj))
+        ((symbol? obj) (symbol->string obj))
+        ((char?   obj) (string obj))
+        (else (format "~a" obj))))
 
     (define (str . rest)
       (string-join (map x->string rest)
@@ -41,8 +41,8 @@
          (irregex-replace/all "([a-z])([A-Z])" s
                               (lambda (m)
                                 (string-append (irregex-match-substring m 1)
-                                               " "
-                                               (irregex-match-substring m 2))))))
+                                  " "
+                                  (irregex-match-substring m 2))))))
        #\ ))
 
     (define (dash->space s)
@@ -57,7 +57,7 @@
       (string-join
        (map (lambda (word)
               (string-downcase word))
-            (split-words s))
+         (split-words s))
        "_"))
 
     (define (dasherize s)
@@ -65,19 +65,19 @@
       (string-join
        (map (lambda (word)
               (string-downcase word))
-            (split-words s))
+         (split-words s))
        "-"))
 
 
-    (define pluralize
-      (^: ((num singular)
-           (pluralize num singular #f))
-          ((num singular plural)
-           (string-append (number->string num) " "
-                          (if (= 1 num)
-                            singular
-                            (or plural
-                                (string-append singular "s")))))))
+    (define-case pluralize
+      ((num singular)
+       (pluralize num singular #f))
+      ((num singular plural)
+       (string-append (number->string num) " "
+                      (if (= 1 num)
+                        singular
+                        (or plural
+                          (string-append singular "s"))))))
 
 
 

@@ -7,10 +7,10 @@
     (silta write)
     (silta file)
     (loitsu irregex)
-    (only  (rnrs)
-           latin-1-codec
-           make-transcoder
-           bytevector->string)
+    (only (rnrs)
+          latin-1-codec
+          make-transcoder
+          bytevector->string)
     (only (srfi :1 lists)
           delete-duplicates
           last)
@@ -36,7 +36,7 @@
     (define (fetch uri)
       (let ((file (extract-file-name uri)))
         (unless (file-exists? file)
-                (surl uri file))))
+          (surl uri file))))
 
     (define (find-server board thread)
       (let ((get (lambda (s)
@@ -44,16 +44,16 @@
                                                                       board "/res/"
                                                                       thread ".htm")))))
                      (cond
-                      ((not (number? res)) #f)
-                      ((and (number? res)
-                            (zero? res))
-                       #f)
-                      (else s))))))
+                         ((not (number? res)) #f)
+                       ((and (number? res)
+                          (zero? res))
+                        #f)
+                       (else s))))))
         (match board
                ("b"
                 (or (get "jun")
-                    (get "may")
-                    (get "dec")))
+                  (get "may")
+                  (get "dec")))
                ("l" ;二次元壁紙
                 (get  "dat" ))
                ("k" ;壁紙
@@ -77,49 +77,48 @@
                               ,board "/src/" (+ (~ #\")))))
         (delete-duplicates
          (map (cut irregex-match-substring <> 0)
-              (irregex-fold image-regexp
-                            (lambda (i m s) (cons m s))
-                            '()
-                            (get-thread-html board thread))))))
+           (irregex-fold image-regexp
+                         (lambda (i m s) (cons m s))
+                         '()
+                         (get-thread-html board thread))))))
 
     (define (get-thread-html board thread)
       (surl->utf8 (make-url board thread)))
 
     (define (setup-path thread)
       (unless (file-exists? thread)
-              (make-directory* thread)))
+        (make-directory* thread)))
 
     (define (valid-thread-number? num)
       (number? (string->number num)))
 
     (define (futaba-get-one-thread board thread)
       (cond
-       ((and (not (member thread (deleted-thread)))
+          ((and (not (member thread (deleted-thread)))
              (valid-thread-number? thread))
-        (setup-path thread)
-        (cond
-         ((thread-exists? board thread)
-          (puts thread)
-          (let ((res (get-thread-html board thread)))
-            (unless (string=? "" res)
+           (setup-path thread)
+           (cond
+               ((thread-exists? board thread)
+                (puts thread)
+                (let ((res (get-thread-html board thread)))
+                  (unless (string=? "" res)
                     (with-cwd
                      thread
                      (map  fetch
-                           (get-image-url/thread board thread))))))
-         (else
-          (update-deleted-thread thread))))))
+                       (get-image-url/thread board thread))))))
+             (else
+                 (update-deleted-thread thread))))))
 
     (define (futaba-get-all-thread board)
       (let ((threads (directory-list2 (current-directory))))
         (for-each
-         (cut futaba-get-one-thread board <>)
-         threads)
+            (cut futaba-get-one-thread board <>)
+          threads)
         (puts (paint "-----------------------------" 29))))
 
-    (define futaba-get
-      (^:
-       ((board) (force-loop ((repeat futaba-get-all-thread) board)))
-       ((board thread) (futaba-get-one-thread board thread))))
+    (define-case futaba-get
+      ((board) (force-loop ((repeat futaba-get-all-thread) board)))
+      ((board thread) (futaba-get-one-thread board thread)))
 
     (define (repeat f)
       (lambda args
@@ -131,10 +130,10 @@
 
     (define (force-loop body)
       (guard (e (else
-                 (display "error, go back loop")
-                 (newline)
-                 (force-loop body)))
-             (body)))
+                    (display "error, go back loop")
+                  (newline)
+                  (force-loop body)))
+        (body)))
 
 
     (define deleted-thread

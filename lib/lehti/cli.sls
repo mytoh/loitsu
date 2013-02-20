@@ -1,6 +1,6 @@
 
 (library (lehti cli)
-  (export runner)
+    (export runner)
   (import
     (rnrs)
     (match)
@@ -16,6 +16,10 @@
         ("install"
          (install args))
         ("deinstall"
+         (deinstall args))
+        ("remove"
+         (deinstall args))
+        ("rm"
          (deinstall args))
         ("clean"
          (clean args))

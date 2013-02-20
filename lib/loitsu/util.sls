@@ -94,10 +94,9 @@
         ((_ x ...)
          (not (or x ...)))))
 
-    (define (complement f)
-      (^:
-       (() (not (f)))
-       ((x . zs) (not (apply f x zs)))))
+    (define-case (complement f)
+      (() (not (f)))
+      ((x . zs) (not (apply f x zs))))
 
     (define (fork f g)
       ;; www.t3x.org/s9fes/hof.scm.html

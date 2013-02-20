@@ -1,0 +1,14 @@
+#!/usr/bin/env mosh
+
+(import
+  (silta base)
+  (silta process-context)
+  (piha cli))
+
+(runner (command-line))
+
+;; vim:filetype=scheme
+
+;; Local Variables:
+;; mode: scheme
+;; End:

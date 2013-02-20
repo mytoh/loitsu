@@ -7,7 +7,8 @@
     (export
       ^.
       ^*
-      ^:)
+      ^:
+      define-case)
   (import
     (silta base)
     (silta case-lambda)
@@ -29,5 +30,12 @@
       (syntax-rules ()
         ((_ clause ...)
          (case-lambda clause ...))))
+
+    (define-syntax define-case
+      (syntax-rules ()
+        ((_ name clause ...)
+         (define name
+           (case-lambda
+            clause ...)))))
 
     ))

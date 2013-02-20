@@ -7,8 +7,7 @@
       box
       unbox)
   (import
-    (silta base)
-    )
+    (silta base))
 
   (begin
 
