@@ -8,7 +8,9 @@
       ^.
       ^*
       ^:
-      define-case)
+      define-case
+      define-match
+      define-match*)
   (import
     (silta base)
     (silta case-lambda)
@@ -37,5 +39,19 @@
          (define name
            (case-lambda
             clause ...)))))
+
+    (define-syntax define-match
+      (syntax-rules ()
+        ((_ name clause ...)
+         (define name
+           (match-lambda
+            clause  ...)))))
+
+    (define-syntax define-match*
+      (syntax-rules ()
+        ((_ name clause ...)
+         (define name
+           (match-lambda*
+            clause  ...)))))
 
     ))
