@@ -1,7 +1,6 @@
-
 (library (pikkukivi cli)
-  (export
-    runner)
+    (export
+      runner)
   (import
     (silta base)
     (loitsu cli)
@@ -22,6 +21,8 @@
          (futaba args))
         ("yotsuba"
          (yotsuba args))
+        ("pahvi"
+         (pahvi args))
         ("tosixel"
          (tosixel args))
         ("kuva"
