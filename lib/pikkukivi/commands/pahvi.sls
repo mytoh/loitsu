@@ -16,8 +16,8 @@
     (define (extract-file-name uri)
       (last (irregex-split "/" uri)))
 
-    (define (fetch uri)
-      (let ((file (extract-file-name uri)))
+    (define (fetch tag uri)
+      (let ((file (build-path tag (extract-file-name uri))))
         (unless (file-exists? file)
           (surl uri file))))
 
@@ -40,8 +40,6 @@
                         html))))
 
     (define (get-post-image-urls urls)
-      ;;     Size: <a href="/data/08c47da5bb38339428726de82894e5d6.jpg">2.39 MB</a>
-      ;; (2000x3500)
       (map
           (lambda (url)
             (let ((html (surl->utf8 url))
@@ -59,13 +57,15 @@
 
 
     (define (pahvi-get-tag tag)
+      (make-directory* tag)
       (let loop ((page 1))
            (let ((page-posts (get-posts-page tag page)))
              (cond
                  ((not (page-is-chicken? page-posts))
                   (display (string-append "getting page " (number->string page)))
                   (map
-                      fetch
+                      (lambda (url)
+                        (fetch tag url))
                     (get-post-image-urls (get-post-urls page-posts)))
                   (newline)
                   (loop (+ page 1)))))))
