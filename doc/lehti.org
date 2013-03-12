@@ -1,31 +1,28 @@
-
 *  lehti
-   
 ** commands
-   
 *** install
     install package
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti install napa
-#+END_SRC
+#+end_src
     
 *** deinstall
     deinstall package
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti deinstall napa
-#+END_SRC
+#+end_src
     
 *** reinstall
     reintall package
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti reinstall napa
-#+END_SRC
+#+end_src
     
 *** environment
     display current environment
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti environment
-#+END_SRC
+#+end_src
     
 *** specification
     display package information
@@ -46,21 +43,20 @@ lehti clean napa
     
 *** contents
     display package files
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti contents napa
-#+END_SRC
+#+end_src
     
 *** list
     display installed packages
-#+BEGIN_SRC shell
+#+begin_src shell
 lehti list
-#+END_SRC
+#+end_src
 
 ** spec file
-
 *** example lehspec file
 
-#+BEGIN_SRC scheme
+#+begin_src scheme
 (spec
   (name "napa")
   (description "git helper")
@@ -74,4 +70,5 @@ lehti list
           "lib/napa/hg.sls"
           "lib/napa/svn.sls"
            "napa.lehspec"  )))
-#+END_RC
+#+end_src
+    
