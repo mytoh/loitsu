@@ -2,11 +2,13 @@
     (export
       plist?
       pref
-      pappend
+      passoc
+      pdissoc
       pmap
       plist
       pkeys
       pvals
+      pfirst
       )
   (import
     (silta base)
@@ -15,7 +17,6 @@
     (loitsu lamb))
 
   (begin
-
     ;; internal functions
 
     (define (%check-plist lst)
@@ -41,7 +42,9 @@
 
     (define (pref lst key)
       (let ((found-pair (%find-key eq? key lst)))
-        (cadr found-pair)))
+        (if found-pair
+          (cadr found-pair)
+          #f)))
 
     (define (plist? lst)
       (cond
@@ -75,8 +78,40 @@
               (pvals (cddr lst))))))
 
 
-    (define (pappend lst key value)
-      (append lst (list key value)))
+    (define-case passoc
+      ((lst key value)
+       (letrec ((update (lambda (l k v)
+                          (cond
+                              ((null? l)
+                               '())
+                            ((equal? (car l) k)
+                             (append (list k v) (cddr l)))
+                            (else
+                                (append (pfirst l)
+                                  (update (cddr l) k v))))))
+                (found (pref lst key)))
+         (cond
+             (found
+              (if (equal? (plist key value) found)
+                lst
+                (update lst key value)))
+           (else
+               (append lst (list key value))))))
+      ((lst k v k2 v2)
+       (passoc (passoc lst k v) k2 v2))
+      ((lst k v . rest)
+       (apply passoc (passoc lst k v) rest)))
+
+    (define-case pdissoc
+      ((lst key)
+       (if (equal? (car lst) key)
+         (cddr lst)
+         (append (pfirst lst)
+           (pdissoc (cddr lst) key))))
+      ((lst k k2)
+       (pdissoc (pdissoc lst k) k2))
+      ((lst k . rest)
+       (apply pdissoc (pdissoc lst k) rest)))
 
     (define (pmap proc lst)
       (cond
@@ -87,6 +122,9 @@
               (append (list key (proc value))
                 (pmap proc (cddr lst)))))))
 
+
+    (define (pfirst lst)
+      (list (car lst) (cadr lst)))
 
 
     ))

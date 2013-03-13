@@ -1,8 +1,6 @@
-
-
 (library (lehti commands reinstall)
-  (export
-    reinstall)
+    (export
+      reinstall)
   (import
     (rnrs)
     (only (srfi :13)
@@ -20,11 +18,13 @@
         (display (string-join packages))
         (newline)
         (for-each
-          (lambda (p)
-            (cond
-              ((package-installed? p)
-               (deinstall-package p)
-               (install-package p))))
+            (lambda (p)
+              (cond
+                  ((package-installed? p)
+                   (deinstall-package p)
+                   (install-package p))
+                (else
+                    (install-package p))))
           packages))
       (ohei "finished"))
 
