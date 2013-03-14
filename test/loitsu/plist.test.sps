@@ -47,5 +47,17 @@
 (check (pmap (lambda (x) (* x x)) (plist ':a 1 ':b 2))
        => '(:a 1 :b 4))
 
+;; pfirst
+(check (pfirst pls1) => '(:a 1))
+
+;; psecond
+(check (psecond pls1) => '(:b 2))
+
+;; pthird
+(check (pthird (plist ':a 1 ':b 2 ':c 3)) => '(:c 3))
+
+;; prest
+(check (prest (plist ':a 1 ':b 2 ':c 3)) => '(:b 2 :c 3))
+
 
 (check-report)

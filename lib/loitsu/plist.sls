@@ -9,6 +9,11 @@
       pkeys
       pvals
       pfirst
+      psecond
+      pthird
+      prest
+      pcar
+      pcdr
       )
   (import
     (silta base)
@@ -122,9 +127,22 @@
               (append (list key (proc value))
                 (pmap proc (cddr lst)))))))
 
-
-    (define (pfirst lst)
+    (define (pcar lst)
       (list (car lst) (cadr lst)))
 
+    (define (pcdr lst)
+      (cddr lst))
+
+    (define (prest lst)
+      (pcdr lst))
+
+    (define (pfirst lst)
+      (pcar lst))
+
+    (define (psecond lst)
+      (pcar (prest lst)))
+
+    (define (pthird lst)
+      (pcar (prest (prest lst))))
 
     ))
