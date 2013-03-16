@@ -18,7 +18,7 @@
 (check (plist? pls1) => #t)
 
 ;; pref
-(check (pref pls1 ':a) => 1)
+(check (pref pls1 ':a) => '(:a 1))
 (check (pref pls1 ':c) => #f)
 
 ;; plist
@@ -26,6 +26,7 @@
 (check (plist ':a 1 ':b 2 ':c 3) => '(:a 1 :b 2 :c 3))
 
 ;; passoc
+(check (passoc pls1 ':a 1) => '(:a 1 :b 2))
 (check (passoc pls1 ':c 3) => '(:a 1 :b 2 :c 3))
 (check (passoc pls1 ':b 10) => '(:a 1 :b 10))
 (check (passoc pls1 ':c 3 ':d 4) => '(:a 1 :b 2 :c 3 :d 4))

@@ -17,6 +17,7 @@
       )
   (import
     (silta base)
+    (silta write)
     (only (srfi :13)
           string-ref)
     (loitsu lamb))
@@ -48,7 +49,7 @@
     (define (pref lst key)
       (let ((found-pair (%find-key eq? key lst)))
         (if found-pair
-          (cadr found-pair)
+          found-pair
           #f)))
 
     (define (plist? lst)
@@ -90,7 +91,7 @@
                               ((null? l)
                                '())
                             ((equal? (car l) k)
-                             (append (list k v) (cddr l)))
+                             (append (plist k v) (cddr l)))
                             (else
                                 (append (pfirst l)
                                   (update (cddr l) k v))))))
@@ -101,7 +102,7 @@
                 lst
                 (update lst key value)))
            (else
-               (append lst (list key value))))))
+               (append lst (plist key value))))))
       ((lst k v k2 v2)
        (passoc (passoc lst k v) k2 v2))
       ((lst k v . rest)
@@ -124,7 +125,7 @@
         (else
             (let ((key (car lst))
                   (value (cadr lst)))
-              (append (list key (proc value))
+              (append (plist key (proc value))
                 (pmap proc (cddr lst)))))))
 
     (define (pcar lst)
