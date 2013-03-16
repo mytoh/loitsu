@@ -5,6 +5,7 @@
     (silta write)
     (only (srfi :1 lists)
           last)
+    (srfi :39 parameters)
     (srfi :26 cut)
     (loitsu match)
     (loitsu file)
@@ -12,6 +13,12 @@
     (surl))
   (begin
 
+    (define *danbooru-base-url*
+      "http://danbooru.donmai.us")
+
+    (define supporting-extensions
+      (make-parameter
+          '("jpg" "jpeg" "png" "gif" "bmp" "swf")))
 
     (define (extract-file-name uri)
       (last (irregex-split "/" uri)))
@@ -21,9 +28,6 @@
         (unless (file-exists? file)
           (surl uri file))))
 
-
-    (define *danbooru-base-url*
-      "http://danbooru.donmai.us")
 
     (define (get-posts-page tag page)
       (surl->utf8 (string-append *danbooru-base-url* "/posts?" "page=" (number->string page) "&" "tags=" tag)))
@@ -43,7 +47,12 @@
       (map
           (lambda (url)
             (let ((html (surl->utf8 url))
-                  (image-regexp `(:  "Size: <a href=\"" ($ "/data/" (+ (or num alpha)) "." (or "jpg" "jpeg" "png" "gif")) "\">" )))
+                  (image-regexp `(: "Size: <a href=\""
+                                    ($ "/data/"
+                                       (+ (or num alpha))
+                                       "."
+                                       (or ,@(supporting-extensions)))
+                                    "\">" )))
               (string-append  *danbooru-base-url*
                 (irregex-match-substring
                  (irregex-search image-regexp html)
