@@ -5,21 +5,26 @@
       rassv
       )
   (import
-    (rnrs)
+    (silta base)
+    (loitsu lamb)
     (loitsu control))
 
 
   (begin
 
-    (define (rassoc key alist . args)
-      (let-optionals* args ((eq-fn equal?))
-                      (let loop ((lst alist))
-                           (cond
-                               ((null? lst) #f)
-                             ((eq-fn key (cdr (car lst)))
-                              (car lst))
-                             (else
-                                 (loop (cdr lst)))))))
+    (define-case rassoc
+      ((key alist)
+       (rassoc key alist equal?))
+      ((key alist eq-fn)
+       (let loop ((lst alist))
+            (cond
+                ((null? lst) #f)
+              ((eq-fn key (cdr (car lst)))
+               (car lst))
+              (else
+                  (loop (cdr lst)))))))
+
+
 
     (define (rassq key alist)
       (rassoc key alist eq?))
