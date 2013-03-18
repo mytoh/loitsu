@@ -17,7 +17,6 @@
       )
   (import
     (silta base)
-    (silta write)
     (only (srfi :13)
           string-ref)
     (loitsu lamb))
