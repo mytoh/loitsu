@@ -3,7 +3,9 @@
             unpaint
             pa)
   (import
-    (rnrs)
+    (silta base)
+    (silta write)
+    (silta cxr)
     (only (srfi :1)
           fold)
     (only (srfi :13)
@@ -15,38 +17,42 @@
 
   (begin
 
+
+    (define (floor-exact n)
+      (exact (floor n)))
+
     (define (rgb-value red green blue)
       ;; receive three numbers and
       ;; return string like ";5;120"
       (if (if-gray-possible red green blue)
         (string-append
-         ";5;"
-         (number->string
-          (+ 232
-             (exact (floor (/ (+ red green blue) 33))))))
+            ";5;"
+          (number->string
+              (+ 232
+                (exact (floor (/ (+ red green blue) 33))))))
         ;; ";5;#{ 232 + ((red.to_f + green.to_f + blue.to_f)/33).round }"
         (string-append
-         ";5;"
-         (number->string
-          (+ 16
-             (* (exact (floor (* 6 (/ red 256)))) 36)
-             (* (exact (floor (* 6 (/ green 256)))) 6)
-             (* (exact (floor (* 6 (/ blue 256)))) 1))))))
+            ";5;"
+          (number->string
+              (+ 16
+                (* (floor-exact (* 6 (/ red 256))) 36)
+                (* (floor-exact (* 6 (/ green 256))) 6)
+                (* (floor-exact (* 6 (/ blue 256))) 1))))))
 
     (define (if-gray-possible red green blue)
       (let loop ((sep 42.5)
                  (cnt 1))
-        (cond
-         ((or (< red (* sep cnt))
-              (< green (* sep cnt))
-              (< blue (* sep cnt)))
-          (and (< red (* sep cnt))
-               (< green (* sep cnt))
-               (< blue (* sep))))
-         ((< cnt 6)
-          (loop sep (+ cnt 1)))
-         ((< 6 cnt)
-          #t))))
+           (cond
+               ((or (< red (* sep cnt))
+                  (< green (* sep cnt))
+                  (< blue (* sep cnt)))
+                (and (< red (* sep cnt))
+                  (< green (* sep cnt))
+                  (< blue (* sep))))
+             ((< cnt 6)
+              (loop sep (+ cnt 1)))
+             ((< 6 cnt)
+              #t))))
 
 
     (define (escape s)
@@ -63,25 +69,25 @@
 
     (define (colour-rgb r g b)
       (string-append
-       "38"
-       (rgb-value r g b)))
+          "38"
+        (rgb-value r g b)))
 
     (define (colour-hex colour)
       (let ((s (string-trim colour #\#)))
         (cond
-         ((= (string-length s) 6)
-          (colour-rgb (string->number (substring s 0 2) 16)
-                      (string->number (substring s 2 4) 16)
-                      (string->number (substring s 4 6) 16)))
-         ((= (string-length s) 3)
-          (colour-hex (duplicate-string s))))))
+            ((= (string-length s) 6)
+             (colour-rgb (string->number (substring s 0 2) 16)
+                         (string->number (substring s 2 4) 16)
+                         (string->number (substring s 4 6) 16)))
+          ((= (string-length s) 3)
+           (colour-hex (duplicate-string s))))))
 
     (define (duplicate-string s)
       (list->string
-       (fold
-        (lambda (c r)
-          (append (list c c) r))
-        '() (string->list s))))
+          (fold
+              (lambda (c r)
+                (append (list c c) r))
+            '() (string->list s))))
 
 
     (define (symbol-colour-foreground lyst colour)
@@ -90,7 +96,7 @@
     (define (colour-symbol colour)
       (let ((c (symbol-colour-foreground ansi-colours-foreground colour)))
         (cond
-         (c c))))
+            (c c))))
 
     (define (colour-rgb-name name)
       (let* ((cols (cadr (assoc (string->symbol name) rgb-colours)))
@@ -102,27 +108,27 @@
     (define (make-colour lst)
       (map (lambda (str)
              (match str
-                    ((r g b)
-                     (colour-rgb r g b))
-                    ((? string? s)
-                     (cond
-                      ((irregex-match (irregex "^#?(?:[a-zA-Z0-9]{3}){1,2}$" ) s)
-                       (colour-hex s))
-                      (else
-                       (colour-rgb-name s))))
-                    ((? number? s)
-                     (colour-simple-number s))
-                    (colour
-                     (colour-symbol colour))))
-           lst))
+               ((r g b)
+                (colour-rgb r g b))
+               ((? string? s)
+                (cond
+                    ((irregex-match (irregex "^#?(?:[a-zA-Z0-9]{3}){1,2}$" ) s)
+                     (colour-hex s))
+                  (else
+                      (colour-rgb-name s))))
+               ((? number? s)
+                (colour-simple-number s))
+               (colour
+                (colour-symbol colour))))
+        lst))
 
     (define (paint s . rest)
       (cond
-       ((null? rest) s)
-       (else
-        (string-append
-         (wrap (apply string-append (make-colour rest)))
-         s (reset)))))
+          ((null? rest) s)
+        (else
+            (string-append
+                (wrap (apply string-append (make-colour rest)))
+              s (reset)))))
 
     (define (pa x . rest)
       (display (apply paint x rest))
