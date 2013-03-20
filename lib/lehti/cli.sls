@@ -62,6 +62,8 @@ commands:
               ("spec"
                (specification args))
               ("search"
-               (search args))))))
+               (search args))
+              ("projects"
+               (projects))))))
 
     ))

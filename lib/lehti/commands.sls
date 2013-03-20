@@ -13,7 +13,8 @@
       deinstall
       reinstall
       install
-      search)
+      search
+      projects)
   (import
     (lehti commands commands)
     (lehti commands clone)
@@ -29,4 +30,5 @@
     (lehti commands completion)
     (lehti commands install)
     (lehti commands search)
+    (lehti commands projects)
     ))
