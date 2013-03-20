@@ -1,9 +1,9 @@
-
 (library (lehti util)
-  (export
-    call-with-packages
-    package-installed?
-    )
+    (export
+      call-with-packages
+      package-installed?
+      print
+      )
   (import
     (rnrs)
     (lehti base)
@@ -18,7 +18,14 @@
 
     (define (call-with-packages package-list proc)
       (for-each
-        (lambda (p)
-          (proc p))
+          (lambda (p)
+            (proc p))
         package-list))
+
+    (define (print x)
+      (display x)
+      (newline))
+
+
+
     ))

@@ -33,7 +33,7 @@
              (display package)
              (newline))
           (else
-              (format "~a not found!" package)))))
+              (format #t "~a not found!" package)))))
 
     (define (search args)
       (cond

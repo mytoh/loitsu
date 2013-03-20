@@ -8,6 +8,7 @@
           remove)
     (lehti env)
     (lehti base)
+    (lehti util)
     )
 
   (begin
@@ -17,10 +18,6 @@
           (lambda (x)
             (equal? (string-ref x 0) #\.))
         lst))
-
-    (define (print x)
-      (display x)
-      (newline))
 
     (define (projects-list)
       (cond
