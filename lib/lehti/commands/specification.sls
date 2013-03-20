@@ -1,7 +1,6 @@
-
 (library (lehti commands specification)
-  (export
-    specification)
+    (export
+      specification)
   (import
     (rnrs)
     (srfi :48)
@@ -16,14 +15,16 @@
     (define (specification args)
       (let* ((package (caddr args))
              (lehspec (package->lehspec package)))
-        (format #t "name: ~a\ndescription: ~a\nfiles:\n~a\n"
+        (format #t "~a ~a\n~a ~a\n~a\n~a\n"
+                (paint "name:" 39)
                 (spec-name lehspec)
+                (paint "description:" 29)
                 (spec-description lehspec)
+                (paint "files:" 66)
                 (string-join
-                  (map (lambda (s)
-                         (string-append "  - " s))
-                       (spec-files lehspec))
+                    (map (lambda (s)
+                           (string-append "  - " s))
+                      (spec-files lehspec))
                   "\n"))))
 
     ))
-
