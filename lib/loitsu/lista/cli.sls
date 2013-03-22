@@ -1,11 +1,10 @@
-
 (library (loitsu lista cli)
     (export
       runner)
   (import
     (silta base)
     (silta file)
-    (match)
+    (loitsu match)
     (loitsu file)
     (loitsu lista))
 
@@ -18,6 +17,6 @@
         ("list"
          (list-file args))
         (else
-         (list-file args))))
+            (list-file args))))
 
     ))

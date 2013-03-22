@@ -1,17 +1,16 @@
-
 (library (loitsu combinator)
-  (export
-    S
-    K
-    I
-    B
-    C
-    W
-    somega
-    lomega
-    Y
-    Z
-    )
+    (export
+      S
+      K
+      I
+      B
+      C
+      W
+      o
+      O
+      Y
+      Z
+      )
   (import
     (rnrs)
     (loitsu util))
@@ -44,11 +43,11 @@
       (lambda (y)
         ((x y) y)))
 
-    (define (somega x)
+    (define (o x)
       (x x))
 
-    (define (lomega)
-      (somega somega))
+    (define (O)
+      (o o))
 
     (define (Y g)
       ((lambda (x) (g (x x)))
@@ -61,37 +60,38 @@
          (f (lambda (y) ((x x) y))))))
 
     (comment
-      (define (fact f)
-        (lambda (x)
-          (if (= x 0)
-            1
-            (* x (f (- x 1))))))
-      ((Z fact) 5)
-      120
+
+     (define (fact f)
+       (lambda (x)
+         (if (= x 0)
+           1
+           (* x (f (- x 1))))))
+     ((Z fact) 5)
+     120
 
 
-      ;; http://rosettacode.org/wiki/Y_combinator#Scheme
-      (define Y
+     ;; http://rosettacode.org/wiki/Y_combinator#Scheme
+     (define Y
+       (lambda (f)
+         ((lambda (x) (x x))
+          (lambda (g)
+            (f (lambda args (apply (g g) args)))))))
+
+     (define fac
+       (Y
         (lambda (f)
-          ((lambda (x) (x x))
-           (lambda (g)
-             (f (lambda args (apply (g g) args)))))))
+          (lambda (x)
+            (if (< x 2)
+              1
+              (* x (f (- x 1))))))))  ;
 
-      (define fac
-        (Y
-          (lambda (f)
-            (lambda (x)
-              (if (< x 2)
-                1
-                (* x (f (- x 1))))))))
-
-      (define fib
-        (Y
-          (lambda (f)
-            (lambda (x)
-              (if (< x 2)
-                x
-                (+ (f (- x 1)) (f (- x 2))))))))
-      )
+     (define fib
+       (Y
+        (lambda (f)
+          (lambda (x)
+            (if (< x 2)
+              x
+              (+ (f (- x 1)) (f (- x 2))))))))
+     )
 
     ))

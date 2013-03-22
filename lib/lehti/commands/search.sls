@@ -10,8 +10,7 @@
           string-ref)
     (srfi :48)
     (lehti env)
-    (lehti base)
-    )
+    (lehti base))
 
   (begin
 

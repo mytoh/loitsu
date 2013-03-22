@@ -22,6 +22,7 @@
     (loitsu lamb))
 
   (begin
+
     ;; internal functions
 
     (define (%check-plist lst)
@@ -43,7 +44,6 @@
             (%find-key proc key (cddr lst)))))
 
 
-    ;;;
 
     (define (pref lst key)
       (let ((found-pair (%find-key eq? key lst)))

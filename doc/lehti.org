@@ -1,7 +1,7 @@
 *  lehti
 ** commands
 *** install
-    install package
+  install package
 #+begin_src shell
 lehti install napa
 #+end_src
@@ -36,7 +36,7 @@ lehti specification napa
 lehti clean
 #+END_SRC
     
-    clean up package fiels
+    clean up package files
 #+BEGIN_SRC shell
 lehti clean napa
 #+END_SRC

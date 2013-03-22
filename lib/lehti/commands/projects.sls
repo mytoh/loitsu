@@ -27,7 +27,6 @@
              (print (paint "lehti projects" 44))
              (for-each print lst)))))
 
-
     (define (projects)
       (projects-list))
 

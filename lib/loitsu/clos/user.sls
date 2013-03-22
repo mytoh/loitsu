@@ -42,9 +42,9 @@
 
   (define-syntax define-class
     (syntax-rules ()
-      ((define-class ?name () ?slot-def ...)
+      ((_ ?name () ?slot-def ...)
        (define-class ?name (<object>) ?slot-def ...))
-      ((define-class ?name (?super ...) ?slot-def ...)
+      ((_ ?name (?super ...) ?slot-def ...)
        (define ?name
          (make <class>
            'definition-name '?name
@@ -53,7 +53,7 @@
 
   (define-syntax define-generic
     (syntax-rules ()
-      ((define-generic ?name)
+      ((_ ?name)
        (define ?name
          (make <generic>
            'definition-name '?name)))))
