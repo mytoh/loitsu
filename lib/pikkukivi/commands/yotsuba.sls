@@ -1,4 +1,3 @@
-
 (library (pikkukivi commands yotsuba)
     (export
       yotsuba)
@@ -22,7 +21,7 @@
     (loitsu process)
     (loitsu control)
     (loitsu cli)
-    (loitsu maali)
+    (maali)
     (loitsu util)
     (surl))
 
@@ -30,7 +29,7 @@
 
     (define (make-thread-url board thread)
       (string-append "http://boards.4chan.org/"
-                     board "/res/" thread))
+        board "/res/" thread))
 
     (define (get-html board thread)
       (surl->utf8 (make-thread-url board thread)))
@@ -42,11 +41,11 @@
                               (+ numeric)
                               "."
                               (or "jpg" "gif" "png")))
-            (match->url (lambda  (m)
+            (match->url (lambda (m)
                           (string-append "http:"
-                                         (irregex-match-substring m)))))
+                            (irregex-match-substring m)))))
         (delete-duplicates
-         (map match->url
+            (map match->url
               (irregex-fold image-regexp
                             (lambda (i m s) (cons m s))
                             '()
@@ -58,43 +57,43 @@
     (define (fetch uri)
       (let ((file (extract-file-name uri)))
         (unless (file-exists? file)
-                (surl uri file))))
+          (surl uri file))))
 
     (define (setup-path number)
       (unless (file-exists? number)
-              (make-directory* number)))
+        (make-directory* number)))
 
     (define (thread-exists? url)
       (not (equal? "" (surl url))))
 
     (define (yotsuba-get-one-thread board thread)
       (cond
-       ((thread-exists? (make-thread-url board thread))
-        (setup-path thread)
-        (display thread)
-        (let ((urls (parse-image-url (get-html board thread))))
-          (with-cwd thread
-                    (map fetch
+          ((thread-exists? (make-thread-url board thread))
+           (setup-path thread)
+           (display thread)
+           (let ((urls (parse-image-url (get-html board thread))))
+             (with-cwd thread
+                       (map fetch
                          urls)))
-        (newline))
-       (else
-        (display (string-append thread "'s gone"))
-        (newline))))
+           (newline))
+        (else
+            (display (string-append thread "'s gone"))
+          (newline))))
 
     (define (string-number? s)
       (string-every char-set:digit s))
 
     (define (yotsuba-get-all-thread board)
       (for-each (lambda (t) (yotsuba-get-one-thread board t))
-                (filter (lambda (d) (string-number? d)) (directory-list2 (current-directory)))))
+        (filter (lambda (d) (string-number? d)) (directory-list2 (current-directory)))))
 
 
     (define (repeat f . args)
       (let loop ()
-        (let ((wait (* (* 60 (* 6 1000)) 5)))
-          (apply f args)
-          (sleep 10000)
-          (loop))))
+           (let ((wait (* (* 60 (* 6 1000)) 5)))
+             (apply f args)
+             (sleep 10000)
+             (loop))))
 
     (define option-repeat
       (option
@@ -121,17 +120,17 @@
                             #f                             ; default value of all?
                             )
                  (cond
-                  (repeat?
-                   (match (cdr args)
-                          ((board)
-                           (repeat yotsuba-get-all-thread board))
-                          ((board thread)
-                           (repeat yotsuba-get-one-thread board thread))))
-                  (else
-                   (match args
-                          ((board)
-                           (yotsuba-get-all-thread board))
-                          ((board thread)
-                           (yotsuba-get-one-thread board thread))))))))
+                     (repeat?
+                      (match (cdr args)
+                        ((board)
+                         (repeat yotsuba-get-all-thread board))
+                        ((board thread)
+                         (repeat yotsuba-get-one-thread board thread))))
+                   (else
+                       (match args
+                         ((board)
+                          (yotsuba-get-all-thread board))
+                         ((board thread)
+                          (yotsuba-get-one-thread board thread))))))))
 
     ))

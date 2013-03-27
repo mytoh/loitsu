@@ -23,7 +23,7 @@
     (loitsu process)
     (loitsu control)
     (loitsu cli)
-    (loitsu maali)
+    (maali)
     (loitsu util)
     (surl))
 
