@@ -1,12 +1,10 @@
-
 (library (lehti commands update)
-  (export
-    update)
+    (export
+      update)
   (import
     (rnrs)
     (lehti env)
-    (lehti base)
-    )
+    (lehti base))
 
   (begin
 
@@ -14,5 +12,3 @@
       (set-current-directory! (*lehti-directory*))
       (run-command '(git pull)))
     ))
-
-

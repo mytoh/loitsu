@@ -1,4 +1,3 @@
-
 (library (loitsu lista)
     (export
       list-file
@@ -19,7 +18,7 @@
     (silta cxr)
     (loitsu process)
     (loitsu list)
-    (loitsu maali)
+    (maali)
     (loitsu control)
     (loitsu file))
 
@@ -27,44 +26,44 @@
 
     (define (print-files files)
       (for-each
-       (lambda (f)
-         (display f)
-         (newline))
-       files))
+          (lambda (f)
+            (display f)
+            (newline))
+        files))
 
     (define (make-file-name-long directory files)
       (map
-       (lambda (f)
-         (let ((path (build-path directory f)))
-           (cond
-            ((file-directory? path)
-             (compose-file-infos
-              path
-              (make-file-name-directory f)))
-            ((file-executable? path)
-             (compose-file-infos
-              path
-              (make-file-name-executable f)))
-            ((file-symbolic-link? path)
-             (compose-file-infos
-              path
-              (make-file-name-symlink f)))
-            (else
-             (compose-file-infos
-              path
-              f)))))
-       files))
+          (lambda (f)
+            (let ((path (build-path directory f)))
+              (cond
+                  ((file-directory? path)
+                   (compose-file-infos
+                    path
+                    (make-file-name-directory f)))
+                ((file-executable? path)
+                 (compose-file-infos
+                  path
+                  (make-file-name-executable f)))
+                ((file-symbolic-link? path)
+                 (compose-file-infos
+                  path
+                  (make-file-name-symlink f)))
+                (else
+                    (compose-file-infos
+                     path
+                     f)))))
+        files))
 
     (define (make-file-name directory file)
       (let ((path (build-path directory file)))
         (cond
-         ((file-directory? path)
-          (make-file-name-directory file))
-         ((file-executable? path)
-          (make-file-name-executable file))
-         ((file-symbolic-link? path)
-          (make-file-name-symlink file))
-         (else file))))
+            ((file-directory? path)
+             (make-file-name-directory file))
+          ((file-executable? path)
+           (make-file-name-executable file))
+          ((file-symbolic-link? path)
+           (make-file-name-symlink file))
+          (else file))))
 
     (define (make-file-name-mark colour mark)
       (lambda (f)
@@ -81,20 +80,20 @@
 
     (define (compose-file-infos path name)
       (let ((sep (paint "│" 239))
-            (sep2 (paint "├" 239 ))
+            (sep2 (paint "├" 239))
             (sep3 (paint "┤" 239)))
         (string-append
-         sep2
-         (file-info-perm path) sep3
-         (file-info-time path) sep
-         (file-info-size path) sep name)))
+            sep2
+          (file-info-perm path) sep3
+          (file-info-time path) sep
+          (file-info-size path) sep name)))
 
 
     (define (file-info-perm file)
       (let* ((no (paint "-" 0))
              (perm-or (lambda (proc name perm)
                         (if (proc name)
-                            perm no)))
+                          perm no)))
              (w (perm-or file-writable? file
                          (paint "w" 7)))
              (r (perm-or file-readable? file
@@ -106,32 +105,32 @@
     (define (file-info-size file)
       (let ((size (file-size-in-bytes file)))
         (cond
-         ((> size 1073741824)
-          (-> size (/ 1024) (/ 1024) (/ 1024)
-              truncate
-              number->string
-              (string-pad 4)
-              (string-append (paint "G" 129))))
-         ((> size 1048576)
-          (-> size
-              (/ 1024)
-              (/ 1024)
-              truncate
-              number->string
-              (string-pad 4)
-              (string-append (paint "M" 52))))
-         ((> size 1024)
-          (-> size
-              (/ 1024)
-              truncate
-              number->string
-              (string-pad 4)
-              (string-append (paint "K" 39))))
-         (else
-          (-> size
-              number->string
-              (string-pad 4)
-              (string-append (paint "B" 55)))))))
+            ((> size 1073741824)
+             (-> size (/ 1024) (/ 1024) (/ 1024)
+                 truncate
+                 number->string
+                 (string-pad 4)
+                 (string-append (paint "G" 129))))
+          ((> size 1048576)
+           (-> size
+               (/ 1024)
+               (/ 1024)
+               truncate
+               number->string
+               (string-pad 4)
+               (string-append (paint "M" 52))))
+          ((> size 1024)
+           (-> size
+               (/ 1024)
+               truncate
+               number->string
+               (string-pad 4)
+               (string-append (paint "K" 39))))
+          (else
+              (-> size
+                  number->string
+                  (string-pad 4)
+                  (string-append (paint "B" 55)))))))
 
 
     (define (file-info-time file)
@@ -144,18 +143,18 @@
              (day (* 30 24 60 60))
              (month (* 12 30 24 60 60)))
         (cond
-         ((< delta sec)
-          (format-time 'sec 3 delta))
-         ((< delta min)
-          (format-time 'min 15 delta))
-         ((< delta hour)
-          (format-time 'hour 9 delta))
-         ((< delta day)
-          (format-time 'day 4 delta))
-         ((< delta month)
-          (format-time 'month 14 delta))
-         (else
-          (format-time 'year 0 delta)))))
+            ((< delta sec)
+             (format-time 'sec 3 delta))
+          ((< delta min)
+           (format-time 'min 15 delta))
+          ((< delta hour)
+           (format-time 'hour 9 delta))
+          ((< delta day)
+           (format-time 'day 4 delta))
+          ((< delta month)
+           (format-time 'month 14 delta))
+          (else
+              (format-time 'year 0 delta)))))
 
     (define (format-time unit colour time)
       (case unit
@@ -166,10 +165,10 @@
         ('month (format #f "~a month" (paint (time->month time) colour)))
         ('year (format #f "~a ~a" (paint (time->year time) colour) (string-pad-right "year" 5)))))
 
-    (define (adjust-string s )
+    (define (adjust-string s)
       (if (> 10 (string->number s))
-          (string-pad s 2)
-          s))
+        (string-pad s 2)
+        s))
 
     (define (/. a b)
       (inexact (/ a b)))
@@ -190,7 +189,7 @@
 
     (define (time->day time)
       (adjust-string
-       (number->string (round->exact  (/. (/.  (/. time 60) 60) 24)))))
+       (number->string (round->exact (/. (/.  (/. time 60) 60) 24)))))
 
     (define (time->month time)
       (adjust-string
@@ -202,8 +201,8 @@
 
     (define (list-file args)
       (let* ((directory (if (null? (cddr args))
-                            (current-directory)
-                            (caddr args)))
+                          (current-directory)
+                          (caddr args)))
              (files (directory-list2 directory)))
         (put-columns make-file-name directory files)))
 
@@ -215,37 +214,37 @@
     (define (string-longest string-list)
       (fold (lambda (s r)
               (if (< r (string-length s))
-                  (string-length s)
-                  r))
-            0 string-list))
+                (string-length s)
+                r))
+        0 string-list))
 
     (define (remove-newline s)
       (if (equal? "\n" (string-take-right s 1))
-          (string-drop-right s 1)
-          s))
+        (string-drop-right s 1)
+        s))
 
     (define (put-columns colour-func directory items)
       (let* ((console-width (if (< 80 (string->number (remove-newline (process-output->string "tput cols" ))))
-                                80 (string->number (remove-newline (process-output->string "tput cols")))))
+                              80 (string->number (remove-newline (process-output->string "tput cols")))))
              (longest (string-longest items))
              (optimal-col-width (exact (floor (inexact (/ console-width (+ longest 2))))))
-             (cols (if (< 1 optimal-col-width ) optimal-col-width 1)))
+             (cols (if (< 1 optimal-col-width) optimal-col-width 1)))
         (let loop ((items items))
-          (cond
-           ((< (length items) cols)
-            (for-each
-             (lambda (s)
-               (display
-                (string-pad-right (colour-func directory  s) (+ longest 2))))
-             (take* items cols)))
-           (else
-            (for-each
-             (lambda (s)
-               (display
-                (string-pad-right (colour-func directory s) (+ longest 2))))
-             (take* items cols))
-            (newline)
-            (loop (drop* items cols))))))
+             (cond
+                 ((< (length items) cols)
+                  (for-each
+                      (lambda (s)
+                        (display
+                            (string-pad-right (colour-func directory  s) (+ longest 2))))
+                    (take* items cols)))
+               (else
+                   (for-each
+                       (lambda (s)
+                         (display
+                             (string-pad-right (colour-func directory s) (+ longest 2))))
+                     (take* items cols))
+                 (newline)
+                 (loop (drop* items cols))))))
       (newline))
 
     ))
