@@ -37,8 +37,6 @@ commands:
                (install args))
               ("deinstall"
                (deinstall args))
-              ("remove"
-               (deinstall args))
               ("rm"
                (deinstall args))
               ("clean"

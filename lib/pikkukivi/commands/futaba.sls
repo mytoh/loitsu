@@ -1,4 +1,3 @@
-
 (library (pikkukivi commands futaba)
     (export
       futaba)
@@ -6,7 +5,6 @@
     (silta base)
     (silta write)
     (silta file)
-    (loitsu irregex)
     (only (rnrs)
           latin-1-codec
           make-transcoder
@@ -18,6 +16,7 @@
     ;;    (srfi :39 parameters)
     (only (mosh concurrent)
           sleep)
+    (loitsu irregex)
     (loitsu match)
     (loitsu lamb)
     (loitsu file)
@@ -50,20 +49,20 @@
                         #f)
                        (else s))))))
         (match board
-               ("b"
-                (or (get "jun")
-                  (get "may")
-                  (get "dec")))
-               ("l" ;二次元壁紙
-                (get  "dat" ))
-               ("k" ;壁紙
-                (get "cgi"))
-               ("7" ;ゆり
-                (get "zip"))
-               ("40" ;東方
-                (get "may"))
-               ("id"
-                (get "may")))))
+          ("b"
+           (or (get "jun")
+             (get "may")
+             (get "dec")))
+          ("l" ;二次元壁紙
+           (get  "dat" ))
+          ("k" ;壁紙
+           (get "cgi"))
+          ("7" ;ゆり
+           (get "zip"))
+          ("40" ;東方
+           (get "may"))
+          ("id"
+           (get "may")))))
 
     (define (thread-exists? board thread)
       (find-server board thread))
@@ -76,11 +75,11 @@
       (let ((image-regexp `(: "http://" (+ alphabetic) ".2chan.net/" (+ alphabetic) "/"
                               ,board "/src/" (+ (~ #\")))))
         (delete-duplicates
-         (map (cut irregex-match-substring <> 0)
-           (irregex-fold image-regexp
-                         (lambda (i m s) (cons m s))
-                         '()
-                         (get-thread-html board thread))))))
+            (map (cut irregex-match-substring <> 0)
+              (irregex-fold image-regexp
+                            (lambda (i m s) (cons m s))
+                            '()
+                            (get-thread-html board thread))))))
 
     (define (get-thread-html board thread)
       (surl->utf8 (make-url board thread)))
@@ -122,11 +121,11 @@
 
     (define (repeat f)
       (lambda args
-        (let ((wait (* (* 60 (* 6 1000)) 5)))
+        (let ((wait (* (* 60 (* 6 1000)) 1)))
           (let loop ()
-            (apply f args)
-            (sleep wait)
-            (loop)))))
+               (apply f args)
+               (sleep wait)
+               (loop)))))
 
     (define (force-loop body)
       (guard (e (else
@@ -146,10 +145,10 @@
     (define (futaba args)
       (let ((args (cddr args)))
         (match args
-               ((board)
-                (futaba-get board))
-               ((board thread)
-                (futaba-get board thread)))))
+          ((board)
+           (futaba-get board))
+          ((board thread)
+           (futaba-get board thread)))))
 
 
     ))
