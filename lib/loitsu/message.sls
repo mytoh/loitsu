@@ -1,12 +1,11 @@
-
 (library (loitsu message)
-  (export
-    message
-    ohei)
+    (export
+      message
+      ohei)
   (import
     (rnrs)
     (loitsu string)
-    (loitsu maali))
+    (maali))
 
   (begin
 
@@ -15,7 +14,7 @@
         ((_ msg)
          (begin
            (message (string-append
-                      (paint ">" 181)
+                        (paint ">" 181)
                       (paint ">" 179)
                       (paint ">" 178))
                     msg 0)
