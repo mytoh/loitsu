@@ -1,4 +1,3 @@
-
 (library (loitsu file)
     (export
       make-directory*
@@ -71,26 +70,9 @@
     (loitsu string)
     (loitsu irregex)
     (loitsu lamb)
+    (loitsu file compat)
     (http)
-    (only (mosh file)
-          create-symbolic-link
-          file-symbolic-link?
-          file-regular?
-          delete-directory
-          directory-list
-          file-directory?
-          file-executable?
-          file-writable?
-          file-readable?
-          file->string
-          file-stat-mtime
-          file-stat-ctime
-          file-size-in-bytes
-          create-directory)
-    (only (mosh)
-          set-current-directory!
-          current-directory
-          read-line))
+    )
 
   (begin
 
@@ -114,84 +96,84 @@
       (letrec ((rec (lambda (p)
                       (if (file-exists? p)
                         (unless (file-directory? p)
-                                (error "non-directory ~s is found while creating a directory ~s"))
+                          (error "non-directory ~s is found while creating a directory ~s"))
                         (let ((d (path-dirname p)))
                           (rec d)
                           (unless (equal? (path-basename p) ".") ; omit the last component in "/a/b/c/."
-                                  (%make-directory p)))))))
+                            (%make-directory p)))))))
         (rec (string-trim-right dir #\/))))
 
     (define (%make-directory dir)
       (unless (or (equal? "." dir)
-                  (equal? ".." dir)
-                  (equal? "" dir))
-              (create-directory dir)))
+                (equal? ".." dir)
+                (equal? "" dir))
+        (create-directory dir)))
 
     ;; rm -rf
     (define (remove-directory* path)
       (cond
-       ((file-regular? path)
-        (remove-file path))
-       ((file-directory? path)
-        (cond
-         ((directory-empty? path)
-          (delete-directory path))
-         (else
-          (for-each
-           (lambda (f)
-             (remove-directory* f))
-           (directory-list/path path))
-          (remove-directory* path))))))
+          ((file-regular? path)
+           (remove-file path))
+        ((file-directory? path)
+         (cond
+             ((directory-empty? path)
+              (delete-directory path))
+           (else
+               (for-each
+                   (lambda (f)
+                     (remove-directory* f))
+                 (directory-list/path path))
+             (remove-directory* path))))))
 
     (define (directory-empty? dir)
       (cond
-       ((file-directory? dir)
-        (if (null? (directory-list2 dir))
-          #t #f))
-       (else
-        (error "not a directory"))))
+          ((file-directory? dir)
+           (if (null? (directory-list2 dir))
+             #t #f))
+        (else
+            (error "not a directory"))))
 
     (define (directory-list2 path)
       (remove
-       (lambda (s) (or (equal? "." s)
-                       (equal? ".." s)))
-       (directory-list path)))
+          (lambda (s) (or (equal? "." s)
+                        (equal? ".." s)))
+        (directory-list path)))
 
     (define (directory-list/path path)
       (map
-       (lambda (p) (build-path path p))
-       (directory-list2 path)))
+          (lambda (p) (build-path path p))
+        (directory-list2 path)))
 
     (define (directory-list-rec path)
       (let ((files (directory-list/path path)))
         (cond
-         ((null? files) '())
-         (else
-          (fold
-           (lambda (e res)
-             (cond
-              ((not (file-directory? e))
-               (cons e res))
-              ((file-directory? e)
-               (append (directory-list-rec e)
-                       res))))
-           '() files)))))
+            ((null? files) '())
+          (else
+              (fold
+                  (lambda (e res)
+                    (cond
+                        ((not (file-directory? e))
+                         (cons e res))
+                      ((file-directory? e)
+                       (append (directory-list-rec e)
+                         res))))
+                '() files)))))
 
     (define (remove-file path)
       (cond
-       ((or (file-regular? path)
-            (file-symbolic-link? path))
-        (delete-directory path))))
+          ((or (file-regular? path)
+             (file-symbolic-link? path))
+           (delete-directory path))))
 
     (define (copy-file src dest)
       (let ((pin (open-input-file src))
             (pout (open-output-file dest)))
-        (let loop  ((in pin))
-          (let ((l (read-char in)))
-            (unless (eof-object? l)
-                    (write-char l pout)
-                    (flush-output-port pout)
-                    (loop in))))
+        (let loop ((in pin))
+             (let ((l (read-char in)))
+               (unless (eof-object? l)
+                 (write-char l pout)
+                 (flush-output-port pout)
+                 (loop in))))
         (close-input-port pin)
         (close-output-port pout)))
 
@@ -200,11 +182,11 @@
       (let ((find-helper (lambda (file paths proc)
                            (any (lambda (f)
                                   (find (lambda (s) (and (equal? (path-basename s) file)
-                                                         (proc s)))
-                                        (if (file-exists? f)
-                                          (directory-list-rec f)
-                                          '())))
-                                paths)))
+                                                      (proc s)))
+                                    (if (file-exists? f)
+                                      (directory-list-rec f)
+                                      '())))
+                             paths)))
             (default-paths (string-split (get-environment-variable "PATH") #\:))
             (default-proc file-regular?))
         (^:
@@ -223,12 +205,12 @@
       (syntax-rules ()
         ((_ file)
          (cond
-          ((file-exists? file)
-           (file->string file))
-          ((string-is-url? file)
-           (slurp-get file))
-          (else
-           (error (quote file) "file not exists\n"))))))
+             ((file-exists? file)
+              (file->string file))
+           ((string-is-url? file)
+            (slurp-get file))
+           (else
+               (error (quote file) "file not exists\n"))))))
 
 
     (define (slurp-get url . file)
@@ -238,9 +220,9 @@
                  (http-get->utf8 url)
                  (if ofile
                    (call-with-port
-                    (open-file-output-port ofile)
-                    (lambda (out)
-                      (put-bytevector out body)))
+                       (open-file-output-port ofile)
+                     (lambda (out)
+                       (put-bytevector out body)))
                    body))))
 
     (define (spit file s)
