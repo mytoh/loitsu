@@ -1,7 +1,6 @@
-
 (library (lehti commands contents)
-  (export
-    contents)
+    (export
+      contents)
   (import
     (rnrs)
     (srfi :48)
@@ -15,8 +14,8 @@
       (let* ((package (caddr args))
              (lehspec (package->lehspec package)))
         (for-each
-          (lambda (p)
-            (format #t "~a\n" p))
-          (spec-files lehspec))))
+            (lambda (p)
+              (format #t "~a\n" p))
+          (spec.files lehspec))))
 
     ))

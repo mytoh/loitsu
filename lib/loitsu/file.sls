@@ -41,8 +41,7 @@
       current-directory
       create-directory
       delete-directory
-      file-size-in-bytes
-      )
+      file-size-in-bytes)
   (import
     (except (rnrs)
             remove
@@ -71,8 +70,7 @@
     (loitsu irregex)
     (loitsu lamb)
     (loitsu file compat)
-    (http)
-    )
+    (http))
 
   (begin
 
