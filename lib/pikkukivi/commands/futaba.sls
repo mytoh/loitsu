@@ -150,5 +150,4 @@
           ((board thread)
            (futaba-get board thread)))))
 
-
     ))
