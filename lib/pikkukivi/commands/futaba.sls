@@ -1,3 +1,5 @@
+;; * futaba
+
 (library (pikkukivi commands futaba)
     (export
       futaba)
@@ -43,7 +45,7 @@
                                                                       board "/res/"
                                                                       thread ".htm")))))
                      (cond
-                         ((not (number? res)) #f)
+                       ((not (number? res)) #f)
                        ((and (number? res)
                           (zero? res))
                         #f)
@@ -91,34 +93,6 @@
     (define (valid-thread-number? num)
       (number? (string->number num)))
 
-    (define (futaba-get-one-thread board thread)
-      (cond
-          ((and (not (member thread (deleted-thread)))
-             (valid-thread-number? thread))
-           (setup-path thread)
-           (cond
-               ((thread-exists? board thread)
-                (puts thread)
-                (let ((res (get-thread-html board thread)))
-                  (unless (string=? "" res)
-                    (with-cwd
-                     thread
-                     (map  fetch
-                       (get-image-url/thread board thread))))))
-             (else
-                 (update-deleted-thread thread))))))
-
-    (define (futaba-get-all-thread board)
-      (let ((threads (directory-list2 (current-directory))))
-        (for-each
-            (cut futaba-get-one-thread board <>)
-          threads)
-        (puts (paint "-----------------------------" 29))))
-
-    (define-case futaba-get
-      ((board) (force-loop ((repeat futaba-get-all-thread) board)))
-      ((board thread) (futaba-get-one-thread board thread)))
-
     (define (repeat f)
       (lambda args
         (let ((wait (* (* 60 (* 6 1000)) 1)))
@@ -142,6 +116,38 @@
       (if (not (memq thread (deleted-thread)))
         (deleted-thread (cons thread (deleted-thread)))))
 
+    ;; ** get
+
+    (define (futaba-get-one-thread board thread)
+      (cond
+        ((and (not (member thread (deleted-thread)))
+           (valid-thread-number? thread))
+         (setup-path thread)
+         (cond
+           ((thread-exists? board thread)
+            (puts thread)
+            (let ((res (get-thread-html board thread)))
+              (unless (string=? "" res)
+                (with-cwd
+                 thread
+                 (map  fetch
+                   (get-image-url/thread board thread))))))
+           (else
+               (update-deleted-thread thread))))))
+
+    (define (futaba-get-all-thread board)
+      (let ((threads (directory-list2 (current-directory))))
+        (for-each
+            (cut futaba-get-one-thread board <>)
+          threads)
+        (puts (paint "-----------------------------" 29))))
+
+    (define-case futaba-get
+      ((board) (force-loop ((repeat futaba-get-all-thread) board)))
+      ((board thread) (futaba-get-one-thread board thread)))
+
+
+    ;; ** main
     (define (futaba args)
       (let ((args (cddr args)))
         (match args
