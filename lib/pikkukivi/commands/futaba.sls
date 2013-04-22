@@ -1,5 +1,8 @@
-;; * futaba
+;;; futab.sls --- futaba image get script
 
+;;; Code:
+
+;;; library declare
 (library (pikkukivi commands futaba)
     (export
       futaba)
@@ -7,10 +10,6 @@
     (silta base)
     (silta write)
     (silta file)
-    (only (rnrs)
-          latin-1-codec
-          make-transcoder
-          bytevector->string)
     (only (srfi :1 lists)
           delete-duplicates
           last)
@@ -108,33 +107,32 @@
                   (force-loop body)))
         (body)))
 
-
-    (define deleted-thread
-      (make-parameter '(dummy)))
+    (define *deleted-thread*
+      (make-parameter '()))
 
     (define (update-deleted-thread thread)
-      (if (not (memq thread (deleted-thread)))
-        (deleted-thread (cons thread (deleted-thread)))))
+      (if (not (memq thread (*deleted-thread*)))
+        (*deleted-thread* (cons thread (*deleted-thread*)))))
 
-    ;; ** get
-
+    ;;; get functions
+    ;; get one thread
     (define (futaba-get-one-thread board thread)
       (cond
-        ((and (not (member thread (deleted-thread)))
+        ((and (not (member thread (*deleted-thread*)))
            (valid-thread-number? thread))
          (setup-path thread)
          (cond
            ((thread-exists? board thread)
-            (puts thread)
+            (puts (paint thread 173))
             (let ((res (get-thread-html board thread)))
               (unless (string=? "" res)
                 (with-cwd
                  thread
-                 (map  fetch
+                 (map fetch
                    (get-image-url/thread board thread))))))
            (else
                (update-deleted-thread thread))))))
-
+    ;;; all thread
     (define (futaba-get-all-thread board)
       (let ((threads (directory-list2 (current-directory))))
         (for-each
@@ -147,7 +145,7 @@
       ((board thread) (futaba-get-one-thread board thread)))
 
 
-    ;; ** main
+    ;;; main
     (define (futaba args)
       (let ((args (cddr args)))
         (match args

@@ -5,48 +5,48 @@
 #+begin_src shell
 lehti install napa
 #+end_src
-    
+
 *** deinstall
     deinstall package
 #+begin_src shell
 lehti deinstall napa
 #+end_src
-    
+
 *** reinstall
     reintall package
 #+begin_src shell
 lehti reinstall napa
 #+end_src
-    
+
 *** environment
     display current environment
 #+begin_src shell
 lehti environment
 #+end_src
-    
+
 *** specification
     display package information
 #+BEGIN_SRC shel
 lehti specification napa
 #+END_SRC
-    
+
 *** clean
     clean up files
 #+BEGIN_SRC shell
 lehti clean
 #+END_SRC
-    
+
     clean up package files
 #+BEGIN_SRC shell
 lehti clean napa
 #+END_SRC
-    
+
 *** contents
     display package files
 #+begin_src shell
 lehti contents napa
 #+end_src
-    
+
 *** list
     display installed packages
 #+begin_src shell
@@ -71,4 +71,3 @@ lehti list
           "lib/napa/svn.sls"
            "napa.lehspec"  )))
 #+end_src
-    
