@@ -5,6 +5,9 @@
     (silta write)
     (only (srfi :1 lists)
           last)
+    (only (srfi :13)
+          string-take
+          string-index)
     (srfi :39 parameters)
     (srfi :26 cut)
     (loitsu match)
@@ -20,11 +23,13 @@
       (make-parameter
           '("jpg" "jpeg" "png" "gif" "bmp" "swf")))
 
-    (define (extract-file-name uri)
-      (last (irregex-split "/" uri)))
+    (define (extract-file-name uri num)
+      (path-swap-extension num
+                           (path-extension (last (irregex-split "/" uri))))
+      )
 
-    (define (fetch tag uri)
-      (let ((file (build-path tag (extract-file-name uri))))
+    (define (fetch tag uri num)
+      (let ((file (build-path tag (extract-file-name uri num))))
         (unless (file-exists? file)
           (surl uri file))))
 
@@ -53,10 +58,13 @@
                                        "."
                                        (or ,@(supporting-extensions)))
                                     "\">" )))
-              (string-append  *danbooru-base-url*
-                (irregex-match-substring
-                 (irregex-search image-regexp html)
-                 1))))
+              (list
+                  url
+                (string-append  *danbooru-base-url*
+                  (irregex-match-substring
+                   (irregex-search image-regexp html)
+                   1)))
+              ))
         urls))
 
     (define (page-is-chicken? html)
@@ -64,20 +72,23 @@
                            html)
         #t #f))
 
+    (define (url->post-number url)
+      (let ((base (path-basename url)))
+        (string-take base (string-index base #\?))))
 
     (define (pahvi-get-tag tag)
       (make-directory* tag)
       (let loop ((page 1))
            (let ((page-posts (get-posts-page tag page)))
              (cond
-                 ((not (page-is-chicken? page-posts))
-                  (display (string-append "getting page " (number->string page)))
-                  (map
-                      (lambda (url)
-                        (fetch tag url))
-                    (get-post-image-urls (get-post-urls page-posts)))
-                  (newline)
-                  (loop (+ page 1)))))))
+               ((not (page-is-chicken? page-posts))
+                (display (string-append "getting page " (number->string page)))
+                (map
+                    (lambda (post)
+                      (fetch tag (cadr post) (url->post-number (car post))))
+                  (get-post-image-urls (get-post-urls page-posts)))
+                (newline)
+                (loop (+ page 1)))))))
 
 
     (define (pahvi args)
