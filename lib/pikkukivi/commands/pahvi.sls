@@ -19,14 +19,13 @@
     (define *danbooru-base-url*
       "http://danbooru.donmai.us")
 
-    (define supporting-extensions
+    (define supporting-image-types
       (make-parameter
           '("jpg" "jpeg" "png" "gif" "bmp" "swf")))
 
     (define (extract-file-name uri num)
       (path-swap-extension num
-                           (path-extension (last (irregex-split "/" uri))))
-      )
+                           (path-extension (last (irregex-split "/" uri)))))
 
     (define (fetch tag uri num)
       (let ((file (build-path tag (extract-file-name uri num))))
@@ -56,15 +55,14 @@
                                     ($ "/data/"
                                        (+ (or num alpha))
                                        "."
-                                       (or ,@(supporting-extensions)))
+                                       (or ,@(supporting-image-types)))
                                     "\">" )))
               (list
                   url
                 (string-append  *danbooru-base-url*
                   (irregex-match-substring
                    (irregex-search image-regexp html)
-                   1)))
-              ))
+                   1)))))
         urls))
 
     (define (page-is-chicken? html)
