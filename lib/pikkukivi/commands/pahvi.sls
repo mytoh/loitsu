@@ -39,9 +39,7 @@
     (define (get-post-urls html)
       ;; href="/posts/1284558?tags=piercing"
       (let ((image-regexp `(:  "/posts/" (+ num) "?tags=" (+ (~ #\")))))
-        (map
-            (lambda (m)
-              (string-append "http://danbooru.donmai.us" (irregex-match-substring m 0)))
+        (map (lambda (m) (string-append "http://danbooru.donmai.us" (irregex-match-substring m 0)))
           (irregex-fold image-regexp
                         (lambda (i m s) (cons m s))
                         '()
@@ -57,8 +55,7 @@
                                        "."
                                        (or ,@(supporting-image-types)))
                                     "\">" )))
-              (list
-                  url
+              (list url
                 (string-append  *danbooru-base-url*
                   (irregex-match-substring
                    (irregex-search image-regexp html)
@@ -81,9 +78,8 @@
              (cond
                ((not (page-is-chicken? page-posts))
                 (display (string-append "getting page " (number->string page)))
-                (map
-                    (lambda (post)
-                      (fetch tag (cadr post) (url->post-number (car post))))
+                (map (lambda (post)
+                       (fetch tag (cadr post) (url->post-number (car post))))
                   (get-post-image-urls (get-post-urls page-posts)))
                 (newline)
                 (loop (+ page 1)))))))
