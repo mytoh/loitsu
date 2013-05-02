@@ -3,12 +3,13 @@
     (export
       ->
       ->>
-      ->*
-      ->>*
-      -<
-      -<<
+      ;; ->*
+      ;; ->>*
+      ;; -<
+      ;; -<<
       -<>
-      -<>>)
+      ;; -<>>
+      )
   (import
     (silta base)
     (loitsu control)
@@ -34,68 +35,56 @@
         ((_ x proc expr ...)
          (->> (proc x) expr ...))))
 
-    (define-syntax ->*
-      (syntax-rules ()
-        ((_ x) x)
-        ((_ x (y z ...) rest ...)
-         (->* (receive args x
-                       (apply y (append args (list z ...))))
-              rest ...))))
+    ;;; diamond
 
-    (define-syntax ->>*
-      (syntax-rules ()
-        ((_ x) x)
-        ((_ x (y z ...) rest ...)
-         (->>* (receive args x
-                        (apply y (append (list z ...) args)))
-               rest ...))))
+    (define-syntax -<>-helper
+      (syntax-rules (<>)
+        ((_ () x (acc ...))
+         (acc ...))
+        ((_ (<> rest ...) x (acc ...))
+         (acc ... x rest ...))
+        ((_ (a rest ...) x (acc ...))
+         (-<>-helper (rest ...) x (acc ... a)))))
 
     (define-syntax -<>
       (syntax-rules ()
-        ((_ x form ...)
-         (let (('<> x))
-           (-> var form ...)))))
+        ((_ x) x)
+        ((_ x form rest ...)
+         (let ((r (-<>-helper form x ())))
+           (-<> r rest ...)))))
 
-    (define-syntax diamond?
-      (syntax-rules ()
-        ((_ form)
-         (member '<> 'form))))
+    (define-syntax -<>>-helper
+      (syntax-rules (<>)
+        ((_ () x (acc ...))
+         (acc ... x))
+        ((_ (<> rest ...) x (acc ...))
+         (acc ... x rest ...))
+        ((_ (a rest ...) x (acc ...))
+         (-<>>-helper (rest ...) x (acc ... a)))))
 
     (define-syntax -<>>
-      ;; (-<>> <> 3 (+ 3) (* 99))
       (syntax-rules ()
-        ((_ var x form ...)
-         (let ((var x))
-           (->> var form ...)))))
-
-    (define-syntax -<
-      (syntax-rules ()
-        ((_ form branch)
-         (let ((result form))
-           (list (-> result branch))))
-        ((_ form branch ...)
-         (let ((result form))
-           (list (-> result branch)
-             ...)))))
-
-    (define-syntax -<<
-      (syntax-rules ()
-        ((_ form branch)
-         (let ((result form))
-           (list (->> result branch))))
-        ((_ form branch ...)
-         (let ((result form))
-           (list (->> result branch)
-             ...)))))
+        ((_ x) x)
+        ((_ x form rest ...)
+         (let ((r (-<>>-helper form x ())))
+           (-<>> r rest ...)))))
 
 
-    (define-syntax -<><
+
+    ;;; http://practical-scheme.net/wiliki/wiliki.cgi?Gauche%3aClojure%3a->%2c->>
+    (define-syntax =*>-helper
+      (syntax-rules (<*>)
+        ((_ () x (acc ...))
+         (acc ...))
+        ((_ (<*> rest ...) x (acc ...))
+         (acc ... x rest ...))
+        ((_ (a rest ...) x (acc ...))
+         (=*>-helper (rest ...) x (acc ... a)))))
+
+    (define-syntax =*>
       (syntax-rules ()
-        ((_ form branch)
-         (let ((result form))
-           (list (-<> <> result branch))))
-        ((_ form branch ...)
-         (let ((result form))
-           (list (-<> <> result branch)
-             ...)))))
+        ((_ x) x)
+        ((_ x form rest ...)
+         (let ((r (=*>-helper form x ())))
+           (=*> r rest ...)))))
     ))
