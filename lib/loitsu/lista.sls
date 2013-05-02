@@ -19,7 +19,7 @@
     (loitsu process)
     (loitsu list)
     (maali)
-    (loitsu control)
+    (loitsu arrows)
     (loitsu file))
 
   (begin
@@ -36,10 +36,10 @@
           (lambda (f)
             (let ((path (build-path directory f)))
               (cond
-                  ((file-directory? path)
-                   (compose-file-infos
-                    path
-                    (make-file-name-directory f)))
+                ((file-directory? path)
+                 (compose-file-infos
+                  path
+                  (make-file-name-directory f)))
                 ((file-executable? path)
                  (compose-file-infos
                   path
@@ -57,8 +57,8 @@
     (define (make-file-name directory file)
       (let ((path (build-path directory file)))
         (cond
-            ((file-directory? path)
-             (make-file-name-directory file))
+          ((file-directory? path)
+           (make-file-name-directory file))
           ((file-executable? path)
            (make-file-name-executable file))
           ((file-symbolic-link? path)
@@ -105,12 +105,12 @@
     (define (file-info-size file)
       (let ((size (file-size-in-bytes file)))
         (cond
-            ((> size 1073741824)
-             (-> size (/ 1024) (/ 1024) (/ 1024)
-                 truncate
-                 number->string
-                 (string-pad 4)
-                 (string-append (paint "G" 129))))
+          ((> size 1073741824)
+           (-> size (/ 1024) (/ 1024) (/ 1024)
+               truncate
+               number->string
+               (string-pad 4)
+               (string-append (paint "G" 129))))
           ((> size 1048576)
            (-> size
                (/ 1024)
@@ -143,8 +143,8 @@
              (day (* 30 24 60 60))
              (month (* 12 30 24 60 60)))
         (cond
-            ((< delta sec)
-             (format-time 'sec 3 delta))
+          ((< delta sec)
+           (format-time 'sec 3 delta))
           ((< delta min)
            (format-time 'min 15 delta))
           ((< delta hour)
@@ -231,12 +231,12 @@
              (cols (if (< 1 optimal-col-width) optimal-col-width 1)))
         (let loop ((items items))
              (cond
-                 ((< (length items) cols)
-                  (for-each
-                      (lambda (s)
-                        (display
-                            (string-pad-right (colour-func directory  s) (+ longest 2))))
-                    (take* items cols)))
+               ((< (length items) cols)
+                (for-each
+                    (lambda (s)
+                      (display
+                          (string-pad-right (colour-func directory  s) (+ longest 2))))
+                  (take* items cols)))
                (else
                    (for-each
                        (lambda (s)
