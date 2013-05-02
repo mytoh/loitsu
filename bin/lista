@@ -1,4 +1,4 @@
-#!/usr/bin/env nmosh
+#!/usr/bin/env mosh
 
 (import
   (silta base)
