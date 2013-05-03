@@ -8,7 +8,7 @@
       ;; -<
       ;; -<<
       -<>
-      ;; -<>>
+      -<>>
       )
   (import
     (silta base)
@@ -40,7 +40,7 @@
     (define-syntax -<>-helper
       (syntax-rules (<>)
         ((_ () x (acc ...))
-         (acc ...))
+         (-> x (acc ...))) ; (acc ...)
         ((_ (<> rest ...) x (acc ...))
          (acc ... x rest ...))
         ((_ (a rest ...) x (acc ...))
@@ -56,7 +56,7 @@
     (define-syntax -<>>-helper
       (syntax-rules (<>)
         ((_ () x (acc ...))
-         (acc ... x))
+         (->> x (acc ... ))) ; (acc ...)
         ((_ (<> rest ...) x (acc ...))
          (acc ... x rest ...))
         ((_ (a rest ...) x (acc ...))

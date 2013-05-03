@@ -16,8 +16,12 @@
 (check (->> '() (cons 'a) (cons 'b) (cons 'c) (cons 'd)) => '(d c b a))
 
 ;; -<>
+(check (-<> 0 (list 1 2 3)) => '(0 1 2 3)) ; default
 (check (-<> 2 (* <> 5) (list 1 2 <> 3 4)) => '(1 2 10 3 4))
-(check (-<> 0 (list 1 2 3)) => '(0 1 2 3))
+
+;; -<>>
+(check (-<>> 0 (list 1 2 3)) => '(1 2 3 0)) ; default
+(check (-<> 2 (* <> 5) (list 1 2 <> 3 4)) => '(1 2 10 3 4))
 
 
 
