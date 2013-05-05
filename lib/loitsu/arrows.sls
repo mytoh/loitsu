@@ -3,6 +3,7 @@
     (export
       ->
       ->>
+      -?>
       ;; ->*
       ;; ->>*
       ;; -<
@@ -35,6 +36,14 @@
         ((_ x proc expr ...)
          (->> (proc x) expr ...))))
 
+    (define-syntax -?>
+      (syntax-rules ()
+        ((_ x) x)
+        ((_ x (proc args ...) expr ...)
+         (if-let1 y (proc x args ...) (-?> y expr ...)))
+        ((_ x proc expr ...)
+         (if-let1 y (proc x) (-?> y expr ...) #f))))
+
     ;;; diamond
 
     (define-syntax -<>-helper
@@ -44,7 +53,9 @@
         ((_ (<> rest ...) x (acc ...))
          (acc ... x rest ...))
         ((_ (a rest ...) x (acc ...))
-         (-<>-helper (rest ...) x (acc ... a)))))
+         (-<>-helper (rest ...) x (acc ... a)))
+        ((_ form x ())
+         (form x))))
 
     (define-syntax -<>
       (syntax-rules ()
@@ -60,7 +71,9 @@
         ((_ (<> rest ...) x (acc ...))
          (acc ... x rest ...))
         ((_ (a rest ...) x (acc ...))
-         (-<>>-helper (rest ...) x (acc ... a)))))
+         (-<>>-helper (rest ...) x (acc ... a)))
+        ((_ form x ())
+         (form x))))
 
     (define-syntax -<>>
       (syntax-rules ()
@@ -69,6 +82,26 @@
          (let ((r (-<>>-helper form x ())))
            (-<>> r rest ...)))))
 
+    ;; -?<>
+    (define-syntax -?<>-helper
+      (syntax-rules (<>)
+        ((_ () x (acc ...))
+         (-> x (acc ...))) ; (acc ...)
+        ((_ (<> rest ...) x (acc ...))
+         (acc ... x rest ...))
+        ((_ (a rest ...) x (acc ...))
+         (-?<>-helper (rest ...) x (acc ... a)))
+        ((_ proc x ())
+         (proc x))))
+
+    (define-syntax -?<>
+      (syntax-rules ()
+        ((_ x) x)
+        ((_ #f form rest ...)
+         #f)
+        ((_ x form rest ...)
+         (let ((r (-?<>-helper form x ())))
+           (-?<> r rest ...)))))
 
 
     ;;; http://practical-scheme.net/wiliki/wiliki.cgi?Gauche%3aClojure%3a->%2c->>
