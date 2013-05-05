@@ -12,6 +12,8 @@
       nor
       fork
       mtrace
+      let1
+      if-let1
       )
   (import
     (except (rnrs)
@@ -73,9 +75,9 @@
            (lambda args
              (let loop ((ret (apply (car fs) args))
                         (fs (cdr fs)))
-               (if (null? fs)
-                 ret
-                 (loop ((car fs) ret) (cdr fs)))))))))
+                  (if (null? fs)
+                    ret
+                    (loop ((car fs) ret) (cdr fs)))))))))
 
 
     (define-syntax partial
@@ -102,6 +104,22 @@
       ;; www.t3x.org/s9fes/hof.scm.html
       (lambda x
         (apply f (map g x))))
+
+    (define-syntax let1
+      (syntax-rules ()
+        ((_ var expr body ...)
+         (let ((var expr))
+           body
+           ...))))
+
+    (define-syntax if-let1
+      (syntax-rules ()
+        ((_ var expr then else)
+         (let ((var expr))
+           (if var then else)))
+        ((_ var expr then)
+         (let ((var expr))
+           (if var then)))))
 
     ;; okmij.org/ftp/Scheme/macro-trace.txt
     (define-syntax mtrace
