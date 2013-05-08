@@ -15,6 +15,7 @@
           string-drop-right)
     (srfi :48)
     (loitsu process)
+    (loitsu arrows)
     (loitsu list)
     (loitsu irregex))
 
@@ -25,19 +26,17 @@
         (irregex-match command-re cmd)))
 
     (define-syntax match-short-command
-      (syntax-rules ()
+      (syntax-rules (else)
+        ((_ short (else expr))
+         expr)
         ((_ short (command expr))
-         (cond
-          ((find-short-command short command)
-           expr)
-          (else
-           (error "match-short-command" (string-append "no matching pattern for " short)))))
+         (if (find-short-command short command)
+           expr
+           (error "match-short-command" (string-append "no matching pattern for " short))))
         ((_ short (command expr) (c2 e2)  ...)
-         (cond
-          ((find-short-command short command)
-           expr)
-          (else
-           (match-short-command short (c2 e2) ...))))))
+         (if (find-short-command short command)
+           expr
+           (match-short-command short (c2 e2) ...)))))
 
     (define (puts s)
       (display s)
@@ -47,36 +46,40 @@
     (define (string-longest string-list)
       (fold (lambda (s r)
               (if (< r (string-length s))
-                  (string-length s)
-                  r))
-            0 string-list))
+                (string-length s)
+                r))
+        0 string-list))
 
     (define (remove-newline s)
       (string-drop-right s 1))
 
 
     (define (puts-columns items)
-      (let* ((console-width (if (< 80 (string->number (remove-newline (process-output->string "tput cols" ))))
-                                80 (string->number (remove-newline (process-output->string "tput cols")))))
+      (let* ((width (-> "tput cols"
+                        process-output->string
+                        remove-newline
+                        string->number))
+             (console-width (if (< 80 width)
+                              80 width))
              (longest (string-longest items))
              (optimal-col-width (exact (floor (inexact (/ console-width (+ longest 2))))))
-             (cols (if (< 1 optimal-col-width ) optimal-col-width 1)))
+             (cols (if (< 1 optimal-col-width) optimal-col-width 1)))
         (let loop ((items items))
-          (cond
-           ((< (length items) cols)
-            (for-each
-             (lambda (s)
-               (display
-                (string-pad-right s (+ longest 2))))
-             (take* items cols)))
-           (else
-            (for-each
-             (lambda (s)
-               (display
-                (string-pad-right s (+ longest 2))))
-             (take* items cols))
-            (newline)
-            (loop (drop* items cols)))))
+             (cond
+               ((< (length items) cols)
+                (for-each
+                    (lambda (s)
+                      (display
+                          (string-pad-right s (+ longest 2))))
+                  (take* items cols)))
+               (else
+                   (for-each
+                       (lambda (s)
+                         (display
+                             (string-pad-right s (+ longest 2))))
+                     (take* items cols))
+                 (newline)
+                 (loop (drop* items cols)))))
         (newline)))
 
     ))
