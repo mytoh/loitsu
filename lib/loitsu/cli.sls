@@ -62,7 +62,10 @@
              (console-width (if (< 80 width)
                               80 width))
              (longest (string-longest items))
-             (optimal-col-width (exact (floor (inexact (/ console-width (+ longest 2))))))
+             (optimal-col-width (->> longest
+                                     (+ 2)
+                                     (/ console-width)
+                                     inexact floor  exact))
              (cols (if (< 1 optimal-col-width) optimal-col-width 1)))
         (let loop ((items items))
              (cond
