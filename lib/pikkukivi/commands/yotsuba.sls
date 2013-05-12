@@ -68,14 +68,14 @@
 
     (define (yotsuba-get-one-thread board thread)
       (cond
-          ((thread-exists? (make-thread-url board thread))
-           (setup-path thread)
-           (display thread)
-           (let ((urls (parse-image-url (get-html board thread))))
-             (with-cwd thread
-                       (map fetch
-                         urls)))
-           (newline))
+        ((thread-exists? (make-thread-url board thread))
+         (setup-path thread)
+         (display thread)
+         (let ((urls (parse-image-url (get-html board thread))))
+           (with-cwd thread
+                     (map fetch
+                       urls)))
+         (newline))
         (else
             (display (string-append thread "'s gone"))
           (newline))))
@@ -97,40 +97,39 @@
 
     (define option-repeat
       (option
-       '(#\r "repeat") #f #t
-       (lambda (option name arg repeat all)
-         (values #t all))))
+          '(#\r "repeat") #f #t
+          (lambda (option name arg repeat all)
+            (values #t all))))
 
     (define option-all
       (option
-       '(#\a "all") #f #t
-       (lambda (option name arg repeat all)
-         (values repeat #t))))
+          '(#\a "all") #f #t
+          (lambda (option name arg repeat all)
+            (values repeat #t))))
 
     (define (yotsuba args)
       (let ((args (cddr args)))
         (receive (repeat? all?)
                  (args-fold args
-                            (list option-repeat option-all)
-                            (lambda (option name arg . seeds) ; unrecognized
-                              (error "Unrecognized option:" name))
-                            (lambda (operand repeat all)        ; operand
-                              (values repeat all))
-                            #f                              ; default value of repeat?
-                            #f                             ; default value of all?
-                            )
-                 (cond
-                     (repeat?
-                      (match (cdr args)
-                        ((board)
-                         (repeat yotsuba-get-all-thread board))
-                        ((board thread)
-                         (repeat yotsuba-get-one-thread board thread))))
-                   (else
-                       (match args
-                         ((board)
-                          (yotsuba-get-all-thread board))
-                         ((board thread)
-                          (yotsuba-get-one-thread board thread))))))))
+                   (list option-repeat option-all)
+                   (lambda (option name arg . seeds) ; unrecognized
+                     (error "Unrecognized option:" name))
+                   (lambda (operand repeat all)        ; operand
+                     (values repeat all))
+                   #f                              ; default value of repeat?
+                   #f                             ; default value of all?
+                   )
+                 (cond (repeat?
+                        (match (cdr args)
+                          ((board)
+                           (repeat yotsuba-get-all-thread board))
+                          ((board thread)
+                           (repeat yotsuba-get-one-thread board thread))))
+                       (else
+                           (match args
+                             ((board)
+                              (yotsuba-get-all-thread board))
+                             ((board thread)
+                              (yotsuba-get-one-thread board thread))))))))
 
     ))

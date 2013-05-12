@@ -4,8 +4,7 @@
   (import
     (silta base)
     (loitsu cli)
-    (pikkukivi commands)
-    )
+    (pikkukivi commands))
 
   (begin
 
@@ -40,7 +39,6 @@
         ("sumo3"
          (sumo3))
         ("gsp"
-         (gsp args))
-        ))
+         (gsp args))))
 
     ))
