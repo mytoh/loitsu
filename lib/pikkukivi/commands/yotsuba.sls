@@ -36,7 +36,7 @@
 
     (define (parse-image-url html)
       (let ((image-regexp '(: "//images.4chan.org/"
-                              alphabetic
+                              (+ alphabetic)
                               "/src/"
                               (+ numeric)
                               "."
@@ -47,7 +47,8 @@
         (delete-duplicates
             (map match->url
               (irregex-fold image-regexp
-                            (lambda (i m s) (cons m s))
+                            (lambda (i m s)
+                              (cons m s))
                             '()
                             html)))))
 
