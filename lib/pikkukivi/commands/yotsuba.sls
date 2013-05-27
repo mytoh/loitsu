@@ -64,22 +64,23 @@
       (unless (file-exists? number)
         (make-directory* number)))
 
-    (define (thread-exists? url)
-      (not (equal? "" (surl url))))
+    (define (thread-exists? body)
+      (not (equal? "" body)))
 
     (define (yotsuba-get-one-thread board thread)
-      (cond
-        ((thread-exists? (make-thread-url board thread))
-         (setup-path thread)
-         (display thread)
-         (let ((urls (parse-image-url (get-html board thread))))
-           (with-cwd thread
-                     (map fetch
-                       urls)))
-         (newline))
-        (else
-            (display (string-append thread "'s gone"))
-          (newline))))
+      (let ((res (get-html board thread)))
+        (cond
+          ((thread-exists? res)
+           (setup-path thread)
+           (display thread)
+           (let ((urls (parse-image-url res)))
+             (with-cwd thread
+                       (map fetch
+                         urls)))
+           (newline))
+          (else
+              (display (string-append thread "'s gone"))
+            (newline)))))
 
     (define (string-number? s)
       (string-every char-set:digit s))
