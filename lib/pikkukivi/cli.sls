@@ -26,6 +26,8 @@
          (tosixel args))
         ("kuva"
          (kuva args))
+        ("uname"
+         (uname args))
         ("mkd"
          (mkd args))
         ("starwars"

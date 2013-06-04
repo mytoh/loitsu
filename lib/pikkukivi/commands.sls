@@ -8,6 +8,7 @@
       mount-nfs
       ascii-taide
       kuva
+      uname
 
       mkd
       starwars
@@ -26,4 +27,5 @@
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)
     (pikkukivi commands alias)
+    (pikkukivi commands uname)
     (pikkukivi commands ascii-taide)))
