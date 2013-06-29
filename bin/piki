@@ -1,4 +1,4 @@
-#!/usr/bin/env mosh
+#!/usr/bin/env nmosh
 
 (import
   (rnrs)
