@@ -1,4 +1,4 @@
-#!/usr/bin/env nmosh
+#!/usr/bin/env pmosh
 
 (import
   (rnrs)
@@ -6,8 +6,7 @@
           cli.))
 
 (define (main args)
-  (cli.runner args)
-  )
+  (cli.runner args))
 
 (main (command-line))
 
