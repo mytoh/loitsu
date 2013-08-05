@@ -20,6 +20,8 @@
          (futaba args))
         ("yotsuba"
          (yotsuba args))
+        ("ylilauta"
+         (ylilauta args))
         ("pahvi"
          (pahvi args))
         ("tosixel"
