@@ -1,7 +1,8 @@
 #!/usr/bin/env pmosh
 
 (import
-  (rnrs)
+  (silta base)
+  (silta process-context)
   (pikkukivi cli))
 
 (runner (command-line))
