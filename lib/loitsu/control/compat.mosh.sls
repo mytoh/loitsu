@@ -1,8 +1,8 @@
 
 (library (loitsu control compat)
-  (export
-    case-lambda
-    let-optionals*)
+    (export
+      case-lambda
+      let-optionals*)
   (import
     (rnrs)
-    (mosh control)) )
+    (mosh control)))

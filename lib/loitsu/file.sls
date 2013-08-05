@@ -74,7 +74,6 @@
 
   (begin
 
-
     (define (file->string-list file)
       (call-with-input-file
           file
@@ -110,12 +109,12 @@
     ;; rm -rf
     (define (remove-directory* path)
       (cond
-          ((file-regular? path)
-           (remove-file path))
+        ((file-regular? path)
+         (remove-file path))
         ((file-directory? path)
          (cond
-             ((directory-empty? path)
-              (delete-directory path))
+           ((directory-empty? path)
+            (delete-directory path))
            (else
                (for-each
                    (lambda (f)
@@ -125,9 +124,9 @@
 
     (define (directory-empty? dir)
       (cond
-          ((file-directory? dir)
-           (if (null? (directory-list2 dir))
-             #t #f))
+        ((file-directory? dir)
+         (if (null? (directory-list2 dir))
+           #t #f))
         (else
             (error "not a directory"))))
 
@@ -145,13 +144,13 @@
     (define (directory-list-rec path)
       (let ((files (directory-list/path path)))
         (cond
-            ((null? files) '())
+          ((null? files) '())
           (else
               (fold
                   (lambda (e res)
                     (cond
-                        ((not (file-directory? e))
-                         (cons e res))
+                      ((not (file-directory? e))
+                       (cons e res))
                       ((file-directory? e)
                        (append (directory-list-rec e)
                          res))))
@@ -159,9 +158,9 @@
 
     (define (remove-file path)
       (cond
-          ((or (file-regular? path)
-             (file-symbolic-link? path))
-           (delete-directory path))))
+        ((or (file-regular? path)
+           (file-symbolic-link? path))
+         (delete-directory path))))
 
     (define (copy-file src dest)
       (let ((pin (open-input-file src))
@@ -203,8 +202,8 @@
       (syntax-rules ()
         ((_ file)
          (cond
-             ((file-exists? file)
-              (file->string file))
+           ((file-exists? file)
+            (file->string file))
            ((string-is-url? file)
             (slurp-get file))
            (else

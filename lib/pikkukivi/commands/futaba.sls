@@ -53,7 +53,8 @@
           ("b"
            (or (get "jun")
              (get "may")
-             (get "dec")))
+             ;; (get "dec")
+             ))
           ("l" ;二次元壁紙
            (get  "dat" ))
           ("k" ;壁紙
