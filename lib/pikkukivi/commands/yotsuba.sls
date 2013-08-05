@@ -2,9 +2,12 @@
     (export
       yotsuba)
   (import
-    (rnrs)
+    (silta base)
+    (silta file)
+    (silta write)
     (loitsu irregex)
     (only (srfi :1)
+          filter
           delete-duplicates
           last)
     (srfi :8 receive)
