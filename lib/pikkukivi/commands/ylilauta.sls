@@ -56,7 +56,17 @@
       (string-append "http://ylilauta.org/" board "/" thread))
 
     (define (get-image-url/thread  board thread)
-      (let ((image-regexp `(: "http://static.ylilauta.org/files/" (+ alphanumeric) "/orig/" (+ numeric) "." (or "jpg" "png" "gif" "bmp" "swf" "mp4" "flv" "mkv") "/"  (+ (~ #\")))))
+      (let ((image-regexp `(: "http://static.ylilauta.org/files/"
+                              (+ alphanumeric) "/orig/" (+ numeric) "."
+                              (or "jpg"
+                                "png"
+                                "gif"
+                                "bmp"
+                                "swf"
+                                "mp4"
+                                "flv"
+                                "mkv")
+                              "/"  (+ (~ #\")))))
         (delete-duplicates
             (map (cut irregex-match-substring <> 0)
               (irregex-fold image-regexp
@@ -117,8 +127,7 @@
                    (get-image-url/thread board thread)))
                 (with-cwd
                  thread
-                 (save-html res thread))
-                )))
+                 (save-html res thread)))))
            (else
                (update-deleted-thread thread))))))
 
