@@ -8,6 +8,8 @@
 
       pahvi
 
+      geeli
+
       yotsuba
 
       ylilauta
@@ -35,6 +37,7 @@
     (pikkukivi commands kuva)
     (pikkukivi commands yotsuba)
     (pikkukivi commands ylilauta)
+    (pikkukivi commands geeli)
     (pikkukivi commands pahvi)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)

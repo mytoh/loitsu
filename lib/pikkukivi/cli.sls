@@ -24,6 +24,8 @@
          (ylilauta args))
         ("pahvi"
          (pahvi args))
+        ("geeli"
+         (geeli args))
         ("tosixel"
          (tosixel args))
         ("kuva"
