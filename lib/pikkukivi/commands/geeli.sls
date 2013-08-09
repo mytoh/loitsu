@@ -46,7 +46,11 @@
         (parse-file-url page)))
 
     (define (get-posts tag pid)
-      (surl->utf8 (string-append *gelbooru-base-url* "/index.php?page=dapi&s=post&q=index&limit=50&tags=" tag "&pid=" (x->string pid))))
+      (let ((limit "50"))
+        (surl->utf8 (string-append *gelbooru-base-url* "/index.php?page=dapi&s=post&q=index"
+                                   "&limit=" limit
+                                   "&tags="  tag
+                                   "&pid=" (x->string pid)))))
 
     (define (extract-file-name uri num)
       (path-swap-extension num
@@ -81,12 +85,12 @@
     (define (geeli-get-tag tag)
       (make-directory* tag)
       (log (string-append "created " tag " directory"))
-      (geeli-get-tag-loop tag 0))
+      (geeli-get-tag-loop tag 0)
+      (log (string-append "finished getting " tag)))
 
     (define (geeli args)
       (match (cddr args)
         (("get" "tag" tag)
-         (display
-             (geeli-get-tag tag)))))
+         (geeli-get-tag tag))))
 
     ))
