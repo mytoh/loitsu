@@ -43,7 +43,7 @@
                               "/src/"
                               (+ numeric)
                               "."
-                              (or "jpg" "gif" "png")))
+                              (or "jpeg" "bmp" "jpg" "gif" "png")))
             (match->url (lambda (m)
                           (string-append "http:"
                             (irregex-match-substring m)))))

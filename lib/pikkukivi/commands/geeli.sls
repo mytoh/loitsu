@@ -62,7 +62,7 @@
           (surl uri file))))
 
     (define (log msg)
-      (display (paint msg 114))
+      (display msg)
       (newline))
 
     (define (post-is-empty? html)
@@ -84,6 +84,7 @@
 
     (define (geeli-get-tag tag)
       (make-directory* tag)
+      (log (string-append "Tag: " (paint tag 39)))
       (log (string-append "created " tag " directory"))
       (geeli-get-tag-loop tag 0)
       (log (string-append "finished getting " tag)))
