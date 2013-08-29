@@ -1,18 +1,14 @@
 (library (pikkukivi commands)
     (export
       tosixel
-
-      futaba
-
       kuva
-
+      ;; boards
+      futaba
       pahvi
-
       geeli
-
       yotsuba
-
       ylilauta
+      konachan
 
       print-path
 
@@ -39,6 +35,7 @@
     (pikkukivi commands ylilauta)
     (pikkukivi commands geeli)
     (pikkukivi commands pahvi)
+    (pikkukivi commands konachan)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)
     (pikkukivi commands alias)

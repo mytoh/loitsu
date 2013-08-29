@@ -22,6 +22,8 @@
          (yotsuba args))
         ("ylilauta"
          (ylilauta args))
+        ("konachan"
+         (konachan args))
         ("pahvi"
          (pahvi args))
         ("geeli"
