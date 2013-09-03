@@ -9,6 +9,7 @@
       yotsuba
       ylilauta
       konachan
+      kolmio
 
       print-path
 
@@ -35,6 +36,7 @@
     (pikkukivi commands ylilauta)
     (pikkukivi commands geeli)
     (pikkukivi commands pahvi)
+    (pikkukivi commands kolmio)
     (pikkukivi commands konachan)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)

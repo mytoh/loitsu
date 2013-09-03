@@ -24,6 +24,8 @@
          (ylilauta args))
         ("konachan"
          (konachan args))
+        ("kolmio"
+         (kolmio args))
         ("pahvi"
          (pahvi args))
         ("geeli"

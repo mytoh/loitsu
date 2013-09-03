@@ -46,7 +46,7 @@
         (parse-file-url page)))
 
     (define (get-posts tag pid)
-      (let ((limit "100"))
+      (let ((limit "70"))
         (surl->utf8 (string-append *konachan-base-url* "/post.xml?"
                                    "limit=" limit
                                    "&" "tags="  tag
