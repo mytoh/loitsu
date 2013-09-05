@@ -61,7 +61,7 @@
                     (x->string id))))
 
     (define (extract-file-name uri num)
-      (path-swap-extension num
+      (path-swap-extension (x->string num)
                            (path-extension (last (irregex-split "/" uri)))))
 
     (define (fetch tag uri num)
@@ -90,14 +90,14 @@
       (newline))
 
 
-    (define (kolmio-get-tag-loop tag pnum)
-      (log (string-append "page " (x->string pnum)))
-      (let ((post-ids (get-post-ids tag pnum)))
+    (define (kolmio-get-tag-loop tag pid)
+      (log (string-append "page " (x->string pid)))
+      (let ((post-ids (get-post-ids tag pid)))
         (for-each
             (lambda (id)
               (get-image tag id))
           post-ids))
-      (kolmio-get-tag-loop tag (+ pnum 1)))
+      (kolmio-get-tag-loop tag (+ pid 1)))
 
     (define (setup-directory tag)
       (unless (file-exists? tag)
@@ -116,6 +116,6 @@
         (("get" "tag" tag)
          (kolmio-get-tag tag 0))
         (("get" "tag" tag pid)
-         (kolmio-get-tag tag pid))))
+         (kolmio-get-tag tag (string->number pid)))))
 
     ))
