@@ -67,7 +67,7 @@
     (define (fetch tag uri num)
       (let ((file (build-path tag (extract-file-name uri num))))
         (unless (file-exists? file)
-          (sleep 2)
+          (sleep 10)
           (surl uri file))))
 
 
