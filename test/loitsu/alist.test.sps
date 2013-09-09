@@ -1,7 +1,7 @@
 (import
   (rnrs)
   (pieni check)
-  (loitsu lazy))
+  (loitsu alist))
 
 ;; rassoc
 (check (rassoc 3 '((a . 1) (b . 2) (c . 3))) => '(c . 3))

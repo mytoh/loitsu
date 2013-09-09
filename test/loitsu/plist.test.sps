@@ -41,6 +41,10 @@
 ;; pkeys
 (check (pkeys pls1) => '(:a :b))
 
+;; pval
+(check (pval pls1 ':a) => 1)
+(check (pval pls1 ':b) => 2)
+
 ;; pvals
 (check (pvals pls1) => '(1 2))
 

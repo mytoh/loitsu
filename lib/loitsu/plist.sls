@@ -8,6 +8,7 @@
       plist
       pkeys
       pvals
+      pval
       pfirst
       psecond
       pthird
@@ -27,8 +28,8 @@
 
     (define (%check-plist lst)
       (cond
-          ((null? lst)
-           #t)
+        ((null? lst)
+         #t)
         ((char=? #\: (string-ref (symbol->string (car lst)) 0))
          (%check-plist (cddr lst)))
         (else
@@ -36,8 +37,8 @@
 
     (define (%find-key proc key lst)
       (cond
-          ((null? lst)
-           #f)
+        ((null? lst)
+         #f)
         ((proc key (car lst))
          (list (car lst) (cadr lst)))
         (else
@@ -53,8 +54,8 @@
 
     (define (plist? lst)
       (cond
-          ((null? lst)
-           #f)
+        ((null? lst)
+         #f)
         ((not (list? lst))
          #f)
         ((even? (length lst))
@@ -70,25 +71,32 @@
 
     (define (pkeys lst)
       (cond
-          ((null? lst) '())
+        ((null? lst) '())
         (else
             (cons (car lst)
               (pkeys (cddr lst))))))
 
     (define (pvals lst)
       (cond
-          ((null? lst) '())
+        ((null? lst) '())
         (else
             (cons (cadr lst)
               (pvals (cddr lst))))))
+
+    (define (pval lst key)
+      (cond ((null? lst) #f)
+            ((equal? key (car lst))
+             (cadr lst))
+            (else
+                (pval (cddr lst) key))))
 
 
     (define-case passoc
       ((lst key value)
        (letrec ((update (lambda (l k v)
                           (cond
-                              ((null? l)
-                               '())
+                            ((null? l)
+                             '())
                             ((equal? (car l) k)
                              (append (plist k v) (cddr l)))
                             (else
@@ -96,10 +104,10 @@
                                   (update (cddr l) k v))))))
                 (found (pref lst key)))
          (cond
-             (found
-              (if (equal? (plist key value) found)
-                lst
-                (update lst key value)))
+           (found
+            (if (equal? (plist key value) found)
+              lst
+              (update lst key value)))
            (else
                (append lst (plist key value))))))
       ((lst k v k2 v2)
@@ -120,7 +128,7 @@
 
     (define (pmap proc lst)
       (cond
-          ((null? lst) '())
+        ((null? lst) '())
         (else
             (let ((key (car lst))
                   (value (cadr lst)))

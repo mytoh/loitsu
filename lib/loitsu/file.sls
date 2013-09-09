@@ -160,7 +160,8 @@
       (cond
         ((or (file-regular? path)
            (file-symbolic-link? path))
-         (delete-directory path))))
+         (delete-directory path)
+         path)))
 
     (define (copy-file src dest)
       (let ((pin (open-input-file src))
