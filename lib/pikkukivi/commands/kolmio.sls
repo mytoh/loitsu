@@ -34,19 +34,24 @@
 
     (define (parse-file-url page)
       (let* ((url-rx '(: "Original: <a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n")))))
-             (not-image-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n"))) "\" >Save this flash (right click and save)</a></p>"))
-             (image-res (parse-file-url/rx (list url-rx not-image-rx) page)))
-        (if image-res
-          (irregex-match-substring image-res 1)
-          #f)))
+             (flash-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n"))) "\" >Save this flash (right click and save)</a></p>"))
+             (other-file-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n"))) "\">Save this file (right click and save as)</a></p>"))
+             (image-res (parse-file-url/rx (list url-rx flash-rx other-file-rx) page)))
+        (cond (image-res
+               (irregex-match-substring image-res 1))
+              (else #f))))
+
+    ;; <li>Original: <a href="http://cs.sankakucomplex.com/data/ef/24/ef246bbba23e2a9a3820dc52cd0f5a02.jpg" id=highres itemprop=contentUrl>1920x1080 (804.5 KB)</a></li>
 
     (define (parse-file-url/rx regexps html)
-      (if (null? regexps)
-        #f
-        (let ((res (irregex-search (car regexps) html)))
-          (if res
-            res
-            (parse-file-url/rx (cdr regexps) html)))))
+      (cond ((null? regexps)
+             #f)
+            (else
+                (let ((res (irregex-search (car regexps) html)))
+                  (cond (res
+                         res)
+                        (else
+                            (parse-file-url/rx (cdr regexps) html)))))))
 
     (define (get-post-ids tag pid)
       (let ((post-id-rx '(: "a href=\"/post/show/" ($ (+ (~ #\")))))
@@ -73,26 +78,27 @@
       (let ((file (build-path tag (extract-file-name uri num))))
         (cond ((file-exists? file)
                (loki "file already exists")
-               (if (= 12922 (file-size-in-bytes file))
-                 (begin
-                   (remove-file file)
-                   (fetch tag uri num))))
+               (cond ((= 12922 (file-size-in-bytes file))
+                      (begin
+                        (remove-file file)
+                        (fetch tag uri num)))))
               (else
                   (surl uri file)
-                (if (= 12922 (file-size-in-bytes file))
-                  (begin
-                    (loki "retrying")
-                    (remove-file file)
-                    (sleep (* 60 (* 6 1000)))
-                    (fetch tag uri num)))))))
+                (cond ((= 12922 (file-size-in-bytes file))
+                       (begin
+                         (loki "retrying")
+                         (remove-file file)
+                         (sleep (* 60 (* 6 1000)))
+                         (fetch tag uri num))))))))
 
 
     (define (page-is-empty? html)
-      (if (irregex-search '(: "<posts count=\"" (+ num)
-                              "\" offset=\"" (+ num)
-                              "\"></posts>")
-                          html)
-        #t #f))
+      (cond ((irregex-search '(: "<posts count=\"" (+ num)
+                                 "\" offset=\"" (+ num)
+                                 "\"></posts>")
+                             html)
+             #t)
+            (else #f)))
 
     (define (read-file file)
       (call-with-input-file
@@ -108,10 +114,6 @@
         (lambda (out)
           (write content out))))
 
-    ;; (write-file "test.fuck" (list(plist ':tag "gokou_ruri" ':id 1939)))
-    ;; (display (pref (read-file "test.fuck") ':tag))
-
-
     (define (data-find-post posts pid)
       (cond ((null? posts)
              #f)
@@ -121,36 +123,40 @@
                 (data-find-post (cdr posts) pid))))
 
     (define (data-get-url tag pid)
-      (let ((file (build-path tag (string-append tag ".dat"))))
-        (if (file-exists? file)
-          (let* ((posts (read-file file))
-                 (post (data-find-post posts pid)))
-            (if post
-              (pval post ':url)
-              (let ((url (parse-file-url (get-page pid))))
-                (cond (url
-                       (write-file file (append posts
-                                          (list (plist ':pid pid ':url url))))
-                       url)
-                      (else
-                          (get-image tag pid))))))
-          (let ((url (parse-file-url (get-page pid))))
-            (cond (url
-                   (write-file file (list (plist ':pid pid ':url url)))
-                   url)
-                  (else
-                      (get-image tag pid)))))))
+      (let ((dat (build-path tag (string-append tag ".dat"))))
+        (cond ((file-exists? dat)
+               (let* ((posts (read-file dat))
+                      (post (data-find-post posts pid)))
+                 (cond (post
+                        (pval post ':url))
+                       (else
+                           (let ((url (parse-file-url (get-page pid))))
+                             (cond (url
+                                    (write-file dat (append posts
+                                                      (list (plist ':pid pid ':url url))))
+                                    url)
+                                   (else
+                                       (get-image tag pid))))))))
+              (else
+                  (let ((url (parse-file-url (get-page pid))))
+                    (cond (url
+                           (write-file dat (list (plist ':pid pid ':url url)))
+                           url)
+                          (else
+                              (get-image tag pid))))))))
 
     (define (get-image tag pid)
       (ohei "getting " (x->string pid))
       (let ((res (data-get-url tag pid)))
-        (if res
-          (let ((url res))
-            (fetch tag url pid))
-          (let ((url (parse-file-url (get-page pid))))
-            (if url
-              (fetch tag url pid)
-              (get-image tag pid))))))
+        (cond (res
+               (let ((url res))
+                 (fetch tag url pid)))
+              (else
+                  (let ((url (parse-file-url (get-page pid))))
+                    (cond (url
+                           (fetch tag url pid))
+                          (else
+                              (get-image tag pid))))))))
 
     (define (loki msg)
       (display msg)
@@ -183,6 +189,8 @@
         (("get" "tag" tag)
          (kolmio-get-tag tag 0))
         (("get" "tag" tag pid)
-         (kolmio-get-tag tag (string->number pid)))))
+         (kolmio-get-tag tag (string->number pid)))
+        (("test")
+         (display (parse-file-url (get-page 2022339))))))
 
     ))
