@@ -39,10 +39,12 @@
         html))
 
     (define (save-html thread str)
-      (call-with-output-file
-          (build-path thread (path-swap-extension thread "html"))
-        (lambda (out)
-          (display str out))))
+      (let ((file (build-path thread (path-swap-extension thread "html"))))
+        (if (file-exists? file)
+          (remove-file file))
+        (call-with-output-file file
+          (lambda (out)
+            (display str out)))))
 
     (define (parse-image-url html)
       (let ((image-regexp '(: "//images.4chan.org/"
