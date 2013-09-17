@@ -35,7 +35,14 @@
         board "/res/" thread))
 
     (define (get-html board thread)
-      (surl->utf8 (make-thread-url board thread)))
+      (let ((html (surl->utf8 (make-thread-url board thread))))
+        html))
+
+    (define (save-html thread str)
+      (call-with-output-file
+          (build-path thread (path-swap-extension thread "html"))
+        (lambda (out)
+          (display str out))))
 
     (define (parse-image-url html)
       (let ((image-regexp '(: "//images.4chan.org/"
@@ -76,6 +83,7 @@
           ((thread-exists? res)
            (setup-path thread)
            (display thread)
+           (save-html thread res)
            (let ((urls (parse-image-url res)))
              (with-cwd thread
                        (map fetch
