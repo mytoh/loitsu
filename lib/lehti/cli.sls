@@ -4,7 +4,9 @@
     (rnrs)
     (match)
     (lehti base)
-    (lehti commands))
+    (prefix
+      (lehti commands)
+      commands.))
 
   (begin
 
@@ -29,39 +31,39 @@ commands:
     (define (runner args)
       (cond ((< (length args) 2)
              (help))
-        (else
-            (match-short-command (cadr args)
-              ("setup"
-               (setup args))
-              ("install"
-               (install args))
-              ("deinstall"
-               (deinstall args))
-              ("rm"
-               (deinstall args))
-              ("clean"
-               (clean args))
-              ("reinstall"
-               (reinstall args))
-              ("update"
-               (update))
-              ("commands"
-               (print-commands))
-              ("clone"
-               (clone args))
-              ("contents"
-               (contents args))
-              ("environment"
-               (environment))
-              ("list"
-               (list-packages))
-              ("completion"
-               (completion args))
-              ("spec"
-               (specification args))
-              ("search"
-               (search args))
-              ("projects"
-               (projects))))))
+            (else
+                (match-short-command (cadr args)
+                  ("setup"
+                   (commands.setup args))
+                  ("install"
+                   (commands.install args))
+                  ("deinstall"
+                   (commands.deinstall args))
+                  ("rm"
+                   (commands.deinstall args))
+                  ("clean"
+                   (commands.clean args))
+                  ("reinstall"
+                   (commands.reinstall args))
+                  ("update"
+                   (commands.update))
+                  ("commands"
+                   (commands.print-commands))
+                  ("clone"
+                   (commands.clone args))
+                  ("contents"
+                   (commands.contents args))
+                  ("environment"
+                   (commands.environment))
+                  ("list"
+                   (commands.list-packages))
+                  ("completion"
+                   (commands.completion args))
+                  ("spec"
+                   (commands.specification args))
+                  ("search"
+                   (commands.search args))
+                  ("projects"
+                   (commands.projects))))))
 
     ))

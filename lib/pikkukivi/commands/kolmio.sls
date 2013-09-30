@@ -12,7 +12,9 @@
           last)
     (only (srfi :13)
           string-take
+          string-delete
           string-index)
+    (srfi :14)
     (srfi :39 parameters)
     (srfi :26 cut)
     (only (mosh concurrent)
@@ -33,15 +35,13 @@
 
 
     (define (parse-file-url page)
-      (let* ((url-rx '(: "Original: <a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n")))))
-             (flash-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n"))) "\" >Save this flash (right click and save)</a></p>"))
-             (other-file-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n"))) "\">Save this file (right click and save as)</a></p>"))
+      (let* ((url-rx '(: "Original: <a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n\r")))))
+             (flash-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n\r"))) "\" >Save this flash (right click and save)</a></p>"))
+             (other-file-rx '(: "<p><a href=\"" ($ "http://cs.sankakucomplex.com/data/"  (+ (~ "\"\n\r"))) "\">Save this file (right click and save as)</a></p>"))
              (image-res (parse-file-url/rx (list url-rx flash-rx other-file-rx) page)))
         (cond (image-res
                (irregex-match-substring image-res 1))
               (else #f))))
-
-    ;; <li>Original: <a href="http://cs.sankakucomplex.com/data/ef/24/ef246bbba23e2a9a3820dc52cd0f5a02.jpg" id=highres itemprop=contentUrl>1920x1080 (804.5 KB)</a></li>
 
     (define (parse-file-url/rx regexps html)
       (cond ((null? regexps)
@@ -100,6 +100,13 @@
              #t)
             (else #f)))
 
+    (define (clean-url url)
+      (string-delete char-set:whitespace url))
+
+    (define (valid-url? url)
+      (irregex-match (irregex "http://.*.[a-z]{3,4}")
+                     url))
+
     (define (read-file file)
       (call-with-input-file
           file
@@ -131,7 +138,7 @@
                         (pval post ':url))
                        (else
                            (let ((url (parse-file-url (get-page pid))))
-                             (cond (url
+                             (cond ((valid-url? url)
                                     (write-file dat (append posts
                                                       (list (plist ':pid pid ':url url))))
                                     url)
@@ -139,7 +146,7 @@
                                        (get-image tag pid))))))))
               (else
                   (let ((url (parse-file-url (get-page pid))))
-                    (cond (url
+                    (cond ((valid-url? url)
                            (write-file dat (list (plist ':pid pid ':url url)))
                            url)
                           (else
@@ -149,19 +156,18 @@
       (ohei "getting " (x->string pid))
       (let ((res (data-get-url tag pid)))
         (cond (res
-               (let ((url res))
+               (let ((url (clean-url res)))
                  (fetch tag url pid)))
               (else
                   (let ((url (parse-file-url (get-page pid))))
-                    (cond (url
-                           (fetch tag url pid))
+                    (cond ((valid-url? url)
+                           (fetch tag (clean-url url) pid))
                           (else
                               (get-image tag pid))))))))
 
     (define (loki msg)
       (display msg)
       (newline))
-
 
     (define (kolmio-get-tag-loop tag pid)
       (loki (string-append "page " (x->string pid)))

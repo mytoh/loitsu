@@ -14,6 +14,7 @@
       mtrace
       let1
       if-let1
+      pon
       )
   (import
     (except (rnrs)
@@ -130,5 +131,11 @@
            (write 'x)
            (newline)
            x))))
+
+    (define (pon pred old new)
+      ;; [[http://bis83gb.hatenadiary.jp/entry/2013/09/23/180718]]
+      (if (pred old)
+        new
+        old))
 
     ))
