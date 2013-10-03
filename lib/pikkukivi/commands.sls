@@ -26,6 +26,8 @@
       sumo2
       sumo3
       gsp
+
+      extattr
       )
   (import
     (silta base)
@@ -43,4 +45,5 @@
     (pikkukivi commands alias)
     (pikkukivi commands uname)
     (pikkukivi commands ascii-taide)
+    (pikkukivi commands extattr)
     ))

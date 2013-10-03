@@ -48,6 +48,8 @@
          (sumo2))
         ("sumo3"
          (sumo3))
+        ("extattr"
+         (extattr args))
         ("gsp"
          (gsp args))))
 
