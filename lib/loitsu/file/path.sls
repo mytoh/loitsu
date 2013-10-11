@@ -5,6 +5,7 @@
       path-extension
       path-sans-extension
       path-swap-extension
+      path-add-extension
       path-dirname
       path-basename
       path-absolute?
@@ -31,28 +32,28 @@
     (define-case build-path
       ((path) path)
       (paths (string-join
-              (map (lambda (s)
-                     (if (equal? "" s)
-                       ""
-                       (if (equal? "/" (string-take-right s 1))
-                         (remove-trailing-slash s)
-                         s)))
-                paths)
-              "/")))
+                 (map (lambda (s)
+                        (if (equal? "" s)
+                          ""
+                          (if (equal? "/" (string-take-right s 1))
+                            (remove-trailing-slash s)
+                            s)))
+                   paths)
+               "/")))
 
     (define (path-extension path)
       (let ((p (split-dot path)))
         (cond
-            ((< 1 (length p))
-             (last p))
+          ((< 1 (length p))
+           (last p))
           (else
               #f))))
 
     (define (path-sans-extension path)
       (let ((pt (split-dot path)))
         (cond
-            ((< 1 (length pt))
-             (string-join (drop-right pt 1) "."))
+          ((< 1 (length pt))
+           (string-join (drop-right pt 1) "."))
           ((eq? 1 (length pt))
            (car pt))
           (else
@@ -62,9 +63,12 @@
       (let ((pt (path-sans-extension path)))
         (string-append pt "." ext)))
 
+    (define (path-add-extension path ext)
+      (string-append path "." ext))
+
     (define (path-dirname path)
       (cond
-          ((equal? "" path) ".")
+        ((equal? "" path) ".")
         ((equal? "/" path) "/")
         ((path-absolute? path)
          (let* ((p (remove-trailing-slash path)))
@@ -74,7 +78,7 @@
         (else
             (let ((p (remove-trailing-slash path)))
               (apply build-path (drop-right (split-slash p)
-                                            1))))))
+                                  1))))))
 
     (define (home-directory)
       (get-environment-variable "HOME"))
@@ -86,7 +90,7 @@
 
     (define (path-basename path)
       (cond
-          ((equal? "/" path) "")
+        ((equal? "/" path) "")
         ((equal? "" path) "")
         (else
             (let ((p (remove-trailing-slash path)))
