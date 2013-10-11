@@ -83,13 +83,19 @@
                         (remove-file file)
                         (fetch tag uri num)))))
               (else
-                  (surl uri file)
+                  (fetch-tmp uri file)
                 (cond ((= 12922 (file-size-in-bytes file))
                        (begin
                          (loki "retrying")
                          (remove-file file)
                          (sleep (* 60 (* 6 1000)))
                          (fetch tag uri num))))))))
+
+    (define (fetch-tmp uri orig)
+      (let* ((ext "!tmp")
+             (tmp (path-add-extension orig ext)))
+        (surl uri tmp)
+        (rename-file tmp orig)))
 
 
     (define (page-is-empty? html)
