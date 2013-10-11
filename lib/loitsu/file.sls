@@ -4,6 +4,7 @@
       remove-directory*
       remove-file
       copy-file
+      rename-file
       directory-list2
       directory-list/path
       directory-list-rec
@@ -19,6 +20,7 @@
       path-extension
       path-sans-extension
       path-swap-extension
+      path-add-extension
       path-dirname
       path-basename
       path-absolute?
