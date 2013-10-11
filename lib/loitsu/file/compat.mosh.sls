@@ -16,6 +16,7 @@
       create-directory
       set-current-directory!
       current-directory
+      rename-file
       read-line)
 
   (import
@@ -36,6 +37,7 @@
           file-stat-mtime
           file-stat-ctime
           file-size-in-bytes
+          rename-file
           create-directory)
     (only (mosh)
           set-current-directory!
