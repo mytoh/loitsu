@@ -68,9 +68,17 @@
       (last (irregex-split "/" uri)))
 
     (define (fetch uri)
-      (let ((file (extract-file-name uri)))
+      (let* ((file (extract-file-name uri))
+             (tmp (temp-name file)))
         (unless (file-exists? file)
-          (surl uri file))))
+          (when (file-exists? tmp)
+            (remove-file tmp))
+          (surl uri tmp)
+          (rename-file tmp file))))
+
+    (define (temp-name orig)
+      (let ((ext "!tmp"))
+        (path-add-extension orig ext)))
 
     (define (setup-path number)
       (unless (file-exists? number)
