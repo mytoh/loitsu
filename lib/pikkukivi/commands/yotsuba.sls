@@ -7,6 +7,7 @@
     (silta write)
     (loitsu irregex)
     (only (srfi :1)
+          every
           filter
           delete-duplicates
           last)
@@ -98,25 +99,33 @@
              (with-cwd thread
                        (map fetch
                          urls)))
-           (newline))
+           (newline)
+           #t)
           (else
               (display (string-append thread "'s gone"))
-            (newline)))))
+            (newline)
+            #f))))
 
     (define (string-number? s)
       (string-every char-set:digit s))
 
     (define (yotsuba-get-all-thread board)
-      (for-each (lambda (t) (yotsuba-get-one-thread board t))
+      (map (lambda (t) (yotsuba-get-one-thread board t))
         (filter (lambda (d) (string-number? d)) (directory-list2 (current-directory)))))
 
 
     (define (repeat f . args)
       (let loop ()
            (let ((wait (* (* 60 (* 6 1000)) 5)))
-             (apply f args)
-             (sleep 10000)
-             (loop))))
+             (let ((results (apply f args)))
+               (unless (all-false? results)
+                 (sleep 10000)
+                 (loop))))))
+
+    (define (all-false? x)
+      (if (list? x)
+        (every (lambda (e) (eq? e #f)) x)
+        (eq? x #f)))
 
     (define option-repeat
       (option
