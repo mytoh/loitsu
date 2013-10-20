@@ -2,7 +2,6 @@
     (export
       tosixel
       kuva
-      ;; boards
       futaba
       pahvi
       geeli
@@ -36,9 +35,9 @@
     (pikkukivi commands kuva)
     (pikkukivi commands yotsuba)
     (pikkukivi commands ylilauta)
-    (pikkukivi commands geeli)
-    (pikkukivi commands pahvi)
-    (pikkukivi commands kolmio)
+    (pikkukivi commands booru geeli)
+    (pikkukivi commands booru pahvi)
+    (pikkukivi commands booru kolmio)
     (pikkukivi commands konachan)
     (pikkukivi commands mount-nfs)
     (pikkukivi commands print-path)

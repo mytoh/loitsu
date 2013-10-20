@@ -1,4 +1,4 @@
-(library (pikkukivi commands geeli)
+(library (pikkukivi commands booru geeli)
     (export geeli)
   (import
     (silta base)
@@ -83,9 +83,10 @@
           (geeli-get-tag-loop tag (+ count 1)))))
 
     (define (geeli-get-tag tag)
-      (make-directory* tag)
       (log (string-append "Tag: " (paint tag 39)))
-      (log (string-append "created " tag " directory"))
+      (when (not (file-exists? tag))
+        (make-directory* tag)
+        (log (string-append "created " tag " directory")))
       (geeli-get-tag-loop tag 0)
       (log (string-append "finished getting " tag)))
 

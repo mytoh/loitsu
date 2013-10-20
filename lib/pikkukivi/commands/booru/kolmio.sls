@@ -1,4 +1,4 @@
-(library (pikkukivi commands kolmio)
+(library (pikkukivi commands booru kolmio)
     (export kolmio)
   (import
     (silta base)

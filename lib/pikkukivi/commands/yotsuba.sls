@@ -13,6 +13,7 @@
           last)
     (srfi :8 receive)
     (only (srfi :13 strings)
+          string-join
           string-every)
     (srfi :14 char-sets)
     (srfi :26 cut)
@@ -31,9 +32,12 @@
 
   (begin
 
-    (define (make-thread-url board thread)
+    (define (yotsuba-url . rest)
       (string-append "http://boards.4chan.org/"
-        board "/res/" thread))
+        (string-join rest "/")))
+
+    (define (make-thread-url board thread)
+      (yotsuba-url  board "res" thread))
 
     (define (get-html board thread)
       (let ((html (surl->utf8 (make-thread-url board thread))))

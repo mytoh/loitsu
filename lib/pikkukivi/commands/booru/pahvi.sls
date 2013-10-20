@@ -1,4 +1,4 @@
-(library (pikkukivi commands pahvi)
+(library (pikkukivi commands booru pahvi)
     (export pahvi)
   (import
     (silta base)
