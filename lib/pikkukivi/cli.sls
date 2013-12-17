@@ -51,6 +51,10 @@
         ("extattr"
          (extattr args))
         ("gsp"
-         (gsp args))))
+         (gsp args))
+        ("bbc1"
+         (bbc1))
+        ("colours"
+         (colours args))))
 
     ))

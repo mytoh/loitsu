@@ -7,4 +7,6 @@
 
 (runner (command-line))
 
-;; vim:filetype=scheme
+;; Local Variables:
+;; mode: scheme
+;; End:

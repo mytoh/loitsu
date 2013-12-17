@@ -34,9 +34,18 @@
       (last (irregex-split "/" uri)))
 
     (define (fetch uri)
-      (let ((file (extract-file-name uri)))
+      (let* ((file (extract-file-name uri))
+             (tmp (temp-name file)))
         (unless (file-exists? file)
-          (surl uri file))))
+          (when (file-exists? tmp)
+            (remove-file tmp))
+          (surl uri tmp)
+          (rename-file tmp file))))
+
+    (define (temp-name orig)
+      (let ((ext "!tmp"))
+        (path-add-extension orig ext)))
+
 
     (define (find-server board thread)
       (let ((get (lambda (s)
@@ -53,8 +62,7 @@
           ("b"
            (or (get "jun")
              (get "may")
-             ;; (get "dec")
-             ))
+             (get "dec")))
           ("l" ;二次元壁紙
            (get  "dat" ))
           ("k" ;壁紙
@@ -85,6 +93,14 @@
 
     (define (get-thread-html board thread)
       (surl->utf8 (make-url board thread)))
+
+    (define (save-html thread str)
+      (let ((file (build-path thread (path-swap-extension thread "html"))))
+        (if (file-exists? file)
+          (remove-file file))
+        (call-with-output-file file
+          (lambda (out)
+            (display str out)))))
 
     (define (setup-path thread)
       (unless (file-exists? thread)
@@ -121,12 +137,13 @@
       (cond
         ((and (not (member thread (*deleted-thread*)))
            (valid-thread-number? thread))
-         (setup-path thread)
          (cond
            ((thread-exists? board thread)
             (puts (paint thread 173))
             (let ((res (get-thread-html board thread)))
               (unless (string=? "" res)
+                (setup-path thread)
+                (save-html thread res)
                 (with-cwd
                  thread
                  (map fetch

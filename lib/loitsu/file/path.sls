@@ -25,6 +25,7 @@
     (srfi :98 os-environment-variables)
     (loitsu string)
     (loitsu lamb)
+    (loitsu arrows)
     )
 
   (begin
@@ -53,7 +54,9 @@
       (let ((pt (split-dot path)))
         (cond
           ((< 1 (length pt))
-           (string-join (drop-right pt 1) "."))
+           (-> pt
+               (drop-right 1)
+               (string-join ".")))
           ((eq? 1 (length pt))
            (car pt))
           (else
@@ -93,8 +96,11 @@
         ((equal? "/" path) "")
         ((equal? "" path) "")
         (else
-            (let ((p (remove-trailing-slash path)))
-              (car (take-right (split-slash p) 1))))))
+            (-> path
+                remove-trailing-slash
+                split-slash
+                (take-right 1)
+                car))))
 
     ;; internal functions
 

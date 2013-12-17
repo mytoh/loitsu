@@ -24,9 +24,11 @@
       sumo
       sumo2
       sumo3
+      bbc1
       gsp
 
       extattr
+      colours
       )
   (import
     (silta base)
@@ -45,4 +47,5 @@
     (pikkukivi commands uname)
     (pikkukivi commands ascii-taide)
     (pikkukivi commands extattr)
+    (pikkukivi commands colours)
     ))
